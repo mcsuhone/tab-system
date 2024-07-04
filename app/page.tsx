@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/ui/input'
 
 export default function Home() {
   return (
@@ -6,5 +6,5 @@ export default function Home() {
       <h2 className="text-4xl p-14">Welcome to tab</h2>
       <Input className="w-300 text-center" placeholder="Enter code" />
     </main>
-  );
+  )
 }
