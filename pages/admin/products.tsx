@@ -17,6 +17,7 @@ import { z } from 'zod'
 import { Product } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import { ValueLabelPair } from '@/types'
+import { HTMLForm } from '@/components/ui/htmlform'
 
 const formSchema = z.object({
   name: z.string(),
@@ -90,13 +91,10 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
+    <>
       <h2 className="text-4xl p-10">Add new product</h2>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col space-y-2 justify-center items-center mb-30"
-        >
+        <HTMLForm onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="name"
@@ -137,7 +135,7 @@ export default function Home() {
             )}
           />
           <Button type="submit">Add product</Button>
-        </form>
+        </HTMLForm>
       </Form>
       {/* TODO: Use some table component here */}
       <div className="mt-8">
@@ -150,6 +148,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-    </main>
+    </>
   )
 }

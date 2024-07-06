@@ -15,6 +15,7 @@ import { z } from 'zod'
 
 import { User } from '@prisma/client'
 import { useEffect, useState } from 'react'
+import { HTMLForm } from '@/components/ui/htmlform'
 
 const formSchema = z.object({
   user_id: z.string().min(1).max(3),
@@ -63,19 +64,16 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
-      <h2 className="text-4xl p-10">Register new user</h2>
+    <>
+      <h2 className="text-4xl p-10">Lisää käyttäjä</h2>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col space-y-2 justify-center items-center mb-30"
-        >
+        <HTMLForm onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="user_id"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Id</FormLabel>
+                <FormLabel>Jäsen nro</FormLabel>
                 <FormControl>
                   <Input placeholder="***" {...field} />
                 </FormControl>
@@ -87,15 +85,15 @@ export default function Home() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Nimi</FormLabel>
                 <FormControl>
                   <Input placeholder="" {...field} />
                 </FormControl>
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
-        </form>
+          <Button type="submit">Lisää käyttäjä</Button>
+        </HTMLForm>
       </Form>
       <div className="mt-8">
         <h2>Users</h2>
@@ -107,6 +105,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-    </main>
+    </>
   )
 }

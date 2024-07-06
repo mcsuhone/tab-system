@@ -19,7 +19,9 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Navbar />
-      <Component {...pageProps} />
+      <main className="flex min-h-screen flex-col items-center p-10">
+        <Component {...pageProps} />
+      </main>
     </>
   )
 }

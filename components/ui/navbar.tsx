@@ -1,19 +1,11 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { User } from '@prisma/client'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 
 export const Navbar = () => {
-  const [user, setUser] = useState<User | undefined>(undefined)
   const router = useRouter()
-
-  useEffect(() => {
-    const val = localStorage.getItem('user')
-    const storedUser = val ? JSON.parse(val) : null
-    setUser(storedUser)
-  }, [])
 
   const logout = () => {
     localStorage.removeItem('user')
@@ -22,8 +14,15 @@ export const Navbar = () => {
 
   return (
     <div className="flex flex-row justify-between items-center space-x-4 p-4 bg-gray-200">
-      <h2 className="text-xl">Tervetuloa {user?.name}</h2>
-      <Button onClick={logout}>Kirjaudu ulos</Button>
+      <Link href="/tab" className="text-xl w-36">
+        Piikki
+      </Link>
+      <Link href="/admin" className="text-md hover:bg-grey-100">
+        Admin sivulle
+      </Link>
+      <Button onClick={logout} className="w-30">
+        Kirjaudu ulos
+      </Button>
     </div>
   )
 }

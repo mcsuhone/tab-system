@@ -17,6 +17,7 @@ import { z } from 'zod'
 
 import { User } from '@prisma/client'
 import { useRouter } from 'next/navigation'
+import { HTMLForm } from '@/components/ui/htmlform'
 
 const formSchema = z.object({
   user_id: z.string().min(1).max(3)
@@ -52,10 +53,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center p-24">
       <h2 className="text-3xl p-14">Tervetuloa piikkiin</h2>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col space-y-4 items-center"
-        >
+        <HTMLForm onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="user_id"
@@ -69,7 +67,7 @@ export default function Home() {
             )}
           />
           <Button type="submit">Kirjaudu sisään</Button>
-        </form>
+        </HTMLForm>
       </Form>
     </main>
   )
