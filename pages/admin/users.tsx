@@ -16,6 +16,7 @@ import { z } from 'zod'
 import { User } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import { HTMLForm } from '@/components/ui/htmlform'
+import { FormHeader } from '@/components/ui/formheader'
 
 const formSchema = z.object({
   user_id: z.string().min(1).max(3),
@@ -65,9 +66,9 @@ export default function Home() {
 
   return (
     <>
-      <h2 className="text-4xl p-10">Lisää käyttäjä</h2>
       <Form {...form}>
         <HTMLForm onSubmit={form.handleSubmit(onSubmit)}>
+          <FormHeader>Lisää käyttäjä</FormHeader>
           <FormField
             control={form.control}
             name="user_id"
