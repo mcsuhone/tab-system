@@ -18,6 +18,7 @@ import { Product } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import { ValueLabelPair } from '@/types'
 import { HTMLForm } from '@/components/ui/htmlform'
+import { FormHeader } from '@/components/ui/formheader'
 
 const formSchema = z.object({
   name: z.string(),
@@ -92,9 +93,9 @@ export default function Home() {
 
   return (
     <>
-      <h2 className="text-4xl p-10">Add new product</h2>
       <Form {...form}>
         <HTMLForm onSubmit={form.handleSubmit(onSubmit)}>
+          <FormHeader>Add new product</FormHeader>
           <FormField
             control={form.control}
             name="name"
