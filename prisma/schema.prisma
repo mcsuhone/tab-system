@@ -37,15 +37,19 @@ model ActivityLog {
 }
 
 enum ProductCategory {
+  BEER
+  CIDER
+  LIQUOR
   GIN
   VODKA
-  NON_ALCOHOLIC
   WHISKEY
   RUM
   TEQUILA
-  BEER
   WINE
+  SODA
   ENERGY_DRINK
+  NON_ALCOHOLIC
+  OTHER
 }
 
 model Transaction {
