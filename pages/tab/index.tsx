@@ -21,12 +21,12 @@ const Tab: React.FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   products
 }) => {
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
-      <h1 className="text-4xl mb-4">Piikki</h1>
-      <Suspense fallback={<h2>Loading data</h2>}>
+    <>
+      <h1 className="text-4xl mb-4">Tuotteet</h1>
+      <Suspense fallback={<h2>Ladataan tuotteita</h2>}>
         <DataTable data={products} columns={columns} />
       </Suspense>
-    </main>
+    </>
   )
 }
 
