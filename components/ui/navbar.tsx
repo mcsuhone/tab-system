@@ -21,7 +21,7 @@ export const Navbar = () => {
   }
 
   return (
-    <div className="flex flex-row items-center space-x-4 p-4 bg-gray-200">
+    <div className="flex flex-row justify-between items-center space-x-4 p-4 bg-gray-200">
       <h2 className="text-xl">Tervetuloa {user?.name}</h2>
       <Button onClick={logout}>Kirjaudu ulos</Button>
     </div>
