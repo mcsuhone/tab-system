@@ -23,7 +23,7 @@ export async function login(username: string, password: string) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 86400 // 1 day
+      maxAge: 86400 * 165 // 1 day
     })
 
     return true

@@ -18,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip'
+import Link from 'next/link'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -492,7 +493,7 @@ const SidebarMenu = React.forwardRef<
   <ul
     ref={ref}
     data-sidebar="menu"
-    className={cn('flex w-full min-w-0 flex-col gap-1', className)}
+    className={cn('flex w-full min-w-0 flex-col gap-2', className)}
     {...props}
   />
 ))

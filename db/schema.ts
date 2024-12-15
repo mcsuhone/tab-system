@@ -9,6 +9,7 @@ import {
   pgEnum
 } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
+import { relations } from 'drizzle-orm'
 import { InferSelectModel, InferInsertModel } from 'drizzle-orm'
 
 export const productCategoryEnum = pgEnum('product_category', [
@@ -81,8 +82,25 @@ export const transactions = pgTable(
   })
 )
 
+export const transactionsRelations = relations(transactions, ({ one }) => ({
+  user: one(users, {
+    fields: [transactions.userId],
+    references: [users.id]
+  }),
+  product: one(products, {
+    fields: [transactions.productId],
+    references: [products.id]
+  })
+}))
+
+export const usersRelations = relations(users, ({ many }) => ({
+  transactions: many(transactions)
+}))
+
 // Type exports
-export type User = InferSelectModel<typeof users>
+export type User = InferSelectModel<typeof users> & {
+  transactions: Transaction[]
+}
 export type NewUser = InferInsertModel<typeof users>
 
 export type Product = InferSelectModel<typeof products>
@@ -91,5 +109,8 @@ export type NewProduct = InferInsertModel<typeof products>
 export type ActivityLog = InferSelectModel<typeof activityLogs>
 export type NewActivityLog = InferInsertModel<typeof activityLogs>
 
-export type Transaction = InferSelectModel<typeof transactions>
+export type Transaction = InferSelectModel<typeof transactions> & {
+  product: Product
+  user: User
+}
 export type NewTransaction = InferInsertModel<typeof transactions>

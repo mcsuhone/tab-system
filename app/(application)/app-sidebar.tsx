@@ -1,12 +1,10 @@
 'use client'
 
-import { Package, User } from 'lucide-react'
+import { Package, User, Wine } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTheme } from 'next-themes'
-import { useEffect } from 'react'
-import { MobileMenu } from './mobile-menu'
 
 import {
   Sidebar,
@@ -19,20 +17,21 @@ import {
   SidebarMenuItem,
   SidebarMenuButton
 } from '@/components/ui/sidebar'
+import { MobileMenu } from './mobile-menu'
 
-// Define menu items
+// Move items outside of the component to avoid recreation
 const items = [
   {
-    title: 'Products',
-    url: '/products',
-    icon: Package
+    title: 'Drinks',
+    url: '/tab',
+    icon: Wine
   },
   {
     title: 'Account',
     url: '/account',
     icon: User
   }
-]
+] as const
 
 export function AppSidebar() {
   const pathname = usePathname()
@@ -43,9 +42,13 @@ export function AppSidebar() {
     setTheme('dark')
   }, [])
 
+  useEffect(() => {
+    setIsMobileOpen(false)
+  }, [pathname])
+
   return (
     <>
-      <MobileMenu onClick={() => setIsMobileOpen(!isMobileOpen)} />
+      <MobileMenu items={items} setIsMobileOpen={setIsMobileOpen} />
 
       <Sidebar
         className={`${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform md:translate-x-0`}
@@ -58,7 +61,6 @@ export function AppSidebar() {
 
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {items.map((item) => (
@@ -67,10 +69,11 @@ export function AppSidebar() {
                       asChild
                       isActive={pathname === item.url}
                       tooltip={item.title}
+                      variant="outline"
                     >
                       <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
+                        <item.icon className="h-5 w-5" />
+                        <span className="text-base">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
