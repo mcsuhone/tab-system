@@ -30,7 +30,8 @@ export const productCategoryEnum = pgEnum('product_category', [
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   tab: integer('tab').notNull().default(0),
-  name: text('name').notNull()
+  name: text('name').notNull(),
+  password: text('password').notNull()
 })
 
 export const products = pgTable(

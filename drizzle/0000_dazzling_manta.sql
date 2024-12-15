@@ -1,4 +1,4 @@
-CREATE TYPE "public"."product_category" AS ENUM('BEER', 'CIDER', 'LIQUOR', 'GIN', 'VODKA', 'WHISKEY', 'RUM', 'TEQUILA', 'WINE', 'SODA', 'ENERGY_DRINK', 'NON_ALCOHOLIC', 'OTHER');--> statement-breakpoint
+-- CREATE TYPE "public"."product_category" AS ENUM('BEER', 'CIDER', 'LIQUOR', 'GIN', 'VODKA', 'WHISKEY', 'RUM', 'TEQUILA', 'WINE', 'SODA', 'ENERGY_DRINK', 'NON_ALCOHOLIC', 'OTHER');--> statement-breakpoint
 CREATE TABLE "activity_logs" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"type" text NOT NULL,
