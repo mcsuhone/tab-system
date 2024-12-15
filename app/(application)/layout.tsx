@@ -10,10 +10,7 @@ export default function ApplicationLayout({
     <div className="flex h-screen">
       <SidebarProvider>
         <AppSidebar />
-        <main className="flex-1 overflow-y-auto p-8">
-          <SidebarTrigger />
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto p-8 mt-8">{children}</main>
       </SidebarProvider>
     </div>
   )

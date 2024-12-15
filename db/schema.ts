@@ -13,6 +13,7 @@ import { InferSelectModel, InferInsertModel } from 'drizzle-orm'
 
 export const productCategoryEnum = pgEnum('product_category', [
   'BEER',
+  'LONG_DRINK',
   'CIDER',
   'LIQUOR',
   'GIN',

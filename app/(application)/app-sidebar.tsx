@@ -1,21 +1,38 @@
 'use client'
 
-import { Menu, Package, User } from 'lucide-react'
+import { Package, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import { useTheme } from 'next-themes'
+import { useEffect } from 'react'
+import { MobileMenu } from './mobile-menu'
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarTrigger
+  SidebarMenuButton
 } from '@/components/ui/sidebar'
-import { useTheme } from 'next-themes'
-import { useEffect } from 'react'
+
+// Define menu items
+const items = [
+  {
+    title: 'Products',
+    url: '/products',
+    icon: Package
+  },
+  {
+    title: 'Account',
+    url: '/account',
+    icon: User
+  }
+]
 
 export function AppSidebar() {
   const pathname = usePathname()
@@ -27,50 +44,42 @@ export function AppSidebar() {
   }, [])
 
   return (
-    <Sidebar>
-      <SidebarHeader className="flex items-center justify-between">
-        <div className="flex items-center gap-2 px-2">
-          <Menu
-            className="h-6 w-6 cursor-pointer md:hidden"
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
-          />
-          <span className="hidden text-lg font-semibold md:block">
-            Tab System
-          </span>
-        </div>
-      </SidebarHeader>
+    <>
+      <MobileMenu onClick={() => setIsMobileOpen(!isMobileOpen)} />
 
-      <SidebarContent
-        className={`${isMobileOpen ? 'block' : 'hidden'} md:block`}
+      <Sidebar
+        className={`${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform md:translate-x-0`}
       >
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={pathname === '/products'}
-              tooltip="Products"
-            >
-              <Link href="/products">
-                <Package />
-                <span>Products</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+        <SidebarHeader className="flex items-center justify-between">
+          <div className="flex items-center gap-2 px-2">
+            <span className="text-lg font-semibold">Tab System</span>
+          </div>
+        </SidebarHeader>
 
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={pathname === '/account'}
-              tooltip="Account"
-            >
-              <Link href="/account">
-                <User />
-                <span>Account</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarContent>
-    </Sidebar>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname === item.url}
+                      tooltip={item.title}
+                    >
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+    </>
   )
 }

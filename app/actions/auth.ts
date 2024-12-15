@@ -1,6 +1,6 @@
 'use server'
 
-import { verifyCredentials } from '@/utils/auth'
+import { verifyCredentials } from '@/lib/auth'
 import { SignJWT } from 'jose'
 import { cookies } from 'next/headers'
 
