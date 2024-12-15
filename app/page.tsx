@@ -15,7 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { User } from '@prisma/client'
+import { User } from '@/db/schema'
 import { useRouter } from 'next/navigation'
 import { HTMLForm } from '@/components/ui/htmlform'
 import { FormHeader } from '@/components/ui/formheader'

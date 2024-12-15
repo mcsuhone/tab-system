@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import db from '@/modules/db'
+import db from '@/db'
 
 export default async function handler(
   req: NextApiRequest,

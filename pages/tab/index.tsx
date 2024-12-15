@@ -2,10 +2,10 @@ import '@/styles/globals.css'
 
 import { DataTable } from '@/components/ui/datatable'
 import React, { Suspense } from 'react'
-import db from '@/modules/db'
+import db from '@/db'
 import { columns } from './columns'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import { Product } from '@prisma/client'
+import { Product } from '@/db/schema'
 
 export const getServerSideProps = (async () => {
   const products = await db.product.findMany()

@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Product } from '@prisma/client'
+import { Product } from '@/db/schema'
 import { useEffect, useState } from 'react'
 import { ValueLabelPair } from '@/types'
 import { HTMLForm } from '@/components/ui/htmlform'
