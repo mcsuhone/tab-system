@@ -3,6 +3,7 @@ import { users } from './schema'
 import { eq } from 'drizzle-orm'
 import { db } from './db'
 import readline from 'readline'
+import bcrypt from 'bcryptjs'
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -34,11 +35,14 @@ async function main() {
     const password =
       (await question('Enter root password (can be empty): ')) || ''
 
+    // Hash the password before storing
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : ''
+
     await db
       .insert(users)
       .values({
         name: username,
-        password: password,
+        password: hashedPassword,
         tab: 0
       })
       .execute()

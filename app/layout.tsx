@@ -1,4 +1,4 @@
-import { Navbar } from '@/components/ui/navbar'
+import { ThemeProvider } from '@/components/theme-provider'
 import '../styles/globals.css'
 
 export const metadata = {
@@ -13,11 +13,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/jalostajat_logo.svg" />
+      </head>
       <body>
-        <Navbar />
-        <main className="flex min-h-screen flex-col items-center p-10">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           {children}
-        </main>
+        </ThemeProvider>
       </body>
     </html>
   )

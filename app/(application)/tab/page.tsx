@@ -19,7 +19,7 @@ export default async function TabPage() {
       ) : (
         <div>
           <h2 className="mb-4 text-xl font-semibold">Products</h2>
-          <ProductList products={products} />
+          <ProductList products={products || []} />
         </div>
       )}
     </div>

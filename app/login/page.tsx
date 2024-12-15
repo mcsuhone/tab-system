@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -13,6 +13,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const pathname = usePathname()
   const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,13 +22,12 @@ export default function LoginPage() {
 
     try {
       const success = await login(username, password)
-
       if (!success) {
         throw new Error('Login failed')
       }
 
-      router.push('/')
       router.refresh()
+      router.push('/home')
     } catch (error) {
       toast({
         title: 'Error',

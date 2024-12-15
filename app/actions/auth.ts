@@ -1,32 +1,29 @@
 'use server'
 
+import { verifyCredentials } from '@/utils/auth'
+import { SignJWT } from 'jose'
 import { cookies } from 'next/headers'
-import { users } from '@/db/schema'
-import { eq } from 'drizzle-orm'
-import { db } from '@/db/db'
 
-export async function login(
-  username: string,
-  password: string
-): Promise<boolean> {
+export async function login(username: string, password: string) {
   try {
-    const user = await db
-      .select()
-      .from(users)
-      .where(eq(users.name, username))
-      .limit(1)
-      .execute()
-
-    if (user.length === 0 || user[0].password !== password) {
+    const isValid = await verifyCredentials(username, password)
+    if (!isValid) {
       return false
     }
 
-    // Set session cookie
-    cookies().set('userId', user[0].id.toString(), {
+    // Create JWT token
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET)
+    const token = await new SignJWT({ username })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setExpirationTime('1d')
+      .sign(secret)
+
+    // Set cookie
+    cookies().set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/'
+      sameSite: 'strict',
+      maxAge: 86400 // 1 day
     })
 
     return true
@@ -34,4 +31,8 @@ export async function login(
     console.error('Login error:', error)
     return false
   }
+}
+
+export async function logout(): Promise<void> {
+  cookies().delete('token')
 }

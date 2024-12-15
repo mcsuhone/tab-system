@@ -3,7 +3,7 @@
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/components/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   Command,

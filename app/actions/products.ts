@@ -1,8 +1,8 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import db from '@/db'
-import { products } from '@/db/schema'
+import { db } from '@/db/db'
+import { ProductCategory, products } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 
 export async function getProducts() {
@@ -18,7 +18,7 @@ export async function getProducts() {
 export async function addProduct(formData: FormData) {
   try {
     const name = formData.get('name') as string
-    const category = formData.get('category') as string
+    const category = formData.get('category') as ProductCategory
     const price = parseFloat(formData.get('price') as string)
 
     if (!name || !category || !price) {

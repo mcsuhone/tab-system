@@ -1,12 +1,13 @@
 'use client'
 
 import { deleteProduct } from '@/app/actions/products'
+import { ProductCategory } from '@/db/schema'
 import { useTransition } from 'react'
 
 type Product = {
   id: number
   name: string
-  category: string
+  category: ProductCategory
   price: number
 }
 

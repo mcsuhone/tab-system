@@ -26,6 +26,7 @@ export const productCategoryEnum = pgEnum('product_category', [
   'NON_ALCOHOLIC',
   'OTHER'
 ])
+export type ProductCategory = (typeof productCategoryEnum.enumValues)[number]
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
