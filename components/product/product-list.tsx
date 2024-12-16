@@ -8,6 +8,7 @@ import { SearchBar } from './search-bar'
 import { useState, useEffect } from 'react'
 import { useProducts } from '@/app/hooks/use-products'
 import { Skeleton } from '@/components/ui/skeleton'
+import { motion, AnimatePresence } from 'framer-motion'
 
 function ProductListSkeleton() {
   return (
@@ -67,13 +68,42 @@ export function ProductList() {
             <SearchBar onSearch={setQuery} />
             <CartButton />
           </div>
-          {isLoading && showSkeleton ? (
-            <ProductListSkeleton />
-          ) : error ? (
-            <div className="text-red-500">{error.message}</div>
-          ) : (
-            <ProductItems products={productsData?.data || []} />
-          )}
+          <AnimatePresence mode="wait">
+            {isLoading && showSkeleton ? (
+              <motion.div
+                key="skeleton"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-4"
+              >
+                <ProductListSkeleton />
+              </motion.div>
+            ) : error ? (
+              <motion.div
+                key="error"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="text-red-500"
+              >
+                {error.message}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="products"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-4"
+              >
+                <ProductItems products={productsData?.data || []} />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </>

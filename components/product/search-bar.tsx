@@ -15,7 +15,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedValue(value)
-    }, 500) // 1 second delay
+    }, 300) // 1 second delay
 
     return () => clearTimeout(timer)
   }, [value])
