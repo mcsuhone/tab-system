@@ -1,13 +1,14 @@
-1. Change signing in to use member_nro instead of name
+1. Account page logs
 
-2. Fix account page logs
+- Make these statistics work
 
-3. Finish admin side
+2. Finish admin page activity
 
-- Add permission to users table
-- Only admins will see "admin" in the sidebar
-- Add admin page for adding products and users
-- Add admin page to look at activity throughout all users
-- Add useful filtering for example, who visited on certain dates etc.
+- display last activity from all users
+- add filtering of this data by date (using date-picker)
 
-4. Rent a VM and Publish first version to hetzner
+3. Add a "tap beer" and "open price" buttons to the product page, that allow user to purchase with open prices.
+
+- Figure out how to do this, so that logging works and we dont display these as duplicates in product list
+
+4. Fix Admin page to not be visible for default users

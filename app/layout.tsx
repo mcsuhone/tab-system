@@ -1,6 +1,7 @@
 import { Providers } from './providers'
 import '../styles/globals.css'
 import { Manrope } from 'next/font/google'
+import { Toaster } from '@/components/ui/toaster'
 
 // Initialize the font
 const manrope = Manrope({
@@ -24,7 +25,10 @@ export default function RootLayout({
         <link rel="icon" href="/jalostajat_logo.svg" />
       </head>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   )

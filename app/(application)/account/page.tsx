@@ -73,6 +73,9 @@ export default async function ProfilePage() {
                 Spent
               </div>
             </div>
+            <div className="pt-2">
+              <ChangePasswordForm userId={user.id} />
+            </div>
           </div>
           <div className="ml-auto flex items-center gap-8">
             <div>
@@ -141,16 +144,6 @@ export default async function ProfilePage() {
             </CardContent>
           </Card>
         </div>
-
-        {/* Password Change Form */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Change Password</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChangePasswordForm userId={user.id} />
-          </CardContent>
-        </Card>
 
         {/* Recent Activity */}
         <Card>
