@@ -1,8 +1,11 @@
+import React from 'react'
 import { getProducts } from '@/app/actions/products'
-import { ProductList } from '@/components/product/product-list'
+import { AdminProductList } from '@/components/product/admin-product-list'
 import { AddProductForm } from '@/components/product/add-product-form'
 
 export default async function AdminProductsPage() {
+  const products = await getProducts({})
+
   return (
     <div className="w-full max-w-7xl">
       <h1 className="mb-8 text-3xl font-bold">Product Management</h1>
@@ -14,7 +17,7 @@ export default async function AdminProductsPage() {
 
       <div>
         <h2 className="mb-4 text-xl font-semibold">Products</h2>
-        <ProductList />
+        <AdminProductList initialProducts={products.data} />
       </div>
     </div>
   )

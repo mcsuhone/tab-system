@@ -6,7 +6,8 @@ import {
   timestamp,
   uniqueIndex,
   real,
-  pgEnum
+  pgEnum,
+  boolean
 } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 import { relations } from 'drizzle-orm'
@@ -51,7 +52,8 @@ export const products = pgTable(
     id: serial('id').primaryKey(),
     name: text('name').notNull(),
     category: productCategoryEnum('category').notNull(),
-    price: real('price').notNull()
+    price: real('price').notNull(),
+    disabled: boolean('disabled').notNull().default(false)
   },
   (table) => ({
     nameIdx: uniqueIndex('product_name_idx').on(table.name)

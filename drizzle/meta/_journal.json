@@ -43,6 +43,13 @@
       "when": 1734386022260,
       "tag": "0005_chilly_blockbuster",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1734387040690,
+      "tag": "0006_foamy_surge",
+      "breakpoints": true
     }
   ]
 }

@@ -2,8 +2,6 @@
 
 import { Product, ProductCategory } from '@/db/schema'
 import { CategoryNav } from './category-nav'
-import { ProductItems } from './product-items'
-import { CartButton } from './cart-button'
 import { SearchBar } from './search-bar'
 import { useState, useEffect } from 'react'
 import { useProducts } from '@/app/hooks/use-products'
@@ -28,29 +26,14 @@ function ProductListSkeleton() {
 }
 
 interface ProductListProps {
-  products: {
-    id: number
-    name: string
-    category:
-      | 'BEER'
-      | 'LONG_DRINK'
-      | 'CIDER'
-      | 'LIQUOR'
-      | 'GIN'
-      | 'VODKA'
-      | 'WHISKEY'
-      | 'RUM'
-      | 'TEQUILA'
-      | 'WINE'
-      | 'SODA'
-      | 'ENERGY_DRINK'
-      | 'NON_ALCOHOLIC'
-      | 'OTHER'
-    price: number
-  }[]
+  children: (products: Product[]) => React.ReactNode
+  showDisabled?: boolean
 }
 
-export function ProductList() {
+export function ProductList({
+  children,
+  showDisabled = true
+}: ProductListProps) {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<ProductCategory | null>(null)
   const [showSkeleton, setShowSkeleton] = useState(false)
@@ -61,7 +44,8 @@ export function ProductList() {
     isLoading
   } = useProducts({
     query,
-    category: category || undefined
+    category: category || undefined,
+    showDisabled
   })
 
   useEffect(() => {
@@ -89,7 +73,6 @@ export function ProductList() {
         <div className="flex flex-col gap-4">
           <div className="flex flex-row justify-between w-full items-center sticky top-0 z-10 bg-background pb-4">
             <SearchBar onSearch={setQuery} />
-            <CartButton />
           </div>
           <AnimatePresence mode="wait">
             {isLoading && showSkeleton ? (
@@ -123,7 +106,7 @@ export function ProductList() {
                 transition={{ duration: 0.2 }}
                 className="space-y-4"
               >
-                <ProductItems products={productsData?.data || []} />
+                {children(productsData?.data || [])}
               </motion.div>
             )}
           </AnimatePresence>

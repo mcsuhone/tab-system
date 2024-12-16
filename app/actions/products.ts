@@ -8,9 +8,14 @@ import { eq, and, ilike } from 'drizzle-orm'
 export type ProductFilters = {
   query?: string
   category?: ProductCategory
+  showDisabled?: boolean
 }
 
-export async function getProducts({ query, category }: ProductFilters = {}) {
+export async function getProducts({
+  query,
+  category,
+  showDisabled = true
+}: ProductFilters = {}) {
   try {
     const conditions = []
     if (query) {
@@ -18,6 +23,9 @@ export async function getProducts({ query, category }: ProductFilters = {}) {
     }
     if (category) {
       conditions.push(eq(products.category, category))
+    }
+    if (!showDisabled) {
+      conditions.push(eq(products.disabled, false))
     }
 
     const allProducts = await db
@@ -47,25 +55,71 @@ export async function addProduct(formData: FormData) {
       .values({
         name,
         category,
-        price
+        price,
+        disabled: false
       })
       .returning()
 
     revalidatePath('/tab')
+    revalidatePath('/admin/products')
     return { data: newProduct[0] }
   } catch (error) {
     console.error('Error adding product:', error)
-    return { error: 'Failed to add product' }
+    throw error
   }
 }
 
-export async function deleteProduct(id: number) {
+interface UpdateProductData {
+  disabled?: boolean
+  price?: number
+}
+
+export async function updateProduct(
+  productId: number,
+  data: UpdateProductData
+) {
   try {
-    await db.delete(products).where(eq(products.id, id))
+    const updateData: UpdateProductData = {}
+
+    if (typeof data.disabled === 'boolean') {
+      updateData.disabled = data.disabled
+    }
+
+    if (typeof data.price === 'number') {
+      updateData.price = data.price
+    }
+
+    const updatedProduct = await db
+      .update(products)
+      .set(updateData)
+      .where(eq(products.id, productId))
+      .returning()
+
+    if (!updatedProduct.length) {
+      throw new Error('Product not found')
+    }
+
+    revalidatePath('/admin/products')
     revalidatePath('/tab')
-    return { success: true }
+    return { success: true, data: updatedProduct[0] }
   } catch (error) {
-    console.error('Error deleting product:', error)
-    return { error: 'Failed to delete product' }
+    console.error('Error updating product:', error)
+    throw new Error('Failed to update product')
+  }
+}
+
+export async function getProductByName(name: string) {
+  try {
+    const product = await db.query.products.findFirst({
+      where: eq(products.name, name)
+    })
+
+    if (!product) {
+      throw new Error('Product not found')
+    }
+
+    return product
+  } catch (error) {
+    throw new Error('Failed to fetch product')
   }
 }
