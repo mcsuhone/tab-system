@@ -5,12 +5,31 @@ import { CategoryNav } from './category-nav'
 import { ProductItems } from './product-items'
 import { CartButton } from './cart-button'
 import { SearchBar } from './search-bar'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useProducts } from '@/app/hooks/use-products'
+import { Skeleton } from '@/components/ui/skeleton'
+
+function ProductListSkeleton() {
+  return (
+    <div className="space-y-4">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="flex items-center gap-4 p-4 rounded-lg border">
+          <Skeleton className="h-16 w-16 rounded-md flex-shrink-0" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-4 w-1/3" />
+            <Skeleton className="h-4 w-1/4" />
+          </div>
+          <Skeleton className="h-8 w-24" />
+        </div>
+      ))}
+    </div>
+  )
+}
 
 export function ProductList() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<ProductCategory | null>(null)
+  const [showSkeleton, setShowSkeleton] = useState(false)
 
   const {
     data: productsData,
@@ -20,6 +39,18 @@ export function ProductList() {
     query,
     category: category || undefined
   })
+
+  useEffect(() => {
+    if (isLoading) {
+      const timer = setTimeout(() => {
+        setShowSkeleton(true)
+      }, 400)
+      return () => {
+        clearTimeout(timer)
+        setShowSkeleton(false)
+      }
+    }
+  }, [isLoading])
 
   return (
     <>
@@ -36,8 +67,8 @@ export function ProductList() {
             <SearchBar onSearch={setQuery} />
             <CartButton />
           </div>
-          {isLoading ? (
-            <div>Loading...</div>
+          {isLoading && showSkeleton ? (
+            <ProductListSkeleton />
           ) : error ? (
             <div className="text-red-500">{error.message}</div>
           ) : (

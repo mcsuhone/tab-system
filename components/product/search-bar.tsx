@@ -1,7 +1,7 @@
 'use client'
 
 import { Input } from '@/components/ui/input'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface SearchBarProps {
   onSearch: (value: string) => void
@@ -9,15 +9,27 @@ interface SearchBarProps {
 
 export function SearchBar({ onSearch }: SearchBarProps) {
   const [value, setValue] = useState('')
+  const [debouncedValue, setDebouncedValue] = useState('')
+
+  // Add debounce effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value)
+    }, 500) // 1 second delay
+
+    return () => clearTimeout(timer)
+  }, [value])
+
+  // Trigger search only when debounced value changes
+  useEffect(() => {
+    onSearch(debouncedValue)
+  }, [debouncedValue, onSearch])
 
   return (
     <Input
       placeholder="Search drinks..."
       value={value}
-      onChange={(e) => {
-        setValue(e.target.value)
-        onSearch(e.target.value)
-      }}
+      onChange={(e) => setValue(e.target.value)}
       className="max-w-xs"
     />
   )

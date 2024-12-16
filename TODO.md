@@ -15,8 +15,3 @@
 - Add admin page for adding products and users
 - Add admin page to look at activity throughout all users
 - Add useful filtering for example, who visited on certain dates etc.
-
-4. Finish products page
-
-- Make it actually load and filter products from database
-- Make a keyword/fuzzy search for products

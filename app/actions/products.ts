@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { db } from '@/db/db'
 import { ProductCategory, products } from '@/db/schema'
-import { eq, like, and } from 'drizzle-orm'
+import { eq, and, ilike } from 'drizzle-orm'
 
 export type ProductFilters = {
   query?: string
@@ -14,7 +14,7 @@ export async function getProducts({ query, category }: ProductFilters = {}) {
   try {
     const conditions = []
     if (query) {
-      conditions.push(like(products.name, `%${query}%`))
+      conditions.push(ilike(products.name, `%${query}%`))
     }
     if (category) {
       conditions.push(eq(products.category, category))
