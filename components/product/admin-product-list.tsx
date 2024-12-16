@@ -59,11 +59,7 @@ function AdminProductItem({ product: initialProduct }: ProductItemProps) {
   )
 }
 
-interface AdminProductListProps {
-  initialProducts: Product[]
-}
-
-export function AdminProductList({ initialProducts }: AdminProductListProps) {
+export function AdminProductList() {
   const [showDisabled, setShowDisabled] = useState(false)
 
   const renderProducts = (products: Product[]) => (

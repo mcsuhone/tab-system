@@ -17,7 +17,7 @@ export default async function AdminProductsPage() {
 
       <div>
         <h2 className="mb-4 text-xl font-semibold">Products</h2>
-        <AdminProductList initialProducts={products.data} />
+        <AdminProductList />
       </div>
     </div>
   )

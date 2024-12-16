@@ -6,25 +6,35 @@ import { jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 import type { User } from '@/db/schema'
 
-export async function verifyCredentials(username: string, password: string) {
-  // Find user
+export async function verifyCredentials(memberNo: string, password: string) {
+  // Find user by member_no instead of name
   const user = await db
     .select()
     .from(users)
-    .where(eq(users.name, username))
+    .where(eq(users.member_no, memberNo))
     .execute()
 
   if (user.length === 0) {
+    console.log('User not found with member_no:', memberNo)
     return false
   }
 
   // If password is empty in DB and provided password is empty
   if (!user[0].password && !password) {
+    console.log('Empty password login successful')
     return true
   }
 
+  // If password is empty in DB but password was provided, or vice versa
+  if (!user[0].password || !password) {
+    console.log('Password mismatch: one empty, one provided')
+    return false
+  }
+
   // Verify password
-  return await bcrypt.compare(password, user[0].password)
+  const isValid = await bcrypt.compare(password, user[0].password)
+  console.log('Password verification result:', isValid)
+  return isValid
 }
 
 export async function auth(): Promise<{ user: User | null }> {
@@ -37,29 +47,34 @@ export async function auth(): Promise<{ user: User | null }> {
 
     // Verify JWT token
     const secret = new TextEncoder().encode(process.env.JWT_SECRET)
-    const { payload } = await jwtVerify(token.value, secret)
+    try {
+      const { payload } = await jwtVerify(token.value, secret)
 
-    if (!payload.username) {
-      return { user: null }
-    }
+      if (!payload.memberNo) {
+        return { user: null }
+      }
 
-    // Get user from database with transactions
-    const user = await db.query.users.findFirst({
-      where: eq(users.name, payload.username as string),
-      with: {
-        transactions: {
-          with: {
-            product: true
+      // Get user from database with transactions
+      const user = await db.query.users.findFirst({
+        where: eq(users.member_no, payload.memberNo as string),
+        with: {
+          transactions: {
+            with: {
+              product: true
+            }
           }
         }
-      }
-    })
+      })
 
-    if (!user) {
+      if (!user) {
+        return { user: null }
+      }
+
+      return { user: user as User }
+    } catch (jwtError) {
+      // Token is invalid or expired, return null user without throwing
       return { user: null }
     }
-
-    return { user: user as User }
   } catch (error) {
     console.error('Auth error:', error)
     return { user: null }

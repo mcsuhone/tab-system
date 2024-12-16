@@ -61,7 +61,7 @@ export function ProductItems({ products }: { products: Product[] }) {
             </p>
           </div>
           <div className="flex-[10%]">
-            <p className="text-sm">${product.price.toFixed(2)}</p>
+            <p className="text-sm">{product.price.toFixed(2)}€</p>
           </div>
         </motion.div>
       ))}

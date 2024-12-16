@@ -4,16 +4,29 @@ import { verifyCredentials } from '@/lib/auth'
 import { SignJWT } from 'jose'
 import { cookies } from 'next/headers'
 
-export async function login(username: string, password: string) {
+export async function login(memberNo: string, password: string) {
   try {
-    const isValid = await verifyCredentials(username, password)
+    if (!memberNo) {
+      console.log('No member number provided')
+      return false
+    }
+
+    console.log('Attempting login with:', {
+      memberNo,
+      password: password ? '[PROVIDED]' : '[EMPTY]'
+    })
+
+    const isValid = await verifyCredentials(memberNo, password)
+    console.log('Credentials verification result:', isValid)
+
     if (!isValid) {
+      console.log('Invalid credentials')
       return false
     }
 
     // Create JWT token
     const secret = new TextEncoder().encode(process.env.JWT_SECRET)
-    const token = await new SignJWT({ username })
+    const token = await new SignJWT({ memberNo })
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('1d')
       .sign(secret)
