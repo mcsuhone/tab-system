@@ -27,6 +27,29 @@ function ProductListSkeleton() {
   )
 }
 
+interface ProductListProps {
+  products: {
+    id: number
+    name: string
+    category:
+      | 'BEER'
+      | 'LONG_DRINK'
+      | 'CIDER'
+      | 'LIQUOR'
+      | 'GIN'
+      | 'VODKA'
+      | 'WHISKEY'
+      | 'RUM'
+      | 'TEQUILA'
+      | 'WINE'
+      | 'SODA'
+      | 'ENERGY_DRINK'
+      | 'NON_ALCOHOLIC'
+      | 'OTHER'
+    price: number
+  }[]
+}
+
 export function ProductList() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<ProductCategory | null>(null)

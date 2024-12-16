@@ -1,27 +1,14 @@
-import { getProducts } from '@/app/actions/products'
-import { ProductList } from '@/components/product/product-list'
-import { AddProductForm } from '@/components/product/add-product-form'
-
-export default async function TabPage() {
-  const { data: products, error } = await getProducts()
-
+export default async function AdminActivityPage() {
   return (
     <div className="w-full max-w-7xl">
-      <h1 className="mb-8 text-3xl font-bold">Tab Management</h1>
+      <h1 className="mb-8 text-3xl font-bold">Activity</h1>
 
-      <div className="mb-8">
-        <h2 className="mb-4 text-xl font-semibold">Add New Product</h2>
-        <AddProductForm />
+      <div className="space-y-4">
+        {/* Activity content will go here */}
+        <p className="text-muted-foreground">
+          Recent activity will be displayed here.
+        </p>
       </div>
-
-      {error ? (
-        <div className="text-red-500">{error}</div>
-      ) : (
-        <div>
-          <h2 className="mb-4 text-xl font-semibold">Products</h2>
-          <ProductList products={products || []} />
-        </div>
-      )}
     </div>
   )
 }

@@ -29,6 +29,11 @@ const items = [
     title: 'Account',
     url: '/account',
     icon: User
+  },
+  {
+    title: 'Admin',
+    url: '/admin',
+    icon: Package
   }
 ] as const
 

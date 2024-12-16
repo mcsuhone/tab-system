@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { ProductCategory, Transaction } from '@/db/schema'
 import { LogoutButton } from '@/components/logout-button'
+import { ChangePasswordForm } from '@/components/account/change-password-form'
 
 export default async function ProfilePage() {
   const { user } = await auth()
@@ -140,6 +141,16 @@ export default async function ProfilePage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Password Change Form */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Change Password</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ChangePasswordForm userId={user.id} />
+          </CardContent>
+        </Card>
 
         {/* Recent Activity */}
         <Card>

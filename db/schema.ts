@@ -30,12 +30,19 @@ export const productCategoryEnum = pgEnum('product_category', [
 ])
 export type ProductCategory = (typeof productCategoryEnum.enumValues)[number]
 
+export const userPermissionEnum = pgEnum('user_permission', [
+  'default',
+  'admin'
+])
+export type UserPermission = (typeof userPermissionEnum.enumValues)[number]
+
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   balance: integer('balance').notNull().default(0),
   name: text('name').notNull(),
   member_no: text('member_no').notNull(),
-  password: text('password').notNull()
+  password: text('password').notNull(),
+  permission: userPermissionEnum('permission').notNull().default('default')
 })
 
 export const products = pgTable(
