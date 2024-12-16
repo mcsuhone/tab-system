@@ -3,11 +3,28 @@
 import { revalidatePath } from 'next/cache'
 import { db } from '@/db/db'
 import { ProductCategory, products } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, like, and } from 'drizzle-orm'
 
-export async function getProducts() {
+export type ProductFilters = {
+  query?: string
+  category?: ProductCategory
+}
+
+export async function getProducts({ query, category }: ProductFilters = {}) {
   try {
-    const allProducts = await db.select().from(products)
+    const conditions = []
+    if (query) {
+      conditions.push(like(products.name, `%${query}%`))
+    }
+    if (category) {
+      conditions.push(eq(products.category, category))
+    }
+
+    const allProducts = await db
+      .select()
+      .from(products)
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+
     return { data: allProducts }
   } catch (error) {
     console.error('Error fetching products:', error)

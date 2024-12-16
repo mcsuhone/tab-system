@@ -47,7 +47,7 @@ export default async function ProfilePage() {
     : null
 
   return (
-    <div className="container py-8 max-w-5xl">
+    <>
       <div className="grid gap-8">
         {/* Profile Header */}
         <div className="flex items-start flex-wrap gap-6">
@@ -185,6 +185,6 @@ export default async function ProfilePage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </>
   )
 }

@@ -3,6 +3,7 @@ import { SidebarProvider } from '@/components/ui/sidebar'
 import { Toaster } from '@/components/ui/toaster'
 import { AppSidebar } from './app-sidebar'
 import { MobileMenu } from './mobile-menu'
+import { PageContainer } from '@/components/containers/page-container'
 
 export default async function ApplicationLayout({
   children
@@ -14,10 +15,10 @@ export default async function ApplicationLayout({
       <SidebarProvider>
         <AppSidebar />
 
-        <main className="flex-1 overflow-y-auto p-8 mt-6 space-y-4">
+        <PageContainer>
           <MobileMenu />
           {children}
-        </main>
+        </PageContainer>
       </SidebarProvider>
       <Toaster />
     </CartProvider>
