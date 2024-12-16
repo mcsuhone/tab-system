@@ -2,7 +2,7 @@
 
 import { db } from '@/db/db'
 import { transactions } from '@/db/schema'
-import { getCurrentUser } from '@/lib/get-current-user'
+import { auth } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 
 interface TransactionItem {
@@ -16,7 +16,7 @@ export async function createTransaction({
 }: {
   items: TransactionItem[]
 }) {
-  const user = await getCurrentUser()
+  const { user } = await auth()
   if (!user) throw new Error('Not authenticated')
 
   // Create individual transactions for each item

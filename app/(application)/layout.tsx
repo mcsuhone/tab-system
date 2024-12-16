@@ -16,8 +16,10 @@ export default async function ApplicationLayout({
         <AppSidebar />
 
         <PageContainer>
-          <MobileMenu />
-          {children}
+          <div className="flex flex-col h-full">
+            <MobileMenu />
+            {children}
+          </div>
         </PageContainer>
       </SidebarProvider>
       <Toaster />
