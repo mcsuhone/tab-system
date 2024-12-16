@@ -3,15 +3,14 @@
 import { Button } from '@/components/ui/button'
 import { LogOut } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { logout } from '@/app/actions/auth-action'
 
 export function LogoutButton() {
   const router = useRouter()
 
-  const handleLogout = () => {
-    // Remove the auth cookie
-    document.cookie = 'auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-
-    // Redirect to login page
+  const handleLogout = async () => {
+    await logout()
+    router.refresh()
     router.push('/login')
   }
 
