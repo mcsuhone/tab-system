@@ -50,6 +50,20 @@
       "when": 1734387040690,
       "tag": "0006_foamy_surge",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1734391088794,
+      "tag": "0007_empty_mongu",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1734391473359,
+      "tag": "0008_typical_glorian",
+      "breakpoints": true
     }
   ]
 }

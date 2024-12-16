@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import {
@@ -14,13 +14,15 @@ import {
 } from '@/components/ui/table'
 import { DatePicker } from '@/components/ui/date-picker'
 import { useToast } from '@/components/ui/use-toast'
+import { getActivityLogs } from '@/app/actions/activity-logs'
 
 interface ActivityLog {
   id: number
-  user_id: number
-  member_nro: string
-  action: string
-  timestamp: string
+  type: string
+  userId: number
+  memberNo: string
+  userName: string
+  createdAt: string
 }
 
 export default function ActivityLogsPage() {
@@ -29,14 +31,35 @@ export default function ActivityLogsPage() {
   const [startDate, setStartDate] = useState<Date>()
   const [endDate, setEndDate] = useState<Date>()
   const [memberNo, setMemberNo] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  // Load initial data
+  useEffect(() => {
+    loadLogs()
+  }, [])
+
+  async function loadLogs() {
+    setIsLoading(true)
+    const { data, error } = await getActivityLogs({
+      startDate,
+      endDate,
+      memberNo: memberNo || undefined
+    })
+
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: error.title,
+        description: error.description
+      })
+    } else if (data) {
+      setLogs(data)
+    }
+    setIsLoading(false)
+  }
 
   async function handleFilter() {
-    // TODO: Implement filtering logic
-    toast({
-      title: 'Not implemented',
-      description: 'Filtering functionality will be added soon.',
-      variant: 'destructive'
-    })
+    await loadLogs()
   }
 
   return (
@@ -62,7 +85,9 @@ export default function ActivityLogsPage() {
             onChange={(e) => setMemberNo(e.target.value)}
             className="w-[200px]"
           />
-          <Button onClick={handleFilter}>Apply Filters</Button>
+          <Button onClick={handleFilter} disabled={isLoading}>
+            {isLoading ? 'Loading...' : 'Apply Filters'}
+          </Button>
         </div>
       </div>
 
@@ -71,20 +96,22 @@ export default function ActivityLogsPage() {
           <TableRow>
             <TableHead>Timestamp</TableHead>
             <TableHead>Member #</TableHead>
+            <TableHead>Name</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {logs.map((log) => (
             <TableRow key={log.id}>
-              <TableCell>{new Date(log.timestamp).toLocaleString()}</TableCell>
-              <TableCell>{log.member_nro}</TableCell>
-              <TableCell>{log.action}</TableCell>
+              <TableCell>{new Date(log.createdAt).toLocaleString()}</TableCell>
+              <TableCell>{log.memberNo}</TableCell>
+              <TableCell>{log.userName}</TableCell>
+              <TableCell>{log.type}</TableCell>
             </TableRow>
           ))}
           {logs.length === 0 && (
             <TableRow>
-              <TableCell colSpan={3} className="text-center py-4">
+              <TableCell colSpan={4} className="text-center py-4">
                 No activity logs found
               </TableCell>
             </TableRow>

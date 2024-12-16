@@ -29,6 +29,7 @@ import { Product, ProductCategory, productCategoryEnum } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { ChevronDown } from 'lucide-react'
 import { EnableProductDialog } from './enable-product-dialog'
+import { Checkbox } from '@/components/ui/checkbox'
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -39,7 +40,9 @@ const formSchema = z.object({
   }),
   price: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
     message: 'Price must be a positive number'
-  })
+  }),
+  isOpenPrice: z.boolean().default(false),
+  isTapBeer: z.boolean().default(false)
 })
 
 export function AddProductForm() {
@@ -64,6 +67,8 @@ export function AddProductForm() {
         formData.append('name', values.name)
         formData.append('category', values.category)
         formData.append('price', values.price)
+        formData.append('isOpenPrice', String(values.isOpenPrice))
+        formData.append('isTapBeer', String(values.isTapBeer))
         await addProduct(formData)
         form.reset()
         setSelectedCategory(null)
@@ -171,6 +176,46 @@ export function AddProductForm() {
                   />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isOpenPrice"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Open Price</FormLabel>
+                  <p className="text-sm text-muted-foreground">
+                    Allow customers to set their own price
+                  </p>
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isTapBeer"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Tap Beer</FormLabel>
+                  <p className="text-sm text-muted-foreground">
+                    Mark this product as tap beer
+                  </p>
+                </div>
               </FormItem>
             )}
           />

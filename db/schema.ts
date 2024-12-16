@@ -27,6 +27,7 @@ export const productCategoryEnum = pgEnum('product_category', [
   'SODA',
   'ENERGY_DRINK',
   'NON_ALCOHOLIC',
+  'COCKTAIL',
   'OTHER'
 ])
 export type ProductCategory = (typeof productCategoryEnum.enumValues)[number]
@@ -53,7 +54,8 @@ export const products = pgTable(
     name: text('name').notNull(),
     category: productCategoryEnum('category').notNull(),
     price: real('price').notNull(),
-    disabled: boolean('disabled').notNull().default(false)
+    disabled: boolean('disabled').notNull().default(false),
+    isSpecialProduct: boolean('is_special_product').notNull().default(false)
   },
   (table) => ({
     nameIdx: uniqueIndex('product_name_idx').on(table.name)

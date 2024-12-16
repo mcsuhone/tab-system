@@ -69,7 +69,7 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Shopping Cart</DialogTitle>
-          <DialogDescription>Total: €{total.toFixed(2)}</DialogDescription>
+          <DialogDescription>Total: {total.toFixed(2)}€</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           {items.map((item) => (
@@ -80,7 +80,7 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
               <div className="flex-1">
                 <p className="font-medium">{item.product.name}</p>
                 <p className="text-sm text-gray-500">
-                  ${item.product.price.toFixed(2)} each
+                  {item.product.price.toFixed(2)}€ each
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
             onClick={handleCheckout}
             disabled={items.length === 0 || isCheckingOut}
           >
-            {isCheckingOut ? 'Processing...' : `Checkout €${total.toFixed(2)}`}
+            {isCheckingOut ? 'Processing...' : `Checkout ${total.toFixed(2)}€`}
           </Button>
         </DialogFooter>
       </DialogContent>

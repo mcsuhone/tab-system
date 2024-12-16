@@ -135,12 +135,17 @@ export default async function ProfilePage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Jotain tähän?
+                Average Order
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">€€€€</div>
-              <p className="text-xs text-muted-foreground">Rahaa</p>
+              <div className="text-2xl font-bold">
+                €
+                {user.transactions.length > 0
+                  ? (totalSpent / user.transactions.length).toFixed(2)
+                  : '0.00'}
+              </div>
+              <p className="text-xs text-muted-foreground">Per transaction</p>
             </CardContent>
           </Card>
         </div>

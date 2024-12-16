@@ -5,8 +5,11 @@ import { CategoryNav } from './category-nav'
 import { SearchBar } from './search-bar'
 import { useState, useEffect } from 'react'
 import { useProducts } from '@/app/hooks/use-products'
+import { useSpecialProducts } from '@/app/hooks/use-special-products'
 import { Skeleton } from '@/components/ui/skeleton'
 import { motion, AnimatePresence } from 'framer-motion'
+import { SpecialProducts } from './special-products'
+import { CartButton } from './cart-button'
 
 function ProductListSkeleton() {
   return (
@@ -48,6 +51,8 @@ export function ProductList({
     showDisabled
   })
 
+  const { data: specialProductsData } = useSpecialProducts()
+
   useEffect(() => {
     if (isLoading) {
       const timer = setTimeout(() => {
@@ -60,8 +65,19 @@ export function ProductList({
     }
   }, [isLoading])
 
+  // Only filter out special products from regular products list
+  const regularProducts =
+    productsData?.data?.filter((p) => !p.isSpecialProduct) || []
+
   return (
     <>
+      <div className="flex justify-end mt-6">
+        <CartButton />
+      </div>
+      <div className="mb-8">
+        <SpecialProducts products={specialProductsData?.data || []} />
+      </div>
+
       <h2 className="mb-4 text-xl font-semibold">Categories</h2>
       <div className="grid grid-cols-[200px_1fr] gap-6">
         <div className="sticky top-0">
@@ -106,7 +122,7 @@ export function ProductList({
                 transition={{ duration: 0.2 }}
                 className="space-y-4"
               >
-                {children(productsData?.data || [])}
+                {children(regularProducts)}
               </motion.div>
             )}
           </AnimatePresence>

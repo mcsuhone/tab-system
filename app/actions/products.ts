@@ -45,6 +45,9 @@ export async function addProduct(formData: FormData) {
     const name = formData.get('name') as string
     const category = formData.get('category') as ProductCategory
     const price = parseFloat(formData.get('price') as string)
+    const isOpenPrice = formData.get('isOpenPrice') === 'true'
+    const isTapBeer = formData.get('isTapBeer') === 'true'
+    const isSpecialProduct = formData.get('isSpecialProduct') === 'true'
 
     if (!name || !category || !price) {
       return { error: 'Missing required fields' }
@@ -56,7 +59,8 @@ export async function addProduct(formData: FormData) {
         name,
         category,
         price,
-        disabled: false
+        disabled: false,
+        isSpecialProduct
       })
       .returning()
 
@@ -72,6 +76,9 @@ export async function addProduct(formData: FormData) {
 interface UpdateProductData {
   disabled?: boolean
   price?: number
+  isOpenPrice?: boolean
+  isTapBeer?: boolean
+  isSpecialProduct?: boolean
 }
 
 export async function updateProduct(
@@ -87,6 +94,18 @@ export async function updateProduct(
 
     if (typeof data.price === 'number') {
       updateData.price = data.price
+    }
+
+    if (typeof data.isOpenPrice === 'boolean') {
+      updateData.isOpenPrice = data.isOpenPrice
+    }
+
+    if (typeof data.isTapBeer === 'boolean') {
+      updateData.isTapBeer = data.isTapBeer
+    }
+
+    if (typeof data.isSpecialProduct === 'boolean') {
+      updateData.isSpecialProduct = data.isSpecialProduct
     }
 
     const updatedProduct = await db

@@ -1,0 +1,1 @@
+ALTER TABLE "products" ADD COLUMN "is_special_product" boolean DEFAULT false NOT NULL;

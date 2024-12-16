@@ -17,9 +17,9 @@ export function CartButton() {
           onClick={() => setCartOpen(true)}
           className="flex items-center gap-2"
         >
-          <ShoppingCart className="h-4 w-4" />
+          <ShoppingCart strokeWidth={2.8} className="h-4 w-4" />
           <span>Cart ({items.length})</span>
-          <span>${total.toFixed(2)}</span>
+          <span>{total.toFixed(2)}€</span>
         </Button>
       </div>
       <CartDialog open={cartOpen} onOpenChange={setCartOpen} />
