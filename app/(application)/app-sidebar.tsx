@@ -1,25 +1,24 @@
 'use client'
 
-import { Package, User, Wine } from 'lucide-react'
+import { Package, User, Wine, Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState, useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useTheme } from 'next-themes'
+import Image from 'next/image'
 
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarMenuButton
+  SidebarMenuButton,
+  useSidebar
 } from '@/components/ui/sidebar'
-import { MobileMenu } from './mobile-menu'
 
-// Move items outside of the component to avoid recreation
 const items = [
   {
     title: 'Drinks',
@@ -36,53 +35,63 @@ const items = [
 export function AppSidebar() {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const { openMobile, setOpenMobile } = useSidebar()
 
   useEffect(() => {
     setTheme('dark')
   }, [])
 
   useEffect(() => {
-    setIsMobileOpen(false)
-  }, [pathname])
+    setOpenMobile(false)
+  }, [pathname, setOpenMobile])
 
   return (
-    <>
-      <MobileMenu items={items} setIsMobileOpen={setIsMobileOpen} />
-
-      <Sidebar
-        className={`${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform md:translate-x-0`}
+    <Sidebar
+      className={`${openMobile ? 'translate-x-0' : '-translate-x-full'} transition-transform md:translate-x-0`}
+    >
+      <button
+        onClick={() => setOpenMobile(!openMobile)}
+        className="fixed left-4 top-4 z-50 md:hidden"
       >
-        <SidebarHeader className="flex items-center justify-between">
-          <div className="flex items-center gap-2 px-2">
-            <span className="text-lg font-semibold">Tab System</span>
-          </div>
-        </SidebarHeader>
+        <Menu className="h-6 w-6 cursor-pointer" />
+      </button>
 
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname === item.url}
-                      tooltip={item.title}
-                      variant="outline"
-                    >
-                      <Link href={item.url}>
-                        <item.icon className="h-5 w-5" />
-                        <span className="text-base">{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-      </Sidebar>
-    </>
+      <SidebarHeader className="flex items-center justify-between my-2">
+        <div className="flex items-center gap-2 px-2">
+          <Image
+            src="/jalostajat_logo_w.png"
+            alt="Jalostajat logo"
+            width={36}
+            height={36}
+            className="max-w-[36px]"
+          />
+          <span className="text-xl font-semibold gesetz-font">OJS Tab</span>
+        </div>
+      </SidebarHeader>
+
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === item.url}
+                    tooltip={item.title}
+                    variant="outline"
+                  >
+                    <Link href={item.url}>
+                      <item.icon className="h-5 w-5" />
+                      <span className="text-base">{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
   )
 }

@@ -27,7 +27,7 @@ export default function LoginPage() {
       }
 
       router.refresh()
-      router.push('/home')
+      router.push('/tab')
     } catch (error) {
       toast({
         title: 'Error',

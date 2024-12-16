@@ -43,7 +43,8 @@ async function main() {
       .values({
         name: username,
         password: hashedPassword,
-        tab: 0
+        balance: 0,
+        member_no: '0'
       })
       .execute()
 

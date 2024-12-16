@@ -5,6 +5,7 @@ import { getCurrentUser } from '@/lib/get-current-user'
 import { redirect } from 'next/navigation'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { ProductCategory, Transaction } from '@/db/schema'
+import { LogoutButton } from '@/components/logout-button'
 
 export default async function ProfilePage() {
   const user = await getCurrentUser()
@@ -49,7 +50,7 @@ export default async function ProfilePage() {
     <div className="container py-8 max-w-5xl">
       <div className="grid gap-8">
         {/* Profile Header */}
-        <div className="flex items-start gap-6">
+        <div className="flex items-start flex-wrap gap-6">
           <Avatar className="h-24 w-24">
             <AvatarFallback>
               {user.name.slice(0, 2).toUpperCase()}
@@ -57,7 +58,6 @@ export default async function ProfilePage() {
           </Avatar>
           <div className="space-y-1">
             <h1 className="text-2xl font-semibold">{user.name}</h1>
-            <p className="text-muted-foreground">Tab Balance: €{user.tab}</p>
             <div className="flex gap-4 text-sm text-muted-foreground pt-2">
               <div>
                 <strong className="text-foreground">
@@ -72,6 +72,19 @@ export default async function ProfilePage() {
                 Spent
               </div>
             </div>
+          </div>
+          <div className="ml-auto flex items-center gap-8">
+            <div>
+              <p className="text-sm text-muted-foreground mb-1">Balance</p>
+              <p className="text-2xl font-bold tabular-nums">
+                {user.balance.toLocaleString('en-GB', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}
+                €
+              </p>
+            </div>
+            <LogoutButton />
           </div>
         </div>
 
@@ -117,11 +130,13 @@ export default async function ProfilePage() {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Current Tab</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Jotain tähän?
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">€{user.tab}</div>
-              <p className="text-xs text-muted-foreground">Available balance</p>
+              <div className="text-2xl font-bold">€€€€</div>
+              <p className="text-xs text-muted-foreground">Rahaa</p>
             </CardContent>
           </Card>
         </div>
@@ -149,7 +164,9 @@ export default async function ProfilePage() {
                         Ordered {transaction.product.name}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {daysSince} day{daysSince !== 1 ? 's' : ''} ago
+                        {daysSince === 0
+                          ? 'today'
+                          : `${daysSince} day${daysSince !== 1 ? 's' : ''} ago`}
                       </p>
                     </div>
                     <div className="text-sm font-medium">

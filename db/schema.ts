@@ -32,8 +32,9 @@ export type ProductCategory = (typeof productCategoryEnum.enumValues)[number]
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
-  tab: integer('tab').notNull().default(0),
+  balance: integer('balance').notNull().default(0),
   name: text('name').notNull(),
+  member_no: text('member_no').notNull(),
   password: text('password').notNull()
 })
 
@@ -61,26 +62,19 @@ export const activityLogs = pgTable('activity_logs', {
     .default(sql`CURRENT_TIMESTAMP`)
 })
 
-export const transactions = pgTable(
-  'transactions',
-  {
-    id: serial('id').primaryKey(),
-    amount: real('amount').notNull(),
-    userId: integer('user_id')
-      .notNull()
-      .references(() => users.id),
-    productId: integer('product_id')
-      .notNull()
-      .references(() => products.id),
-    createdAt: timestamp('created_at')
-      .notNull()
-      .default(sql`CURRENT_TIMESTAMP`)
-  },
-  (table) => ({
-    userIdx: uniqueIndex('transaction_user_idx').on(table.userId),
-    productIdx: uniqueIndex('transaction_product_idx').on(table.productId)
-  })
-)
+export const transactions = pgTable('transactions', {
+  id: serial('id').primaryKey(),
+  amount: real('amount').notNull(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => users.id),
+  productId: integer('product_id')
+    .notNull()
+    .references(() => products.id),
+  createdAt: timestamp('created_at')
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`)
+})
 
 export const transactionsRelations = relations(transactions, ({ one }) => ({
   user: one(users, {

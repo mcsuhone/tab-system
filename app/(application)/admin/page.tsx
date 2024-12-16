@@ -1,23 +1,24 @@
 import { getProducts } from '@/app/actions/products'
 import { ProductList } from '@/components/product/product-list'
-import UserInfo from '../user-info'
-import { User } from '@/db/schema'
-import { getCurrentUser } from '@/lib/get-current-user'
+import { AddProductForm } from '@/components/product/add-product-form'
 
 export default async function TabPage() {
   const { data: products, error } = await getProducts()
-  const user = await getCurrentUser()
 
   return (
-    <div className="w-full space-y-6">
-      <h1 className="text-3xl font-bold">Drinks</h1>
-      <UserInfo user={user} />
+    <div className="w-full max-w-7xl">
+      <h1 className="mb-8 text-3xl font-bold">Tab Management</h1>
+
+      <div className="mb-8">
+        <h2 className="mb-4 text-xl font-semibold">Add New Product</h2>
+        <AddProductForm />
+      </div>
 
       {error ? (
         <div className="text-red-500">{error}</div>
       ) : (
         <div>
-          <h2 className="mb-4 text-xl font-semibold">Drinks</h2>
+          <h2 className="mb-4 text-xl font-semibold">Products</h2>
           <ProductList products={products || []} />
         </div>
       )}
