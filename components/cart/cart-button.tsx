@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 export function CartButton() {
   const [cartOpen, setCartOpen] = useState(false)
-  const { total, items } = useCart()
+  const { total, items, isLoading } = useCart()
   const [isAnimating, setIsAnimating] = useState(false)
   const prevItemsRef = useRef<number>(0)
 
@@ -27,6 +27,15 @@ export function CartButton() {
     }
     prevItemsRef.current = totalItems
   }, [items])
+
+  if (isLoading) {
+    return (
+      <Button variant="outline" className="flex items-center gap-2">
+        <ShoppingCart className="h-4 w-4" />
+        <span>Loading...</span>
+      </Button>
+    )
+  }
 
   return (
     <>

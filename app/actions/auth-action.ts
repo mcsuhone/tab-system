@@ -3,6 +3,9 @@
 import { verifyCredentials } from '@/lib/auth'
 import { SignJWT } from 'jose'
 import { cookies } from 'next/headers'
+import { db } from '@/db/db'
+import { users } from '@/db/schema'
+import { eq } from 'drizzle-orm'
 
 export async function login(memberNo: string, password: string) {
   try {
@@ -11,22 +14,31 @@ export async function login(memberNo: string, password: string) {
       return false
     }
 
-    console.log('Attempting login with:', {
-      memberNo,
-      password: password ? '[PROVIDED]' : '[EMPTY]'
-    })
-
     const isValid = await verifyCredentials(memberNo, password)
-    console.log('Credentials verification result:', isValid)
 
     if (!isValid) {
       console.log('Invalid credentials')
       return false
     }
 
-    // Create JWT token
+    // Get user data including permission
+    const user = await db
+      .select({
+        memberNo: users.member_no,
+        permission: users.permission
+      })
+      .from(users)
+      .where(eq(users.member_no, memberNo))
+      .limit(1)
+
+    if (!user[0]) return false
+
+    // Create JWT token with permission
     const secret = new TextEncoder().encode(process.env.JWT_SECRET)
-    const token = await new SignJWT({ memberNo })
+    const token = await new SignJWT({
+      memberNo: user[0].memberNo,
+      permission: user[0].permission
+    })
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('1d')
       .sign(secret)

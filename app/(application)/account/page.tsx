@@ -7,6 +7,18 @@ import { categoryDisplayNames } from '@/lib/product-categories'
 import { ProductCategory, Transaction } from '@/db/schema'
 import { LogoutButton } from '@/components/logout-button'
 import { ChangePasswordForm } from '@/components/account/change-password-form'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table'
+
+// Move client components to a separate file
+import { StatsGrid } from './stats-grid'
+import { RecentActivity } from './recent-activity'
 
 export default async function ProfilePage() {
   const { user } = await auth()
@@ -34,10 +46,10 @@ export default async function ProfilePage() {
     ? Math.round((favoriteCategory[1] / user.transactions.length) * 100)
     : 0
 
-  // Get recent transactions
+  // Get recent transactions (15)
   const recentTransactions = [...user.transactions]
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .slice(0, 3)
+    .slice(0, 15)
 
   // Get last order date
   const lastOrder = recentTransactions[0]
@@ -46,6 +58,34 @@ export default async function ProfilePage() {
         (Date.now() - lastOrder.createdAt.getTime()) / (1000 * 60 * 60 * 24)
       )
     : null
+
+  const stats = {
+    lastOrder: {
+      value:
+        daysSinceLastOrder === null
+          ? 'No orders yet'
+          : `${daysSinceLastOrder} day${daysSinceLastOrder !== 1 ? 's' : ''} ago`,
+      subtitle: lastOrder
+        ? `${lastOrder.product.name}, ${lastOrder.amount.toFixed(2)}€`
+        : undefined
+    },
+    favoriteCategory: {
+      value: favoriteCategory
+        ? categoryDisplayNames[favoriteCategory[0] as ProductCategory]
+        : 'No orders yet',
+      subtitle: favoriteCategory
+        ? `${favoriteCategoryPercentage}% of all orders`
+        : undefined
+    },
+    averageOrder: {
+      value: `${
+        user.transactions.length > 0
+          ? (totalSpent / user.transactions.length).toFixed(2)
+          : '0.00'
+      }€`,
+      subtitle: 'Per transaction'
+    }
+  }
 
   return (
     <>
@@ -68,7 +108,7 @@ export default async function ProfilePage() {
               </div>
               <div>
                 <strong className="text-foreground">
-                  €{totalSpent.toFixed(2)}
+                  {totalSpent.toFixed(2)}€
                 </strong>{' '}
                 Spent
               </div>
@@ -80,7 +120,7 @@ export default async function ProfilePage() {
           <div className="ml-auto flex items-center gap-8">
             <div>
               <p className="text-sm text-muted-foreground mb-1">Balance</p>
-              <p className="text-2xl font-bold tabular-nums">
+              <p className="text-1xl font-bold tabular-nums">
                 {user.balance.toLocaleString('en-GB', {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2
@@ -95,104 +135,10 @@ export default async function ProfilePage() {
         <Separator />
 
         {/* Stats Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Last Order</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {daysSinceLastOrder === null
-                  ? 'No orders yet'
-                  : `${daysSinceLastOrder} day${daysSinceLastOrder !== 1 ? 's' : ''} ago`}
-              </div>
-              {lastOrder && (
-                <p className="text-xs text-muted-foreground">
-                  {lastOrder.product.name}, €{lastOrder.amount.toFixed(2)}
-                </p>
-              )}
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Favorite Category
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {favoriteCategory
-                  ? categoryDisplayNames[favoriteCategory[0] as ProductCategory]
-                  : 'No orders yet'}
-              </div>
-              {favoriteCategory && (
-                <p className="text-xs text-muted-foreground">
-                  {favoriteCategoryPercentage}% of all orders
-                </p>
-              )}
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Average Order
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                €
-                {user.transactions.length > 0
-                  ? (totalSpent / user.transactions.length).toFixed(2)
-                  : '0.00'}
-              </div>
-              <p className="text-xs text-muted-foreground">Per transaction</p>
-            </CardContent>
-          </Card>
-        </div>
+        <StatsGrid stats={stats} />
 
         {/* Recent Activity */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentTransactions.map((transaction) => {
-                const daysSince = Math.round(
-                  (Date.now() - transaction.createdAt.getTime()) /
-                    (1000 * 60 * 60 * 24)
-                )
-
-                return (
-                  <div key={transaction.id} className="flex items-center gap-4">
-                    <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                      🛒
-                    </div>
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">
-                        Ordered {transaction.product.name}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {daysSince === 0
-                          ? 'today'
-                          : `${daysSince} day${daysSince !== 1 ? 's' : ''} ago`}
-                      </p>
-                    </div>
-                    <div className="text-sm font-medium">
-                      €{transaction.amount.toFixed(2)}
-                    </div>
-                  </div>
-                )
-              })}
-
-              {recentTransactions.length === 0 && (
-                <p className="text-sm text-muted-foreground text-center py-4">
-                  No recent activity
-                </p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        <RecentActivity transactions={recentTransactions} />
       </div>
     </>
   )

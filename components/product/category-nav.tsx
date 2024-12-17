@@ -24,7 +24,7 @@ export function CategoryNav({
           <button
             onClick={() => onCategorySelect(null)}
             className={`w-full text-left block p-2 rounded-md hover:bg-accent ${
-              activeCategory === null ? 'bg-accent font-medium' : ''
+              activeCategory === null ? 'bg-accent text-sm' : 'text-sm'
             }`}
           >
             All Products
@@ -35,7 +35,7 @@ export function CategoryNav({
             <button
               onClick={() => onCategorySelect(category)}
               className={`w-full text-left block p-2 rounded-md hover:bg-accent ${
-                activeCategory === category ? 'bg-accent font-medium' : ''
+                activeCategory === category ? 'bg-accent text-sm' : 'text-sm'
               }`}
             >
               {categoryDisplayNames[category]}

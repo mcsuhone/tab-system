@@ -5,9 +5,11 @@ import { Card, CardContent } from '@/components/ui/card'
 import { useState } from 'react'
 import { AddToCartDialog } from '../cart/add-to-cart-dialog'
 import { Beer, Martini, DollarSign } from 'lucide-react'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface SpecialProductsProps {
   products: Product[]
+  isLoading?: boolean
 }
 
 interface SpecialProductConfig {
@@ -39,7 +41,18 @@ const specialProductConfigs: Record<string, SpecialProductConfig> = {
   }
 }
 
-export function SpecialProducts({ products }: SpecialProductsProps) {
+function SpecialProductSkeleton() {
+  return (
+    <Card>
+      <CardContent className="p-4 flex items-center gap-2">
+        <Skeleton className="h-5 w-5 rounded-full" />
+        <Skeleton className="h-5 w-28" />
+      </CardContent>
+    </Card>
+  )
+}
+
+export function SpecialProducts({ products, isLoading }: SpecialProductsProps) {
   const [selectedProduct, setSelectedProduct] =
     useState<SpecialProductExtended | null>(null)
 
@@ -55,23 +68,31 @@ export function SpecialProducts({ products }: SpecialProductsProps) {
     <div>
       <h2 className="text-lg font-semibold mb-4">Special Products</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {products.map((product) => {
-          const config = specialProductConfigs[product.name]
-          if (!config) return null
+        {isLoading ? (
+          <>
+            <SpecialProductSkeleton />
+            <SpecialProductSkeleton />
+            <SpecialProductSkeleton />
+          </>
+        ) : (
+          products.map((product) => {
+            const config = specialProductConfigs[product.name]
+            if (!config) return null
 
-          return (
-            <Card
-              key={product.id}
-              className="cursor-pointer hover:bg-accent transition-colors"
-              onClick={() => handleProductClick(product)}
-            >
-              <CardContent className="p-4 flex items-center gap-2">
-                <span className={config.color}>{config.icon}</span>
-                <span className="font-medium">{config.title}</span>
-              </CardContent>
-            </Card>
-          )
-        })}
+            return (
+              <Card
+                key={product.id}
+                className="cursor-pointer hover:bg-accent transition-colors"
+                onClick={() => handleProductClick(product)}
+              >
+                <CardContent className="p-4 flex items-center gap-2">
+                  <span className={config.color}>{config.icon}</span>
+                  <span className="font-medium">{config.title}</span>
+                </CardContent>
+              </Card>
+            )
+          })
+        )}
       </div>
 
       {selectedProduct && (

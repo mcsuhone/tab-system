@@ -51,7 +51,8 @@ export function ProductList({
     showDisabled
   })
 
-  const { data: specialProductsData } = useSpecialProducts()
+  const { data: specialProductsData, isLoading: isSpecialProductsLoading } =
+    useSpecialProducts()
 
   useEffect(() => {
     if (isLoading) {
@@ -74,9 +75,21 @@ export function ProductList({
       <div className="flex justify-end mt-6">
         <CartButton />
       </div>
-      <div className="mb-8">
-        <SpecialProducts products={specialProductsData?.data || []} />
-      </div>
+      <AnimatePresence mode="wait">
+        {!isSpecialProductsLoading && specialProductsData?.data && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="mb-8"
+          >
+            <SpecialProducts
+              products={specialProductsData.data}
+              isLoading={false}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <h2 className="mb-4 text-xl font-semibold">Categories</h2>
       <div className="grid grid-cols-[200px_1fr] gap-6">

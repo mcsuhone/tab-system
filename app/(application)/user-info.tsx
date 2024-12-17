@@ -20,14 +20,14 @@ export default function UserInfo({ user, className }: UserInfoProps) {
 
   return (
     <Card className={cn('p-3', className)}>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         <Avatar className="h-8 w-8 text-xs">
           <AvatarFallback>{user.name.slice(0, 2).toUpperCase()}</AvatarFallback>
         </Avatar>
         <div className="flex-1 min-w-0">
           <h2 className="text-sm font-medium truncate">{user.name}</h2>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-8">
           <div className="text-right">
             <p className="text-xs text-muted-foreground">Balance</p>
             <p className="text-sm font-semibold tabular-nums">
