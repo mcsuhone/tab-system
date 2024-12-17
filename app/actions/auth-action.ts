@@ -6,6 +6,7 @@ import { cookies } from 'next/headers'
 import { db } from '@/db/db'
 import { users } from '@/db/schema'
 import { eq } from 'drizzle-orm'
+import { auth } from '@/lib/auth'
 
 export async function login(memberNo: string, password: string) {
   try {
@@ -60,4 +61,14 @@ export async function login(memberNo: string, password: string) {
 
 export async function logout(): Promise<void> {
   cookies().delete('token')
+}
+
+export async function checkAdminStatus(): Promise<boolean> {
+  try {
+    const { user } = await auth()
+    return user?.permission === 'admin' ?? false
+  } catch (error) {
+    console.error('Error checking admin status:', error)
+    return false
+  }
 }

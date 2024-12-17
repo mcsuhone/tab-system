@@ -3,10 +3,9 @@
 import { Package, User, Wine, Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
-import { jwtVerify } from 'jose'
 
 import {
   Sidebar,
@@ -39,28 +38,14 @@ const adminItem = {
   icon: Package
 } as const
 
-export function AppSidebar() {
+interface AppSidebarProps {
+  isAdmin: boolean
+}
+
+export function AppSidebar({ isAdmin }: AppSidebarProps) {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
   const { openMobile, setOpenMobile } = useSidebar()
-  const [isAdmin, setIsAdmin] = useState(false)
-
-  useEffect(() => {
-    async function checkAdminStatus() {
-      try {
-        const token = document.cookie.split('token=')[1]?.split(';')[0]
-        if (token) {
-          const secret = new TextEncoder().encode('secret')
-          const { payload } = await jwtVerify(token, secret)
-          setIsAdmin(payload.role === 'admin')
-        }
-      } catch (error) {
-        console.error('Error checking admin status:', error)
-        setIsAdmin(false)
-      }
-    }
-    checkAdminStatus()
-  }, [])
 
   useEffect(() => {
     setTheme('dark')
@@ -88,6 +73,7 @@ export function AppSidebar() {
       <SidebarHeader className="flex items-center justify-between my-2">
         <div className="flex items-center gap-2 px-2">
           <Image
+            priority
             src="/jalostajat_logo_w.png"
             alt="Jalostajat logo"
             width={36}

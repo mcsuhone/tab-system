@@ -11,11 +11,15 @@ export function LogoutButton() {
   const { clearCart } = useCart()
 
   const handleLogout = async () => {
-    await logout()
-    clearCart()
-    localStorage.removeItem('token')
-    router.refresh()
-    router.push('/login')
+    try {
+      await logout()
+      clearCart()
+      localStorage.removeItem('token')
+      // Force a hard navigation to the login page
+      window.location.href = '/login'
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
   }
 
   return (

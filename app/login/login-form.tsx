@@ -33,7 +33,6 @@ export function LoginForm() {
       const success = await login(memberNo, password)
 
       if (!success) {
-        console.log('Login failed, showing toast')
         toast({
           title: 'Error',
           description:
