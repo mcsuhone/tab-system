@@ -2,19 +2,10 @@ import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import { users } from './schema'
 import { eq } from 'drizzle-orm'
 import { db } from './db'
-import readline from 'readline'
 import bcrypt from 'bcryptjs'
+import { fileURLToPath } from 'url'
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
-
-const question = (query: string): Promise<string> => {
-  return new Promise((resolve) => {
-    rl.question(query, resolve)
-  })
-}
+const DEFAULT_ADMIN_USERNAME = 'admin'
 
 async function main() {
   console.log('Starting migration...')
@@ -25,18 +16,24 @@ async function main() {
   const existingRoot = await db
     .select()
     .from(users)
-    .where(eq(users.name, 'root'))
+    .where(eq(users.name, DEFAULT_ADMIN_USERNAME))
     .execute()
 
   if (existingRoot.length === 0) {
-    console.log('\nNo root user found. Creating root user...')
-    const username =
-      (await question('Enter root username (default: root): ')) || 'root'
-    const password =
-      (await question('Enter root password (can be empty): ')) || ''
+    console.log(
+      '\nNo root user found. Creating root user from environment variables...'
+    )
+    const username = process.env.ADMIN_USERNAME || DEFAULT_ADMIN_USERNAME
+    const password = process.env.ADMIN_PASSWORD
+
+    if (!password) {
+      throw new Error(
+        'ADMIN_PASSWORD environment variable is required for first run'
+      )
+    }
 
     // Hash the password before storing
-    const hashedPassword = password ? await bcrypt.hash(password, 10) : ''
+    const hashedPassword = await bcrypt.hash(password, 10)
 
     await db
       .insert(users)
@@ -50,11 +47,15 @@ async function main() {
 
     console.log('Root user created successfully!')
   }
-
-  rl.close()
 }
 
-main().catch((err) => {
-  console.error('Migration failed!', err)
-  process.exit(1)
-})
+// Export for use in other files
+export const runMigrations = main
+
+// If this file is run directly
+if (import.meta.url === fileURLToPath(import.meta.url)) {
+  main().catch((err) => {
+    console.error('Migration failed!', err)
+    process.exit(1)
+  })
+}
