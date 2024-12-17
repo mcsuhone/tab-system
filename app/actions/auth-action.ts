@@ -66,7 +66,7 @@ export async function logout(): Promise<void> {
 export async function checkAdminStatus(): Promise<boolean> {
   try {
     const { user } = await auth()
-    return user?.permission === 'admin' ?? false
+    return user?.permission === 'admin' || false
   } catch (error) {
     console.error('Error checking admin status:', error)
     return false

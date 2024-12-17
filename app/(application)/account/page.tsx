@@ -1,24 +1,15 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import { auth } from '@/lib/auth'
-import { redirect } from 'next/navigation'
-import { categoryDisplayNames } from '@/lib/product-categories'
-import { ProductCategory, Transaction } from '@/db/schema'
-import { LogoutButton } from '@/components/logout-button'
 import { ChangePasswordForm } from '@/components/account/change-password-form'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table'
+import { LogoutButton } from '@/components/logout-button'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Separator } from '@/components/ui/separator'
+import { ProductCategory, Transaction } from '@/db/schema'
+import { auth } from '@/lib/auth'
+import { categoryDisplayNames } from '@/lib/product-categories'
+import { redirect } from 'next/navigation'
 
 // Move client components to a separate file
-import { StatsGrid } from './stats-grid'
 import { RecentActivity } from './recent-activity'
+import { StatsGrid } from './stats-grid'
 
 export default async function ProfilePage() {
   const { user } = await auth()

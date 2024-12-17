@@ -10,7 +10,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { Product } from '@/db/schema'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useCart } from './cart-provider'
 import { QuantitySelector } from './quantity-selector'
 import { Input } from '@/components/ui/input'
@@ -41,9 +41,14 @@ export function AddToCartDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const qty = parseFloat(quantity)
-    const finalPrice = product.isOpenPrice ? parseFloat(price) : product.price
+    const finalPrice = product.isSpecialProduct
+      ? parseFloat(price)
+      : product.price
 
-    if (qty > 0 && (!product.isOpenPrice || (finalPrice && finalPrice > 0))) {
+    if (
+      qty > 0 &&
+      (!product.isSpecialProduct || (finalPrice && finalPrice > 0))
+    ) {
       addItem(
         {
           ...product,
@@ -61,19 +66,16 @@ export function AddToCartDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>
-            Add to Cart - {product.name}
-            {product.isTapBeer && ' (Tap)'}
-          </DialogTitle>
-          {!product.isOpenPrice && (
+          <DialogTitle>Add to Cart - {product.name}</DialogTitle>
+          {!product.isSpecialProduct && (
             <DialogDescription>
-              €{product.price.toFixed(2)} per unit
+              {product.price.toFixed(2)}€ per unit
             </DialogDescription>
           )}
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
-            {product.isOpenPrice && (
+            {product.isSpecialProduct && (
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="price" className="text-right">
                   Price
@@ -106,12 +108,12 @@ export function AddToCartDialog({
             <div className="grid grid-cols-4 items-center gap-4">
               <label className="text-right">Total</label>
               <div className="col-span-3">
-                €
                 {(
-                  (product.isOpenPrice
+                  (product.isSpecialProduct
                     ? parseFloat(price) || 0
                     : product.price) * parseFloat(quantity || '0')
                 ).toFixed(2)}
+                €
               </div>
             </div>
           </div>

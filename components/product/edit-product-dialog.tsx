@@ -1,5 +1,6 @@
 'use client'
 
+import { updateProduct } from '@/app/actions/products'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -7,7 +8,12 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import {
   Form,
   FormControl,
@@ -16,20 +22,14 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import { Product, ProductCategory, productCategoryEnum } from '@/db/schema'
+import { Input } from '@/components/ui/input'
+import { Product, productCategoryEnum } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ChevronDown } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { updateProduct } from '@/app/actions/products'
-import { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
 
 const formSchema = z.object({
   name: z.string().min(2, {

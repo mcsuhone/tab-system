@@ -13,7 +13,7 @@ import { Product } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Ban, MoreHorizontal, Pencil } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { EditProductDialog } from './edit-product-dialog'
 import { ProductList } from './product-list'
 
@@ -23,23 +23,6 @@ const container = {
     opacity: 1,
     transition: {
       staggerChildren: 0.02
-    }
-  }
-}
-
-const item = {
-  hidden: {
-    opacity: 0,
-    y: -10
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 700,
-      damping: 35,
-      mass: 0.35
     }
   }
 }

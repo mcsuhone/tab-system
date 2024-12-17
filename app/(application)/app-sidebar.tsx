@@ -1,11 +1,11 @@
 'use client'
 
-import { Package, User, Wine, Menu, SlidersHorizontal } from 'lucide-react'
+import { Menu, SlidersHorizontal, User, Wine } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
-import { useTheme } from 'next-themes'
-import Image from 'next/image'
 
 import {
   Sidebar,
@@ -14,8 +14,8 @@ import {
   SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
 
@@ -44,12 +44,12 @@ interface AppSidebarProps {
 
 export function AppSidebar({ isAdmin }: AppSidebarProps) {
   const pathname = usePathname()
-  const { theme, setTheme } = useTheme()
+  const { setTheme } = useTheme()
   const { openMobile, setOpenMobile } = useSidebar()
 
   useEffect(() => {
     setTheme('dark')
-  }, [])
+  }, [setTheme])
 
   useEffect(() => {
     setOpenMobile(false)

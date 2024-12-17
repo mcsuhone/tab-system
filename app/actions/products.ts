@@ -1,9 +1,9 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
 import { db } from '@/db/db'
 import { ProductCategory, products } from '@/db/schema'
-import { eq, and, ilike } from 'drizzle-orm'
+import { and, eq, ilike } from 'drizzle-orm'
+import { revalidatePath } from 'next/cache'
 
 export type ProductFilters = {
   query?: string
@@ -45,8 +45,6 @@ export async function addProduct(formData: FormData) {
     const name = formData.get('name') as string
     const category = formData.get('category') as ProductCategory
     const price = parseFloat(formData.get('price') as string)
-    const isOpenPrice = formData.get('isOpenPrice') === 'true'
-    const isTapBeer = formData.get('isTapBeer') === 'true'
     const isSpecialProduct = formData.get('isSpecialProduct') === 'true'
 
     if (!name || !category || !price) {
@@ -78,8 +76,6 @@ interface UpdateProductData {
   price?: number
   name?: string
   category?: ProductCategory
-  isOpenPrice?: boolean
-  isTapBeer?: boolean
   isSpecialProduct?: boolean
 }
 
@@ -104,14 +100,6 @@ export async function updateProduct(
 
     if (data.category) {
       updateData.category = data.category
-    }
-
-    if (typeof data.isOpenPrice === 'boolean') {
-      updateData.isOpenPrice = data.isOpenPrice
-    }
-
-    if (typeof data.isTapBeer === 'boolean') {
-      updateData.isTapBeer = data.isTapBeer
     }
 
     if (typeof data.isSpecialProduct === 'boolean') {

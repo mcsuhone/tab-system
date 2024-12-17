@@ -1,9 +1,9 @@
 'use client'
 
-import React from 'react'
-import { useState, useEffect } from 'react'
-import { Input } from '@/components/ui/input'
+import { getActivityLogs } from '@/app/actions/activity-logs'
 import { Button } from '@/components/ui/button'
+import { DatePicker } from '@/components/ui/date-picker'
+import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -12,16 +12,15 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { DatePicker } from '@/components/ui/date-picker'
 import { useToast } from '@/components/ui/use-toast'
-import { getActivityLogs } from '@/app/actions/activity-logs'
-import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { AnimatePresence, motion } from 'framer-motion'
+import React, { useEffect, useState, useCallback } from 'react'
 
 interface ActivityLog {
   id: number
   action: string
-  details: any
+  details: Record<string, unknown>
   userId: number | null
   createdAt: Date
   memberNo: string | null
@@ -97,65 +96,68 @@ export default function ActivityLogsPage() {
     'all' | 'today' | 'week' | 'month'
   >('all')
 
+  const loadLogs = useCallback(
+    async (filter?: 'today' | 'week' | 'month') => {
+      setIsLoading(true)
+      try {
+        let start = startDate
+        let end = endDate
+
+        if (filter) {
+          const now = new Date()
+          now.setHours(23, 59, 59, 999) // Set to end of day
+          end = now
+
+          const startOfToday = new Date(now)
+          startOfToday.setHours(0, 0, 0, 0)
+
+          switch (filter) {
+            case 'today':
+              start = startOfToday
+              break
+            case 'week': {
+              start = new Date(startOfToday)
+              start.setDate(start.getDate() - 6) // -6 to include today
+              break
+            }
+            case 'month': {
+              start = new Date(startOfToday)
+              start.setDate(start.getDate() - 29) // -29 to include today
+              break
+            }
+          }
+          setStartDate(undefined)
+          setEndDate(undefined)
+          setActiveFilter(filter)
+        } else {
+          setActiveFilter('all')
+        }
+
+        const { data, error } = await getActivityLogs({
+          startDate: start,
+          endDate: end,
+          memberNo: memberNo || undefined
+        })
+
+        if (error) {
+          toast({
+            variant: 'destructive',
+            title: error.title,
+            description: error.description
+          })
+        } else if (data) {
+          setLogs(data as ActivityLog[])
+        }
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [startDate, endDate, memberNo, toast]
+  )
+
   useEffect(() => {
     loadLogs()
-  }, [])
-
-  async function loadLogs(filter?: 'today' | 'week' | 'month') {
-    setIsLoading(true)
-    try {
-      let start = startDate
-      let end = endDate
-
-      if (filter) {
-        const now = new Date()
-        now.setHours(23, 59, 59, 999) // Set to end of day
-        end = now
-
-        const startOfToday = new Date(now)
-        startOfToday.setHours(0, 0, 0, 0)
-
-        switch (filter) {
-          case 'today':
-            start = startOfToday
-            break
-          case 'week': {
-            start = new Date(startOfToday)
-            start.setDate(start.getDate() - 6) // -6 to include today
-            break
-          }
-          case 'month': {
-            start = new Date(startOfToday)
-            start.setDate(start.getDate() - 29) // -29 to include today
-            break
-          }
-        }
-        setStartDate(undefined)
-        setEndDate(undefined)
-        setActiveFilter(filter)
-      } else {
-        setActiveFilter('all')
-      }
-
-      const { data, error } = await getActivityLogs({
-        startDate: start,
-        endDate: end,
-        memberNo: memberNo || undefined
-      })
-
-      if (error) {
-        toast({
-          variant: 'destructive',
-          title: error.title,
-          description: error.description
-        })
-      } else if (data) {
-        setLogs(data)
-      }
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  }, [loadLogs])
 
   return (
     <div className="w-full max-w-7xl">

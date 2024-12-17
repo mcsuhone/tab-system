@@ -3,7 +3,6 @@
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 
-import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -19,11 +18,16 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover'
-import React from 'react'
+import { cn } from '@/lib/utils'
 import { ValueLabelPair } from '@/types'
+import React from 'react'
 
 interface ComboboxInputProps {
-  field: any
+  field: {
+    value: string
+    onChange: (value: string) => void
+    name: string
+  }
   options: ValueLabelPair<string, string>[]
   placeholder_text: string
   empty_text: string

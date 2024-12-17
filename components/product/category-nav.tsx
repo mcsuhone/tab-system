@@ -2,7 +2,6 @@
 
 import { ProductCategory, productCategoryEnum } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
-import Link from 'next/link'
 
 const PRODUCT_CATEGORIES = Object.values(
   productCategoryEnum.enumValues

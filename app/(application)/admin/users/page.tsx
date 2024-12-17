@@ -1,26 +1,28 @@
 'use client'
 
-import React from 'react'
-import { useState, useEffect } from 'react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table'
+  createUser,
+  getUsers,
+  resetUserPassword,
+  updateUser
+} from '@/app/actions/users'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogFooter
+  DialogTrigger
 } from '@/components/ui/dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -29,20 +31,17 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import {
-  getUsers,
-  createUser,
-  resetUserPassword,
-  updateUser
-} from '@/app/actions/users'
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table'
 import { useToast } from '@/components/ui/use-toast'
 import { UserPermission } from '@/db/schema'
-import { Plus, MoreHorizontal, Pencil, KeyRound } from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
+import { KeyRound, MoreHorizontal, Pencil, Plus } from 'lucide-react'
+import React, { useEffect, useState, useCallback } from 'react'
 
 interface User {
   id: number
@@ -151,7 +150,7 @@ function AddUserDialog({ onSuccess }: { onSuccess: () => void }) {
 
   async function handleCreateUser(e: React.FormEvent) {
     e.preventDefault()
-    const { data, error, success } = await createUser(newUser)
+    const { error, success } = await createUser(newUser)
     if (error) {
       toast({
         variant: 'destructive',
@@ -242,11 +241,7 @@ export default function UsersPage() {
   const [resetUserId, setResetUserId] = useState<number | null>(null)
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false)
 
-  useEffect(() => {
-    loadUsers()
-  }, [])
-
-  async function loadUsers() {
+  const loadUsers = useCallback(async () => {
     const { data, error } = await getUsers()
     if (error) {
       toast({
@@ -257,7 +252,11 @@ export default function UsersPage() {
     } else if (data) {
       setUsers(data)
     }
-  }
+  }, [toast])
+
+  useEffect(() => {
+    loadUsers()
+  }, [loadUsers])
 
   async function handleResetPassword() {
     if (!resetUserId) return

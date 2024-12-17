@@ -1,9 +1,17 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import {
+  addProduct,
+  getProductByName,
+  updateProduct
+} from '@/app/actions/products'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import {
   Form,
   FormControl,
@@ -13,21 +21,13 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import {
-  addProduct,
-  getProductByName,
-  updateProduct
-} from '@/app/actions/products'
-import { useTransition, useState } from 'react'
-import { Product, ProductCategory, productCategoryEnum } from '@/db/schema'
+import { Product, productCategoryEnum } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronDown } from 'lucide-react'
+import { useState, useTransition } from 'react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 import { EnableProductDialog } from './enable-product-dialog'
 
 const formSchema = z.object({
@@ -48,8 +48,6 @@ interface AddProductFormProps {
 
 export function AddProductForm({ onSuccess }: AddProductFormProps) {
   const [isPending, startTransition] = useTransition()
-  const [selectedCategory, setSelectedCategory] =
-    useState<ProductCategory | null>(null)
   const [existingProduct, setExistingProduct] = useState<Product | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
 
@@ -70,7 +68,6 @@ export function AddProductForm({ onSuccess }: AddProductFormProps) {
         formData.append('price', values.price)
         await addProduct(formData)
         form.reset()
-        setSelectedCategory(null)
         onSuccess?.()
       } catch (error) {
         if (error instanceof Error && error.message.includes('duplicate')) {
@@ -97,7 +94,6 @@ export function AddProductForm({ onSuccess }: AddProductFormProps) {
         price: newPrice
       })
       form.reset()
-      setSelectedCategory(null)
       setDialogOpen(false)
       onSuccess?.()
     })
@@ -149,7 +145,6 @@ export function AddProductForm({ onSuccess }: AddProductFormProps) {
                           key={category}
                           onSelect={() => {
                             field.onChange(category)
-                            setSelectedCategory(category)
                           }}
                         >
                           {categoryDisplayNames[category]}
