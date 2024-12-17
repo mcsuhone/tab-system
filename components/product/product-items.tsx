@@ -53,7 +53,7 @@ export function ProductItems({ products }: { products: Product[] }) {
           onClick={() => setSelectedProduct(product)}
         >
           <div className="flex-[60%]">
-            <h3 className="font-semibold">{product.name}</h3>
+            <p className="font-medium text-sm">{product.name}</p>
           </div>
           <div className="flex-[30%]">
             <p className="text-sm text-gray-500">

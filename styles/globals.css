@@ -2,11 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Libre+Bodoni:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
     --font-family: 'Josefin Sans', sans-serif;
+    --font-family-headings: 'Libre Bodoni', serif;
     --background: #ffffff;
     --foreground: #0b1222;
 
@@ -54,47 +55,58 @@
   }
 
   .dark {
-    --background: #1a1c1c;
+    --background: #09140e;
     --foreground: #f2f7fc;
 
-    --card: #0b221b;
+    --card: #1a221d;
     --card-foreground: #f2f7fc;
 
-    --popover: #0b221d;
+    --popover: #15211b;
     --popover-foreground: #f2f7fc;
 
     --primary: #f2f7fc;
-    --primary-foreground: #1a2333;
+    --primary-foreground: #09140e;
 
-    --secondary: #232b3d;
+    --secondary: #162921;
     --secondary-foreground: #f2f7fc;
 
-    --muted: #233d30;
+    --muted: #26302b;
     --muted-foreground: #9baea7;
 
-    --accent: #233d35;
+    --accent: #262f2b;
     --accent-foreground: #f2fcfb;
 
     --destructive: #7d1a1a;
     --destructive-foreground: #f2f7fc;
 
-    --border: #49524f;
-    --input: #49524f;
+    --border: #303e38;
+    --input: #1f3a2e;
     --ring: #c6ded6;
-    --chart-1: #1a56e8;
-    --chart-2: #2a9b76;
-    --chart-3: #e67300;
-    --chart-4: #8c33e8;
-    --chart-5: #e81f66;
 
-    --sidebar-background: #1a1c1c;
+    --chart-1: #4d90ff;
+    --chart-2: #2ed3b7;
+    --chart-3: #ff9f57;
+    --chart-4: #b57fff;
+    --chart-5: #ff5c8f;
+
+    --sidebar-background: #09140e;
     --sidebar-foreground: #f3f4f4;
-    --sidebar-primary: #3b65e5;
+    --sidebar-primary: #4d90ff;
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #272729;
+    --sidebar-accent: #0f1d15;
     --sidebar-accent-foreground: #f3f3f4;
-    --sidebar-border: #272729;
+    --sidebar-border: #1f3a2e;
     --sidebar-ring: #4d8ef7;
+  }
+
+  /* Add heading styles */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-family-headings);
   }
 }
 
