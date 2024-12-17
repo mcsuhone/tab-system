@@ -14,6 +14,7 @@ Tab system to allow members of an organisation to keep track of their balance. T
 - Structure repository files as follows
 - For pages in Next app router, always have page.tsx be a server component. If we need client functionality, create page-client.tsx component.
 - For more than 200 lines of code, always split code into multiple components. If they are not used on multiple pages, store it next to page.tsx.
+- Always use .env for actual envs and update .env.sample with correct keys without values.
 
 ```
 /app
@@ -25,6 +26,8 @@ Tab system to allow members of an organisation to keep track of their balance. T
 /public
 /styles
 /types
+.env
+.env.sample
 ```
 
 ## UI and Styling
