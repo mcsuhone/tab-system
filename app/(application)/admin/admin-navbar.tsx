@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation'
 const adminTabs = [
   {
     title: 'Activity',
-    href: '/admin'
+    href: '/admin/activity-logs'
   },
   {
     title: 'Products',
@@ -23,7 +23,11 @@ export function AdminNavbar() {
   const pathname = usePathname()
 
   return (
-    <Tabs defaultValue="/admin" className="w-full" value={pathname}>
+    <Tabs
+      defaultValue="/admin/activity-logs"
+      className="w-full"
+      value={pathname}
+    >
       <TabsList>
         {adminTabs.map((tab) => (
           <TabsTrigger key={tab.href} value={tab.href} asChild>

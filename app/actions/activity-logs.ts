@@ -2,7 +2,7 @@
 
 import { db } from '@/db/db'
 import { activityLogs, users } from '@/db/schema'
-import { and, between, eq } from 'drizzle-orm'
+import { and, between, eq, desc } from 'drizzle-orm'
 
 export type ActivityLogFilters = {
   startDate?: Date
@@ -19,7 +19,11 @@ export async function getActivityLogs({
     const conditions = []
 
     if (startDate && endDate) {
-      conditions.push(between(activityLogs.createdAt, startDate, endDate))
+      const adjustedEndDate = new Date(endDate)
+      adjustedEndDate.setDate(adjustedEndDate.getDate() + 1)
+      conditions.push(
+        between(activityLogs.createdAt, startDate, adjustedEndDate)
+      )
     }
 
     if (memberNo) {
@@ -37,7 +41,8 @@ export async function getActivityLogs({
     const logs = await db
       .select({
         id: activityLogs.id,
-        type: activityLogs.type,
+        action: activityLogs.action,
+        details: activityLogs.details,
         userId: activityLogs.userId,
         createdAt: activityLogs.createdAt,
         memberNo: users.member_no,
@@ -46,7 +51,7 @@ export async function getActivityLogs({
       .from(activityLogs)
       .leftJoin(users, eq(activityLogs.userId, users.id))
       .where(conditions.length > 0 ? and(...conditions) : undefined)
-      .orderBy(activityLogs.createdAt)
+      .orderBy(desc(activityLogs.createdAt))
 
     return { data: logs }
   } catch (error) {

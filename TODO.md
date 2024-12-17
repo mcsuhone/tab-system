@@ -1,6 +1,4 @@
-2. Finish admin page activity
+1. Fix products admin page
 
-- display last activity from all users
-- add filtering of this data by date (using date-picker)
-
-4. Fix Admin page visiblity
+- need to remove special products from the list
+- Also put add product form behind a dialog

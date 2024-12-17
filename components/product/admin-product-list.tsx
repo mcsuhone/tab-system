@@ -42,7 +42,7 @@ function AdminProductItem({ product: initialProduct }: ProductItemProps) {
         <p className="text-sm text-gray-600">
           {categoryDisplayNames[product.category]}
         </p>
-        <p className="text-sm">${product.price.toFixed(2)}</p>
+        <p className="text-sm">{product.price.toFixed(2)}€</p>
       </div>
       <button
         onClick={handleToggleStatus}
@@ -62,24 +62,29 @@ function AdminProductItem({ product: initialProduct }: ProductItemProps) {
 export function AdminProductList() {
   const [showDisabled, setShowDisabled] = useState(false)
 
-  const renderProducts = (products: Product[]) => (
-    <div className="space-y-4">
-      <div className="flex items-center space-x-2">
-        <Switch
-          checked={showDisabled}
-          onCheckedChange={setShowDisabled}
-          id="show-disabled"
-        />
-        <label htmlFor="show-disabled">Show disabled products</label>
-      </div>
+  const renderProducts = (products: Product[]) => {
+    // Filter out special products
+    const regularProducts = products.filter((p) => !p.isSpecialProduct)
 
-      <div className="grid gap-4">
-        {products.map((product) => (
-          <AdminProductItem key={product.id} product={product} />
-        ))}
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center space-x-2">
+          <Switch
+            checked={showDisabled}
+            onCheckedChange={setShowDisabled}
+            id="show-disabled"
+          />
+          <label htmlFor="show-disabled">Show disabled products</label>
+        </div>
+
+        <div className="grid gap-4">
+          {regularProducts.map((product) => (
+            <AdminProductItem key={product.id} product={product} />
+          ))}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   return <ProductList showDisabled={showDisabled}>{renderProducts}</ProductList>
 }

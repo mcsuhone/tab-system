@@ -20,11 +20,12 @@ import { cn } from '@/lib/utils'
 
 interface ActivityLog {
   id: number
-  type: string
-  userId: number
+  action: string
+  details: any
+  userId: number | null
+  createdAt: Date
   memberNo: string | null
   userName: string | null
-  createdAt: Date
 }
 
 interface FilterButtonProps
@@ -42,9 +43,11 @@ function FilterButton({
   return (
     <button
       className={cn(
-        'w-full text-left block p-2 rounded-md text-sm transition-colors',
+        'px-4 py-2 rounded-md text-sm transition-colors border',
         'hover:bg-accent hover:text-accent-foreground',
-        active && 'bg-accent text-accent-foreground',
+        active
+          ? 'bg-accent text-accent-foreground border-accent'
+          : 'bg-background border-input',
         className
       )}
       {...props}
@@ -106,20 +109,29 @@ export default function ActivityLogsPage() {
 
       if (filter) {
         const now = new Date()
+        now.setHours(23, 59, 59, 999) // Set to end of day
         end = now
+
+        const startOfToday = new Date(now)
+        startOfToday.setHours(0, 0, 0, 0)
+
         switch (filter) {
           case 'today':
-            start = new Date(now.setHours(0, 0, 0, 0))
+            start = startOfToday
             break
-          case 'week':
-            start = new Date(now.setDate(now.getDate() - 7))
+          case 'week': {
+            start = new Date(startOfToday)
+            start.setDate(start.getDate() - 6) // -6 to include today
             break
-          case 'month':
-            start = new Date(now.setMonth(now.getMonth() - 1))
+          }
+          case 'month': {
+            start = new Date(startOfToday)
+            start.setDate(start.getDate() - 29) // -29 to include today
             break
+          }
         }
-        setStartDate(start)
-        setEndDate(end)
+        setStartDate(undefined)
+        setEndDate(undefined)
         setActiveFilter(filter)
       } else {
         setActiveFilter('all')
@@ -149,10 +161,14 @@ export default function ActivityLogsPage() {
     <div className="w-full max-w-7xl">
       <h1 className="mb-8 text-3xl font-bold">Activity Logs</h1>
 
-      <div className="mb-4 flex flex-wrap gap-2">
+      <div className="mb-4 flex gap-2">
         <FilterButton
           active={activeFilter === 'all'}
-          onClick={() => loadLogs()}
+          onClick={() => {
+            setStartDate(undefined)
+            setEndDate(undefined)
+            loadLogs()
+          }}
         >
           All Time
         </FilterButton>
@@ -178,13 +194,19 @@ export default function ActivityLogsPage() {
 
       <div className="mb-8 flex flex-wrap gap-4">
         <DatePicker
-          value={startDate}
-          onChange={setStartDate}
+          date={startDate}
+          onSelect={(date) => {
+            setStartDate(date)
+            setActiveFilter('all')
+          }}
           placeholder="Start date"
         />
         <DatePicker
-          value={endDate}
-          onChange={setEndDate}
+          date={endDate}
+          onSelect={(date) => {
+            setEndDate(date)
+            setActiveFilter('all')
+          }}
           placeholder="End date"
         />
         <Input
@@ -208,10 +230,11 @@ export default function ActivityLogsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Time</TableHead>
-                <TableHead>Type</TableHead>
+                <TableHead>Timestamp</TableHead>
+                <TableHead>Action</TableHead>
                 <TableHead>Member #</TableHead>
                 <TableHead>Name</TableHead>
+                <TableHead>Details</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -222,11 +245,23 @@ export default function ActivityLogsPage() {
                   className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
                 >
                   <TableCell>
-                    {new Date(log.createdAt).toLocaleString()}
+                    {new Date(log.createdAt).toLocaleString('fi-FI', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit'
+                    })}
                   </TableCell>
-                  <TableCell>{log.type}</TableCell>
-                  <TableCell>{log.memberNo}</TableCell>
-                  <TableCell>{log.userName}</TableCell>
+                  <TableCell>{log.action}</TableCell>
+                  <TableCell>{log.memberNo || '-'}</TableCell>
+                  <TableCell>{log.userName || '-'}</TableCell>
+                  <TableCell>
+                    {typeof log.details === 'string'
+                      ? log.details
+                      : JSON.stringify(log.details, null, 2)}
+                  </TableCell>
                 </motion.tr>
               ))}
             </TableBody>

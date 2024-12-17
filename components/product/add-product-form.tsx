@@ -29,7 +29,6 @@ import { Product, ProductCategory, productCategoryEnum } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { ChevronDown } from 'lucide-react'
 import { EnableProductDialog } from './enable-product-dialog'
-import { Checkbox } from '@/components/ui/checkbox'
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -40,12 +39,14 @@ const formSchema = z.object({
   }),
   price: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
     message: 'Price must be a positive number'
-  }),
-  isOpenPrice: z.boolean().default(false),
-  isTapBeer: z.boolean().default(false)
+  })
 })
 
-export function AddProductForm() {
+interface AddProductFormProps {
+  onSuccess?: () => void
+}
+
+export function AddProductForm({ onSuccess }: AddProductFormProps) {
   const [isPending, startTransition] = useTransition()
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null)
@@ -67,11 +68,10 @@ export function AddProductForm() {
         formData.append('name', values.name)
         formData.append('category', values.category)
         formData.append('price', values.price)
-        formData.append('isOpenPrice', String(values.isOpenPrice))
-        formData.append('isTapBeer', String(values.isTapBeer))
         await addProduct(formData)
         form.reset()
         setSelectedCategory(null)
+        onSuccess?.()
       } catch (error) {
         if (error instanceof Error && error.message.includes('duplicate')) {
           try {
@@ -99,6 +99,7 @@ export function AddProductForm() {
       form.reset()
       setSelectedCategory(null)
       setDialogOpen(false)
+      onSuccess?.()
     })
   }
 
@@ -142,7 +143,7 @@ export function AddProductForm() {
                         <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-full min-w-[var(--radix-dropdown-menu-trigger-width)]">
+                    <DropdownMenuContent className="w-full max-h-[300px] overflow-y-auto min-w-[var(--radix-dropdown-menu-trigger-width)]">
                       {productCategoryEnum.enumValues.map((category) => (
                         <DropdownMenuItem
                           key={category}
@@ -176,46 +177,6 @@ export function AddProductForm() {
                   />
                 </FormControl>
                 <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="isOpenPrice"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel>Open Price</FormLabel>
-                  <p className="text-sm text-muted-foreground">
-                    Allow customers to set their own price
-                  </p>
-                </div>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="isTapBeer"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel>Tap Beer</FormLabel>
-                  <p className="text-sm text-muted-foreground">
-                    Mark this product as tap beer
-                  </p>
-                </div>
               </FormItem>
             )}
           />

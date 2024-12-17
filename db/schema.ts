@@ -7,7 +7,8 @@ import {
   uniqueIndex,
   real,
   pgEnum,
-  boolean
+  boolean,
+  jsonb
 } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 import { relations } from 'drizzle-orm'
@@ -64,10 +65,9 @@ export const products = pgTable(
 
 export const activityLogs = pgTable('activity_logs', {
   id: serial('id').primaryKey(),
-  type: text('type').notNull(),
-  userId: integer('user_id')
-    .notNull()
-    .references(() => users.id),
+  action: text('action').notNull(),
+  details: jsonb('details'),
+  userId: integer('user_id').references(() => users.id),
   createdAt: timestamp('created_at')
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`)
