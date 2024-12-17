@@ -13,7 +13,6 @@ import { Product } from '@/db/schema'
 import { useEffect, useState } from 'react'
 import { useCart } from './cart-provider'
 import { QuantitySelector } from './quantity-selector'
-import { Input } from '@/components/ui/input'
 
 interface AddToCartDialogProps {
   product: Product
@@ -81,15 +80,9 @@ export function AddToCartDialog({
                   Price
                 </label>
                 <div className="col-span-3">
-                  <Input
-                    id="price"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    required
-                    className="w-full"
+                  <QuantitySelector
+                    quantity={price}
+                    onQuantityChange={setPrice}
                   />
                 </div>
               </div>

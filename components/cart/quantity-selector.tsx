@@ -23,7 +23,7 @@ export function QuantitySelector({
       step="0.5"
       min={min}
       max={max}
-      className="w-20 text-center"
+      className="w-24 text-center"
     />
   )
 }
