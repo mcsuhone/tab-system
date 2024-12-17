@@ -25,7 +25,7 @@ const item = {
   show: {
     opacity: 1,
     y: 0,
-    marginTop: 16,
+    marginTop: 10,
     transition: {
       type: 'spring',
       stiffness: 700,
@@ -49,7 +49,7 @@ export function ProductItems({ products }: { products: Product[] }) {
         <motion.div
           key={product.id}
           variants={item}
-          className="flex items-center gap-4 p-4 rounded-lg border cursor-pointer hover:bg-accent transition-colors"
+          className="flex items-center gap-4 px-4 py-3 rounded-lg border cursor-pointer hover:bg-accent transition-colors"
           onClick={() => setSelectedProduct(product)}
         >
           <div className="flex-[60%]">
