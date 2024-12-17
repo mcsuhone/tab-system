@@ -76,6 +76,8 @@ export async function addProduct(formData: FormData) {
 interface UpdateProductData {
   disabled?: boolean
   price?: number
+  name?: string
+  category?: ProductCategory
   isOpenPrice?: boolean
   isTapBeer?: boolean
   isSpecialProduct?: boolean
@@ -94,6 +96,14 @@ export async function updateProduct(
 
     if (typeof data.price === 'number') {
       updateData.price = data.price
+    }
+
+    if (typeof data.name === 'string') {
+      updateData.name = data.name
+    }
+
+    if (data.category) {
+      updateData.category = data.category
     }
 
     if (typeof data.isOpenPrice === 'boolean') {

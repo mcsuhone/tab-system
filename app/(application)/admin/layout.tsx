@@ -11,7 +11,7 @@ export default async function AdminLayout({
   return (
     <div className="flex flex-col gap-12">
       <UserInfo user={user} />
-      <div className="flex flex-col items-center justify-center mb-8">
+      <div className="flex flex-col items-center justify-center mb-2">
         <AdminNavbar />
       </div>
       {children}

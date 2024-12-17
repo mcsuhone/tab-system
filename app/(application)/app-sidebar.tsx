@@ -1,6 +1,6 @@
 'use client'
 
-import { Package, User, Wine, Menu } from 'lucide-react'
+import { Package, User, Wine, Menu, SlidersHorizontal } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
@@ -35,7 +35,7 @@ const baseItems = [
 const adminItem = {
   title: 'Admin',
   url: '/admin',
-  icon: Package
+  icon: SlidersHorizontal
 } as const
 
 interface AppSidebarProps {
@@ -56,6 +56,13 @@ export function AppSidebar({ isAdmin }: AppSidebarProps) {
   }, [pathname, setOpenMobile])
 
   const items = isAdmin ? [...baseItems, adminItem] : baseItems
+
+  const isItemActive = (url: string) => {
+    if (url === '/admin') {
+      return pathname.startsWith('/admin')
+    }
+    return pathname === url
+  }
 
   return (
     <Sidebar
@@ -78,7 +85,7 @@ export function AppSidebar({ isAdmin }: AppSidebarProps) {
             alt="Jalostajat logo"
             width={36}
             height={36}
-            className="max-w-[36px]"
+            className="h-9 w-9"
           />
           <span className="text-xl font-semibold gesetz-font">OJS Tab</span>
         </div>
@@ -92,7 +99,7 @@ export function AppSidebar({ isAdmin }: AppSidebarProps) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    isActive={pathname === item.url}
+                    isActive={isItemActive(item.url)}
                     tooltip={item.title}
                     variant="outline"
                   >

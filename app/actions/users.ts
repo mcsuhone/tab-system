@@ -25,6 +25,22 @@ export async function createUser(data: {
   permission: UserPermission
 }) {
   try {
+    // Check if member number already exists
+    const existingUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.member_no, data.member_no))
+      .limit(1)
+
+    if (existingUser.length > 0) {
+      return {
+        error: {
+          title: 'Error',
+          description: 'A user with this member number already exists.'
+        }
+      }
+    }
+
     const [user] = await db
       .insert(users)
       .values({
@@ -46,6 +62,55 @@ export async function createUser(data: {
       error: {
         title: 'Error',
         description: 'Failed to create user. Please try again.'
+      }
+    }
+  }
+}
+
+export async function updateUser(
+  userId: number,
+  data: {
+    name?: string
+    member_no?: string
+  }
+) {
+  try {
+    if (data.member_no) {
+      // Check if member number already exists for a different user
+      const existingUser = await db
+        .select()
+        .from(users)
+        .where(eq(users.member_no, data.member_no))
+        .limit(1)
+
+      if (existingUser.length > 0 && existingUser[0].id !== userId) {
+        return {
+          error: {
+            title: 'Error',
+            description: 'A user with this member number already exists.'
+          }
+        }
+      }
+    }
+
+    const [user] = await db
+      .update(users)
+      .set(data)
+      .where(eq(users.id, userId))
+      .returning()
+
+    return {
+      data: user,
+      success: {
+        title: 'Success',
+        description: 'User updated successfully'
+      }
+    }
+  } catch (error) {
+    return {
+      error: {
+        title: 'Error',
+        description: 'Failed to update user. Please try again.'
       }
     }
   }
