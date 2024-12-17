@@ -1,0 +1,74 @@
+# Tab system
+
+Every time you choose to apply a rule(s), explicitly state the rule(s) in the output. You can
+abbreviate the rule description to a single word or phrase.
+
+## Project context
+
+Tab system to allow members of an organisation to keep track of their balance. The project will be ran in a local environment.
+
+## Code style and structure
+
+- Write concise, scalable Typescript code with a focus on readability and maintainability.
+- Use well known patterns for each solution
+- Structure repository files as follows
+- For pages in Next app router, always have page.tsx be a server component. If we need client functionality, create page-client.tsx component.
+- For more than 200 lines of code, always split code into multiple components. If they are not used on multiple pages, store it next to page.tsx.
+
+```
+/app
+/components # Shared React components between different pages
+/db
+/drizzle
+/hooks
+/lib
+/public
+/styles
+/types
+```
+
+## UI and Styling
+
+- Use Shadcn UI and Radix for components
+- use `pnpm dlx shadcn@latest add <component-name>` to add a new shadcn components (this is newest way)
+
+## Security
+
+- We use jose and zod for signing and verifying tokens
+- We only have simple password authentication, no external authentication providers
+- For admin functionality, always check permission in token
+
+## Git Usage
+
+Format Message prefixes:
+
+- "feat:" for new features
+- "fix:" for bug fixes
+- "docs:" for documentation changes
+- "style:" for formatting changes
+- "refactor:" for code refactoring
+- "perf:" for performance improvements
+- "test:" for adding tests
+- "chore:" for other changes that don't modify src or test files
+
+Rules:
+
+- Generally, always use 'git add .' to add all changes to the commit, unless we have a lot of changes in different files which we wanna split to different commits.
+- Use lowercase for commit messages
+- Keep the summary line short and concise, but descriptive.
+- Include description for non-obvious changes
+- Always suggest to commit a new change after big changes.
+- Also if we then alter the previous changes, suggest to amend to the previous commit, to keep the commit history clean.
+
+## Documentation
+
+- Only add comments to critical code logic where it is not obvious what the code does.
+- Maintain clear README with setup instructions
+- Make the README be a good starting point for new developers to understand the project
+- Document permission requirements
+
+## Deployment
+
+- This will be ran on a local old PC (ubuntu system)
+- We will use docker to run the application
+- Deployment should be as reliable as possible, even if there is power outage, internet issues or PC turns on/off, the application should be able to automatically start up again.

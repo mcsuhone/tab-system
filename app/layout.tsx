@@ -2,6 +2,7 @@ import { Providers } from './providers'
 import '../styles/globals.css'
 import { Manrope } from 'next/font/google'
 import { Toaster } from '@/components/ui/toaster'
+import { Metadata } from 'next/types'
 
 // Initialize the font
 const manrope = Manrope({
@@ -9,9 +10,12 @@ const manrope = Manrope({
   display: 'swap'
 })
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Tab System',
-  description: 'A system for managing tabs'
+  description: 'Keep track of organization member balances',
+  icons: {
+    icon: '/favicon-32x32.svg'
+  }
 }
 
 export default function RootLayout({
@@ -21,9 +25,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={manrope.className} suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/jalostajat_logo.svg" />
-      </head>
       <body>
         <Providers>
           {children}
