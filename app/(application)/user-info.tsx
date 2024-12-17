@@ -19,7 +19,7 @@ export default function UserInfo({ user, className }: UserInfoProps) {
   }
 
   return (
-    <Card className={cn('p-3', className)}>
+    <Card className={cn('p-3 bg-transparent', className)}>
       <div className="flex items-center gap-4">
         <Avatar className="h-8 w-8 text-xs">
           <AvatarFallback>{user.name.slice(0, 2).toUpperCase()}</AvatarFallback>

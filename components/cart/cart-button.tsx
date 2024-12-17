@@ -64,7 +64,7 @@ export function CartButton() {
           <Button
             onClick={() => setCartOpen(true)}
             className="flex items-center gap-2"
-            variant="outline"
+            variant="default"
           >
             <ShoppingCart className="h-4 w-4" />
             <AnimatePresence mode="wait">
@@ -76,7 +76,7 @@ export function CartButton() {
                 className="inline-flex items-center gap-2"
               >
                 Cart ({items.reduce((sum, item) => sum + item.quantity, 0)})
-                <span>€{total.toFixed(2)}</span>
+                <span>{total.toFixed(2)}€</span>
               </motion.span>
             </AnimatePresence>
           </Button>
