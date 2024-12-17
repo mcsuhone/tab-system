@@ -12,10 +12,7 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: 'Tab System',
-  description: 'Keep track of organization member balances',
-  icons: {
-    icon: '/favicon-32x32.svg'
-  }
+  description: 'Keep track of organization member balances'
 }
 
 export default function RootLayout({
@@ -25,6 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={manrope.className} suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/favicon-32x32.png" />
+      </head>
       <body>
         <Providers>
           {children}
