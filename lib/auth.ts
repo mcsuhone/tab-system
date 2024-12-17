@@ -33,7 +33,6 @@ export async function verifyCredentials(memberNo: string, password: string) {
 
   // Verify password
   const isValid = await bcrypt.compare(password, user[0].password)
-  console.log('Password verification result:', isValid)
   return isValid
 }
 
