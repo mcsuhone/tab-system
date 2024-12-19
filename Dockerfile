@@ -22,12 +22,4 @@ RUN pnpm build
 
 EXPOSE 3000
 
-# Create a startup script
-COPY <<EOF /app/start.sh
-#!/bin/sh
-pnpm tsx db/migrate.ts && pnpm start
-EOF
-
-RUN chmod +x /app/start.sh
-
-CMD ["/app/start.sh"] 
+ENTRYPOINT pnpm tsx db/migrate.ts && pnpm start 
