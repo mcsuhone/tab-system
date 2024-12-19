@@ -40,10 +40,9 @@ import {
 } from '@/components/ui/table'
 import { useToast } from '@/components/ui/use-toast'
 import { UserPermission } from '@/db/schema'
-import { KeyRound, MoreHorizontal, Pencil, Plus } from 'lucide-react'
-import React, { useEffect, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { stagger, animate } from 'framer-motion'
+import { KeyRound, MoreHorizontal, Pencil, Plus } from 'lucide-react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 interface User {
   id: number
