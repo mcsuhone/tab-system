@@ -9,13 +9,14 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { Product } from '@/db/schema'
+import { Measurement, Product } from '@/db/schema'
 import { useEffect, useState } from 'react'
 import { useCart } from './cart-provider'
 import { QuantitySelector } from './quantity-selector'
+import { getMeasurements } from '@/app/actions/measurements'
 
 interface AddToCartDialogProps {
-  product: Product
+  product: Product | null
   open: boolean
   onOpenChange: (open: boolean) => void
 }
@@ -28,17 +29,42 @@ export function AddToCartDialog({
   const [quantity, setQuantity] = useState('1')
   const [price, setPrice] = useState('')
   const { addItem } = useCart()
+  const [measurement, setMeasurement] = useState<Measurement | null>(null)
 
   // Reset quantity and price when dialog opens with a new product
   useEffect(() => {
-    if (open) {
+    if (open && product) {
       setQuantity('1')
       setPrice(product.price.toFixed(2))
     }
-  }, [open, product?.id, product?.price])
+  }, [open, product])
+
+  // Load measurement information when dialog opens
+  useEffect(() => {
+    const loadMeasurement = async () => {
+      if (product?.measureId) {
+        const { data } = await getMeasurements()
+        if (data) {
+          const productMeasurement = data.find(
+            (m) => m.id === product.measureId
+          )
+          if (productMeasurement) {
+            setMeasurement(productMeasurement)
+          }
+        }
+      } else {
+        setMeasurement(null)
+      }
+    }
+    if (open) {
+      loadMeasurement()
+    }
+  }, [open, product?.measureId])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (!product) return
+
     const qty = parseFloat(quantity)
     const finalPrice = product.isSpecialProduct
       ? parseFloat(price)
@@ -48,13 +74,7 @@ export function AddToCartDialog({
       qty > 0 &&
       (!product.isSpecialProduct || (finalPrice && finalPrice > 0))
     ) {
-      addItem(
-        {
-          ...product,
-          price: finalPrice
-        },
-        qty
-      )
+      addItem(product, qty)
       onOpenChange(false)
     }
   }
@@ -69,6 +89,11 @@ export function AddToCartDialog({
           {!product.isSpecialProduct && (
             <DialogDescription>
               {product.price.toFixed(2)}€ per unit
+              {measurement && (
+                <div className="mt-1 text-sm">
+                  1 unit = {measurement.amount} {measurement.unit}
+                </div>
+              )}
             </DialogDescription>
           )}
         </DialogHeader>
@@ -100,13 +125,22 @@ export function AddToCartDialog({
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <label className="text-right">Total</label>
-              <div className="col-span-3">
+              <div className="flex flex-row justify-between col-span-3 mr-8">
                 {(
                   (product.isSpecialProduct
                     ? parseFloat(price) || 0
                     : product.price) * parseFloat(quantity || '0')
                 ).toFixed(2)}
                 €
+                {measurement && (
+                  <div className="mt-1 text-sm text-muted-foreground">
+                    Total volume:{' '}
+                    {(measurement.amount * parseFloat(quantity || '0')).toFixed(
+                      2
+                    )}{' '}
+                    {measurement.unit}
+                  </div>
+                )}
               </div>
             </div>
           </div>

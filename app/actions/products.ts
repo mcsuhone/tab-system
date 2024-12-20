@@ -46,8 +46,9 @@ export async function addProduct(formData: FormData) {
     const category = formData.get('category') as ProductCategory
     const price = parseFloat(formData.get('price') as string)
     const isSpecialProduct = formData.get('isSpecialProduct') === 'true'
+    const measureId = parseInt(formData.get('measureId') as string)
 
-    if (!name || !category || !price) {
+    if (!name || !category || !price || !measureId) {
       return { error: 'Missing required fields' }
     }
 
@@ -58,7 +59,8 @@ export async function addProduct(formData: FormData) {
         category,
         price,
         disabled: false,
-        isSpecialProduct
+        isSpecialProduct,
+        measureId
       })
       .returning()
 
@@ -77,6 +79,7 @@ interface UpdateProductData {
   name?: string
   category?: ProductCategory
   isSpecialProduct?: boolean
+  measureId?: number
 }
 
 export async function updateProduct(

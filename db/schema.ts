@@ -29,6 +29,7 @@ export const productCategoryEnum = pgEnum('product_category', [
   'ENERGY_DRINK',
   'NON_ALCOHOLIC',
   'COCKTAIL',
+  'OTHER_LIQUOR',
   'OTHER'
 ])
 export type ProductCategory = (typeof productCategoryEnum.enumValues)[number]
@@ -48,6 +49,12 @@ export const users = pgTable('users', {
   permission: userPermissionEnum('permission').notNull().default('default')
 })
 
+export const measurements = pgTable('measurements', {
+  id: serial('id').primaryKey(),
+  amount: real('amount').notNull(),
+  unit: text('unit').notNull()
+})
+
 export const products = pgTable(
   'products',
   {
@@ -56,7 +63,8 @@ export const products = pgTable(
     category: productCategoryEnum('category').notNull(),
     price: real('price').notNull(),
     disabled: boolean('disabled').notNull().default(false),
-    isSpecialProduct: boolean('is_special_product').notNull().default(false)
+    isSpecialProduct: boolean('is_special_product').notNull().default(false),
+    measureId: integer('measure_id').references(() => measurements.id)
   },
   (table) => ({
     nameIdx: uniqueIndex('product_name_idx').on(table.name)
@@ -119,3 +127,6 @@ export type Transaction = InferSelectModel<typeof transactions> & {
   user: User
 }
 export type NewTransaction = InferInsertModel<typeof transactions>
+
+export type Measurement = InferSelectModel<typeof measurements>
+export type NewMeasurement = InferInsertModel<typeof measurements>

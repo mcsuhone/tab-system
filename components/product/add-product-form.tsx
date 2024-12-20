@@ -21,14 +21,15 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Product, productCategoryEnum } from '@/db/schema'
+import { Measurement, Product, productCategoryEnum } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronDown } from 'lucide-react'
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { EnableProductDialog } from './enable-product-dialog'
+import { getMeasurements } from '@/app/actions/measurements'
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -39,6 +40,9 @@ const formSchema = z.object({
   }),
   price: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
     message: 'Price must be a positive number'
+  }),
+  measureId: z.number({
+    required_error: 'Please select a measurement.'
   })
 })
 
@@ -50,6 +54,17 @@ export function AddProductForm({ onSuccess }: AddProductFormProps) {
   const [isPending, startTransition] = useTransition()
   const [existingProduct, setExistingProduct] = useState<Product | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [measurements, setMeasurements] = useState<Measurement[]>([])
+
+  useEffect(() => {
+    const loadMeasurements = async () => {
+      const { data } = await getMeasurements()
+      if (data) {
+        setMeasurements(data)
+      }
+    }
+    loadMeasurements()
+  }, [])
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,6 +81,7 @@ export function AddProductForm({ onSuccess }: AddProductFormProps) {
         formData.append('name', values.name)
         formData.append('category', values.category)
         formData.append('price', values.price)
+        formData.append('measureId', values.measureId.toString())
         await addProduct(formData)
         form.reset()
         onSuccess?.()
@@ -148,6 +164,52 @@ export function AddProductForm({ onSuccess }: AddProductFormProps) {
                           }}
                         >
                           {categoryDisplayNames[category]}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="measureId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Measurement (1 pcs = x)</FormLabel>
+                <FormControl>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between"
+                        role="combobox"
+                      >
+                        {field.value
+                          ? measurements.find((m) => m.id === field.value)
+                            ? `${
+                                measurements.find((m) => m.id === field.value)!
+                                  .amount
+                              } ${
+                                measurements.find((m) => m.id === field.value)!
+                                  .unit
+                              }`
+                            : 'Select measurement'
+                          : 'Select measurement'}
+                        <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-full max-h-[300px] overflow-y-auto min-w-[var(--radix-dropdown-menu-trigger-width)]">
+                      {measurements.map((measurement) => (
+                        <DropdownMenuItem
+                          key={measurement.id}
+                          onSelect={() => {
+                            field.onChange(measurement.id)
+                          }}
+                        >
+                          {measurement.amount} {measurement.unit}
                         </DropdownMenuItem>
                       ))}
                     </DropdownMenuContent>

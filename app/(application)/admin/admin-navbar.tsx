@@ -16,6 +16,10 @@ const adminTabs = [
   {
     title: 'Users',
     href: '/admin/users'
+  },
+  {
+    title: 'Measurements',
+    href: '/admin/measurements'
   }
 ]
 
