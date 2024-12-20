@@ -20,6 +20,9 @@ COPY . .
 # Build the application
 RUN pnpm build
 
+# Make startup script executable
+RUN chmod +x start.sh
+
 EXPOSE 3000
 
-ENTRYPOINT pnpm tsx db/migrate.ts && pnpm start 
+CMD ["./start.sh"]
