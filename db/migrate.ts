@@ -42,7 +42,8 @@ async function main() {
           name: username,
           password: hashedPassword,
           balance: 0,
-          member_no: '0'
+          member_no: '0',
+          permission: 'admin'
         })
         .execute()
 
