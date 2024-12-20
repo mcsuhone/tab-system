@@ -1,172 +1,183 @@
 CATEGORY;NAME;BRAND;IMAGE;SIZE;UNIT;SERVE;PRICE;ACTIVE
-Muut v‰kev‰t;Minttu;;TODO;4;cl;;2;active
-Muut v‰kev‰t;Jaloviina;;TODO;4;cl;;2;active
-Muut v‰kev‰t;Jaloviina Extra;;TODO;4;cl;;2,5;active
-Muut v‰kev‰t;Myrsky Jaloviina;;TODO;4;cl;;3;active
-Muut v‰kev‰t;Ararat Akhtamar;Brandy;TODO;4;cl;;2,5;active
-Muut v‰kev‰t;Carlos I.;Brandy;TODO;4;cl;;2,5;active
-Muut v‰kev‰t;Darvelle Freres X.O.;Brandy;TODO;4;cl;;2;active
-Muut v‰kev‰t;Hector Legrande Extra;Brandy;TODO;4;cl;;2;active
-Muut v‰kev‰t;Amarone Alexander Aqua di Vita;Grappa;TODO;4;cl;;1,5;active
-Muut v‰kev‰t;Bottega Fume;Grappa;TODO;4;cl;;1,5;active
-Muut v‰kev‰t;Grappa Prosecco;Grappa;TODO;4;cl;;1,5;active
-Muut v‰kev‰t;Averna;;TODO;4;cl;;1,5;active
-Muut v‰kev‰t;Bols Corenwjin Jenever;;TODO;4;cl;;2;active
-Muut v‰kev‰t;Bols Genever;;TODO;4;cl;;3;active
-Muut v‰kev‰t;Bornholm No 2;;TODO;4;cl;;3,5;active
-Muut v‰kev‰t;B‰ska Droppar;;TODO;4;cl;;4;active
-Muut v‰kev‰t;Cointreau;;TODO;4;cl;;2;active
-Muut v‰kev‰t;Dolin Vermouth;;TODO;4;cl;;1,5;active
-Muut v‰kev‰t;Fernet Branca;;TODO;4;cl;;3;active
-Muut v‰kev‰t;Helsinki Tyrni Pontikka;;TODO;4;cl;;4,5;active
-Muut v‰kev‰t;Martini;;TODO;4;cl;;1,5;active
-Muut v‰kev‰t;Noilly Prat;;TODO;4;cl;;2;active
-Muut v‰kev‰t;Per Se;;TODO;4;cl;;2;active
-Muut v‰kev‰t;Pernod;;TODO;4;cl;;3;active
-Muut v‰kev‰t;Valhalla;;TODO;4;cl;;1,5;active
-Muut v‰kev‰t;Vilmoskˆrte Palinka;;TODO;4;cl;;2;active
-Muut v‰kev‰t;Zwack Unicum;;TODO;4;cl;;2;active
-Muut v‰kev‰t;ƒgr‰s Akvavir;;TODO;4;cl;;4;active
-Gin;24/7 Gin;;TODO;4;cl;Esim gtn‰;2,5;active
-Gin;Arctic blue;;TODO;4;cl;Esim gtn‰;4,5;active
-Gin;Barrister;;TODO;4;cl;Esim gtn‰;3;active
-Gin;Berliner Luft;;TODO;4;cl;Esim gtn‰;1,5;active
-Gin;Bombay Sapphire;;TODO;4;cl;Esim gtn‰;2,5;active
-Gin;Botanist;;TODO;4;cl;Esim gtn‰;3,5;active
-Gin;Crafter's gin;;TODO;4;cl;Esim gtn‰;3;active
-Gin;Drumsshanbo Gunpowder;;TODO;4;cl;Esim gtn‰;3;active
-Gin;Dutch Dry Orange;;TODO;4;cl;Esim gtn‰;4;active
-Gin;Elixier;;TODO;4;cl;Esim gtn‰;4,5;active
-Gin;Euelsberger;;TODO;4;cl;Esim gtn‰;4;active
-Gin;G73;;TODO;4;cl;Esim gtn‰;4;active
-Gin;Gin Mare;;TODO;4;cl;Lis‰‰ garnishina oliiveja ja basilikaa;4;active
-Gin;Harah Gin;;TODO;4;cl;Esim gtn‰;3,5;active
-Gin;Hayman's gin;;TODO;4;cl;Esim gtn‰;3;active
-Gin;Helsinki Dry gin;;TODO;4;cl;Esim gtn‰;3;active
-Gin;Hendricks;;TODO;4;cl;Esim gtn‰;4;active
-Gin;Hernˆ;;TODO;4;cl;Esim gtn‰;5;active
-Gin;Inseparable;;TODO;4;cl;Esim gtn‰;4,5;active
-Gin;Jinzu Gin;;TODO;4;cl;Esim gtn‰;4;active
-Gin;Kinobi;;TODO;4;cl;Esim gtn‰;2,5;active
-Gin;Kyrˆ Napue;;TODO;4;cl;Esim gtn‰;4,5;active
-Gin;Lˆjhty Gin;;TODO;4;cl;Esim gtn‰;4,5;active
-Gin;Metsis Barrel Aged Gin;;TODO;4;cl;Esim gtn‰;3;active
-Gin;Monkey 47;;TODO;4;cl;Esim gtn‰;5;active
-Gin;Opihr;;TODO;4;cl;Esim gtn‰;3;active
-Gin;Roku;;TODO;4;cl;Esim gtn‰;2,5;active
-Gin;SAB's Le Gin;;TODO;4;cl;Esim gtn‰;5;active
-Gin;Sorgin;;TODO;4;cl;Esim gtn‰;4,5;active
-Gin;Tanqueray;;TODO;4;cl;Esim gtn‰;3;active
-Gin;Tanqueray 10;;TODO;4;cl;Esim gtn‰;3,5;active
-Gin;Tanqueray Rangpur;;TODO;4;cl;Esim gtn‰;2,5;active
-Gin;Ventozelo;;TODO;4;cl;Esim gtn‰;4;active
-Gin;Whitley Neill;;TODO;4;cl;Esim gtn‰;3;active
-Gin;ƒgr‰s Abloom;;TODO;4;cl;Esim gtn‰;6;active
-Likˆˆri;Bols -likˆˆrit;;TODO;4;cl;;1,5;active
-Likˆˆri;Berenzten;;TODO;4;cl;;2;active
-Likˆˆri;Cafe;;TODO;4;cl;;1,5;active
-Likˆˆri;Campari;;TODO;4;cl;;2;active
-Likˆˆri;D.O.M. Benedictine;;TODO;4;cl;;3;active
-Likˆˆri;De Kuyper Triple sec;;TODO;4;cl;;1,5;active
-Likˆˆri;De Kuyper likˆˆrit;;TODO;4;cl;;1,5;active
-Likˆˆri;Disaronno;;TODO;4;cl;;2;active
-Likˆˆri;Galliano;;TODO;4;cl;;2;active
-Likˆˆri;Heering Cherry;;TODO;4;cl;;2,5;active
-Likˆˆri;J‰germeister;;TODO;4;cl;;2;active
-Likˆˆri;Kahlua;;TODO;4;cl;;1,5;active
-Likˆˆri;Koskenkorva Lakritsi;;TODO;4;cl;;2;active
-Likˆˆri;Koskenkorva Salmiakki;;TODO;4;cl;;2;active
-Likˆˆri;Licor 43;;TODO;4;cl;;2;active
-Likˆˆri;Naparbier;;TODO;4;cl;;1,5;active
-Likˆˆri;Pallini;;TODO;4;cl;;2;active
-Likˆˆri;Vana Tallinn;;TODO;4;cl;;1,5;active
-Likˆˆri;Zoco;;TODO;4;cl;;1,5;active
-Rommi;Angostura 1919 Premium Gold;;TODO;4;cl;;4;active
-Rommi;Angostura White Reserva;;TODO;4;cl;;2,5;active
-Rommi;Angostura 5 yo Gold;;TODO;4;cl;;3;active
-Rommi;Bacardi Carta Oro;;TODO;4;cl;;2;active
-Rommi;Captain Morgan;;TODO;4;cl;;2;active
-Rommi;Diplomatico Reserva Exclusiva;;TODO;4;cl;;4;active
-Rommi;Havana Club 3 yo;;TODO;4;cl;;2;active
-Rommi;Kraken Black Spiced;;TODO;4;cl;;3;active
-Rommi;La Hechicera Reserva;;TODO;4;cl;;5,5;active
-Rommi;Naud Ron;;TODO;4;cl;;5;active
-Rommi;Plantation 3 star;;TODO;4;cl;;3;active
-Rommi;Plantation Original Dark Rum;;TODO;4;cl;;3;active
-Rommi;Sailor Jerry;;TODO;4;cl;;3;active
-Rommi;Tullamore D.E.W;;TODO;4;cl;;4;active
-Rommi;Zacapa Ambar 12;;TODO;4;cl;;3;active
+Miedot;Coolhead - Passion of the Beets;;TODO;1;kpl;;5.5;active
+Miedot;Coolhead - Tyrni Rosmariini;;TODO;1;kpl;;5;active
+Miedot;Coolhead - Salted Liquorice Raspberry;;TODO;1;kpl;;5;active
+Miedot;Coolhead - Words of Wisdom;;TODO;1;kpl;;5;active
+Miedot;Coolhead - Wet Puller;;TODO;1;kpl;;5;active
+Miedot;Coolhead - Triple Blueberry Pie;;TODO;1;kpl;;7.5;active
+Miedot;Coolhead - Zen Out of Ten;;TODO;1;kpl;;5.5;active
+Miedot;Coolhead - Stranger Fruits;;TODO;1;kpl;;6;active
+Miedot;Coolhead - Vamos!;;TODO;1;kpl;;4.5;active
+Miedot;Olari - Pullot;;TODO;1;kpl;;3.5;active
+Miedot;Olari - T√∂lkit;;TODO;1;kpl;;4;active
+Miedot;P√µhjala - √ïhtu;;TODO;1;kpl;;3;active
+Miedot;P√µhjala - Rukkiv√§li;;TODO;1;kpl;;4.5;active
+Miedot;P√µhjala - Marshmellow island;;TODO;1;kpl;;4.5;active
+Miedot;Black Heart;;TODO;1;kpl;;9.5;active
+Miedot;Punch! - Moscow Mule;;TODO;1;kpl;;4.5;active
+Miedot;Bulkkikalja;;TODO;1;kpl;;2;active
+Miedot;Bulkkisiideri;;TODO;1;kpl;;2;active
+Miedot;Tanker - Gino e Toni;;TODO;1;kpl;;2;active
+Miedot;Hoegaarden;;TODO;1;kpl;;3.5;active
+Miedot;Duvel;;TODO;1;kpl;;5;active
+Miedot;√ïllenaut - IPA;;TODO;1;kpl;;3.5;active
+Miedot;√ïllenaut - Must Eksport;;TODO;1;kpl;;4;active
+Miedot;Vana Villem Brillian Ale ;;TODO;1;kpl;;3.5;active
+Muut v√§kev√§t;Bols Genever;;TODO;4;cl;;3;active
+Muut v√§kev√§t;Dolin Vermouth;;TODO;4;cl;;1.5;active
+Muut v√§kev√§t;Fernet Branca;;TODO;4;cl;;3;active
+Muut v√§kev√§t;Jaloviina;;TODO;4;cl;;2;active
+Muut v√§kev√§t;Martini;;TODO;4;cl;;1.5;active
+Muut v√§kev√§t;Minttu;;TODO;4;cl;;2;active
+Muut v√§kev√§t;Per Se;;TODO;4;cl;;2;active
+Muut v√§kev√§t;Berliner Luft;;TODO;4;cl;;1;active
+Muut v√§kev√§t;Aperol;;TODO;4;cl;;2;active
+Muut v√§kev√§t;Henri Barbourin Patis;;TODO;4;cl;;2;active
+Muut v√§kev√§t;Richard Pastis;;TODO;4;cl;;3;active
+Muut v√§kev√§t;Chatea du Brevil Fine Calvados;;TODO;4;cl;;2.5;active
+Muut v√§kev√§t;51 Cachaca;;TODO;4;cl;;1.5;active
+Muut v√§kev√§t;Snaps Bornholm;;TODO;4;cl;;2.5;active
+Muut v√§kev√§t;Lillet Blanc;;TODO;4;cl;;1.5;active
+Gin;Arctic blue;;TODO;4;cl;;4.5;active
+Gin;Hendricks;;TODO;4;cl;;4;active
+Gin;Barrister;;TODO;4;cl;;3;active
+Gin;Helsinki Dry Gin;;TODO;4;cl;;3;active
+Gin;Hern√∂;;TODO;4;cl;;5;active
+Gin;Kyr√∂ Napue Gin;;TODO;4;cl;;4.5;active
+Gin;Tanqueray;;TODO;4;cl;;3;active
+Gin;Sipsmith London Dry Gin;;TODO;4;cl;;2;active
+Gin;SAB's Le Gin;;TODO;4;cl;;5;active
+Gin;Readers;;TODO;4;cl;;4.5;active
+Gin;Sakagerrak;;TODO;4;cl;;3.5;active
+Gin;Gintaro Dy Gin;;TODO;4;cl;;2;active
+Gin;Ophir;;TODO;4;cl;;3;active
+Gin;Plymouth Gin;;TODO;4;cl;;3.5;active
+Gin;Punch! Nordic Dry Gin;;TODO;4;cl;;2.5;active
+Gin;Bombay Bramble;;TODO;4;cl;;2;active
+Gin;Tanqueray 10;;TODO;4;cl;;3.5;active
+Gin;Bombay Saphire;;TODO;4;cl;;3;active
+Gin;Star of Bombay;;TODO;4;cl;;3.5;active
+Gin;Kyr√∂ Pink;;TODO;4;cl;;3.5;active
+Gin;Tohi;;TODO;4;cl;;4;active
+Gin;Blue Velvet;;TODO;4;cl;;4;active
+Gin;The Botanist 22;;TODO;4;cl;;3;active
+Gin;Beefeater strawberry;;TODO;4;cl;;3;active
+Lik√∂√∂ri;Bols Lik√∂√∂rit;;TODO;4;cl;;1.5;active
+Lik√∂√∂ri;D.O.M. Benedictine;;TODO;4;cl;;3;active
+Lik√∂√∂ri;Caf√©;;TODO;4;cl;;1.5;active
+Lik√∂√∂ri;Campari;;TODO;4;cl;;2;active
+Lik√∂√∂ri;Cointreau;;TODO;4;cl;;2;active
+Lik√∂√∂ri;De Kuyper Triple sec;;TODO;4;cl;;1.5;active
+Lik√∂√∂ri;De Kuyper lik√∂√∂rit;;TODO;4;cl;;1.5;active
+Lik√∂√∂ri;Disaronno;;TODO;4;cl;;2;active
+Lik√∂√∂ri;Galliano;;TODO;4;cl;;2;active
+Lik√∂√∂ri;Heering Cherry;;TODO;4;cl;;2.5;active
+Lik√∂√∂ri;Koskenkorva Salmiakki;;TODO;4;cl;;2;active
+Lik√∂√∂ri;Licor 43;;TODO;4;cl;;2;active
+Lik√∂√∂ri;Naparbier;;TODO;4;cl;;1.5;active
+Lik√∂√∂ri;Pallini;;TODO;4;cl;;2;active
+Lik√∂√∂ri;Sour Apple;;TODO;4;cl;;2;active
+Lik√∂√∂ri;Curacao;;TODO;4;cl;;1.5;active
+Lik√∂√∂ri;Chambord;;TODO;4;cl;;1.5;active
+Lik√∂√∂ri;Punssi;;TODO;4;cl;;2.5;active
+Lik√∂√∂ri;St Germain;;TODO;4;cl;;3.5;active
+Lik√∂√∂ri;Pisang;;TODO;4;cl;;1.5;active
+Lik√∂√∂ri;J√§germeister;;TODO;4;cl;;2;active
+Lik√∂√∂ri;Plymouth Sloe Gin;;TODO;4;cl;;3;active
+Lik√∂√∂ri;Passoa;;TODO;4;cl;;1.5;active
+Lik√∂√∂ri;Giffard;;TODO;4;cl;;1.5;active
+Lik√∂√∂ri;Pimm's;;TODO;4;cl;;1.5;active
+Lik√∂√∂ri;Lapponia lakka;;TODO;4;cl;;2;active
 Rommi;Zacapa 23;;TODO;4;cl;;3;active
-Rommi;÷ Dark Rum;;TODO;4;cl;;3,5;active
-Tequila;Anejo Patron;;TODO;4;cl;;3,5;active
-Tequila;Don julio;;TODO;4;cl;;4;active
-Tequila;Olmeca Altos Blanco;;TODO;4;cl;;3,5;active
-Vodka;Absolut;;TODO;4;cl;;2,5;active
-Vodka;Finlandia;;TODO;4;cl;;2,5;active
-Vodka;Jelzin;;TODO;4;cl;;2;active
+Rommi;Angostura 1919 Premium Gold;;TODO;4;cl;;4;active
+Rommi;Naud Ron;;TODO;4;cl;;5;active
+Rommi;Plantanion XO;;TODO;4;cl;;3.5;active
+Rommi;Captain Morgan;;TODO;4;cl;;2;active
+Rommi;Plantino Rum Guatermala & Belize;;TODO;4;cl;;3;active
+Rommi;Plantanion 3 Star;;TODO;4;cl;;3;active
+Rommi;Appleton Estate 8yo reserve;;TODO;4;cl;;3;active
+Rommi;Diplomatico Reserva Exclusiva;;TODO;4;cl;;4;active
+Rommi;Bacardi Carta Oro;;TODO;4;cl;;2;active
+Rommi;Havana Club 3 YO;;TODO;4;cl;;2;active
+Rommi;Bacardi Carta Blanca;;TODO;4;cl;;2;active
+Rommi;Bacardi Spiced;;TODO;4;cl;;2.5;active
+Tequila;A√±eho Patron;;TODO;4;cl;;3.5;active
+Tequila;Don Julio;;TODO;4;cl;;4;active
+Tequila;Fortaleza Blanco;;TODO;4;cl;;5;active
+Tequila;Altos Blanco;;TODO;4;cl;;3;active
+Vodka;Grey Goose;;TODO;4;cl;;4;active
+Vodka;Marskin Ryyppy;;TODO;4;cl;;3;active
+Vodka;Ketel One;;TODO;4;cl;;3;active
+Vodka;Absolut;;TODO;4;cl;;2.5;active
+Vodka;Finlandia;;TODO;4;cl;;2.5;active
+Vodka;Laplandia;;TODO;4;cl;;2.5;active
+Vodka;Russian Standard;;TODO;4;cl;;2.5;active
 Vodka;Koskenkorva;;TODO;4;cl;;2;active
 Vodka;Soplica;;TODO;4;cl;;2;active
-Vodka;Russian Standard;;TODO;4;cl;;2,5;active
-Vodka;Laplandia;;TODO;4;cl;;2,5;active
-Vodka;Ketel one;;TODO;4;cl;;3;active
-Vodka;Belvedere;;TODO;4;cl;;3,5;active
-Vodka;Grey Goose;;TODO;4;cl;;4;active
-Viski;Akashi Single Malt;;TODO;4;cl;;8;active
-Viski;Ardbeg Corryvreckan;;TODO;4;cl;;6;active
-Viski;Ardbeg Uigeadail;;TODO;4;cl;;6;active
-Viski;Bowmore;;TODO;4;cl;;4;active
-Viski;Bruichladdich Port Charlotte;;TODO;4;cl;;5;active
-Viski;Bulleit Bourbon;;TODO;4;cl;;3;active
-Viski;Bunnahabhain;;TODO;4;cl;;3;active
-Viski;Chivas Regal 12 yo;;TODO;4;cl;;3;active
-Viski;Compass Box Peat Monster;;TODO;4;cl;;4;active
-Viski;Craigellachie Single Malt;;TODO;4;cl;;5;active
-Viski;Dalwhinnie 15 yo;;TODO;4;cl;;4;active
-Viski;Glen Scanlan;;TODO;4;cl;;3;active
-Viski;Glendalough Double;;TODO;4;cl;;4;active
-Viski;Glenfiddich Project XX;;TODO;4;cl;;4;active
-Viski;Glenkinchie 12 yo;;TODO;4;cl;;3,5;active
-Viski;Glenmorangie Cadboll;;TODO;4;cl;;6;active
+Vodka;Nemiroff;;TODO;4;cl;;2;active
+Vodka;Medott;;TODO;4;cl;;2;active
+Vodka;Zubrowka;;TODO;4;cl;;2.5;active
 Viski;Grants Triple Wood;;TODO;4;cl;;3;active
-Viski;Green Spot;;TODO;4;cl;;4,5;active
+Viski;Bowmore;;TODO;4;cl;;4;active
 Viski;Highland Park;;TODO;4;cl;;6;active
-Viski;Jameson IPA Edition Caskmates;;TODO;4;cl;;3,5;active
-Viski;Kilchoman Bourbon;;TODO;4;cl;;9;active
-Viski;Knob Creek;;TODO;4;cl;;3,5;active
-Viski;Kyrˆ Malt;;TODO;4;cl;;4;active
-Viski;Lagavulin 16 yo;;TODO;4;cl;;5;active
-Viski;Laphroaig;;TODO;4;cl;;4;active
-Viski;Maker's Mark;;TODO;4;cl;;3;active
-Viski;Mallacan Single Malt 12 yo;;TODO;4;cl;;5;active
-Viski;Mossburn Blair Athol;;TODO;4;cl;;5;active
-Viski;Nikka;;TODO;4;cl;;5;active
-Viski;Nikka Coffey Grain;;TODO;4;cl;;4,5;active
-Viski;Oban 14 yo Single Malt;;TODO;4;cl;;6,5;active
-Viski;Redbreast 21 yo;;TODO;4;cl;;11;active
-Viski;Redbreast Lustau;;TODO;4;cl;;4;active
-Viski;Redbreast Single Potstill;;TODO;4;cl;;5;active
-Viski;Singleton 12 yo;;TODO;4;cl;;3;active
-Viski;Southern Comfort;;TODO;4;cl;;2,5;active
-Viski;Talisker 10 yo Single Malt;;TODO;4;cl;;4,5;active
-Viski;Teeling Single Grain;;TODO;4;cl;;4,5;active
-Viski;Woodford Reserve;;TODO;4;cl;;3,5;active
-Konjakki;Baron Otaford;;TODO;4;cl;;3,5;active
-Konjakki;Bushmills Original;;TODO;4;cl;;3,5;active
-Konjakki;Claude Chatelier VSOP;;TODO;4;cl;;3;active
-Konjakki;Emeritus Apteekkarin Cognac;;TODO;4;cl;;4;active
-Konjakki;Hennesy James Hennesy;;TODO;4;cl;;14,5;active
-Konjakki;Hennesy VSOP;;TODO;4;cl;;3,5;active
-Konjakki;Jameson Stout;;TODO;4;cl;;4;active
-Konjakki;Loch Lomond Original;;TODO;4;cl;;5,5;active
-Konjakki;Meukow;;TODO;4;cl;;2;active
-Konjakki;Renault Carte Noire VSOP;;TODO;4;cl;;3;active
-Konjakki;Renault XO;;TODO;4;cl;;5;active
-Absintti;Absinthe Absenthe;;TODO;4;cl;;4;active
-Absintti;De Moravie;;TODO;4;cl;;2;active
-Absintti;Valamo;;TODO;4;cl;;8;active
-Alkoholittomat;Fever Tree Tonic;;TODO;1;kpl;;1,5;active
-Alkoholittomat;Limut (kokis, pepsi, fanta yms.);;TODO;1;kpl;;2;active
-Alkoholittomat;Muteman Ginger Beer;;TODO;1;kpl;;2;active
-Alkoholittomat;Muteman Tonic;;TODO;1;kpl;;2;active
-Ruoat;Thaicube;;TODO;1;kpl;L‰mmit‰ mikrossa;4,5;active
-Ruoat;Pizza;;TODO;1;kpl;L‰mmit‰ uunissa;2,5;active
+Viski;Fireball;;TODO;4;cl;;3;active
+Viski;Bunnahabain;;TODO;4;cl;;3;active
+Viski;Aultmore 21 YO;;TODO;4;cl;;12.5;active
+Viski;Octomore ed. 10.2.;;TODO;4;cl;;14;active
+Viski;Talisker 10 yo Single Malt;;TODO;4;cl;;4.5;active
+Viski;Jameson;;TODO;4;cl;;3.5;active
+Viski;Woodford Reserve;;TODO;4;cl;;3.5;active
+Viski;Monkey Shoulder;;TODO;4;cl;;2.5;active
+Viski;Valamo Church;;TODO;4;cl;;7.5;active
+Viski;Valamo Unpeated;;TODO;4;cl;;7.5;active
+Viski;Valamo Luostari;;TODO;4;cl;;4.5;active
+Viski;Helsinki Rye VYS;;TODO;4;cl;;11;active
+Viski;Helsinki Rye Islay;;TODO;4;cl;;7.5;active
+Viski;Kyr√∂ Smoke Rye;;TODO;4;cl;;5;active
+Viski;Kyr√∂ Rye;;TODO;4;cl;;5;active
+Viski;Teerenpeli Savu;;TODO;4;cl;;4.5;active
+Viski;Teerenpeli 10;;TODO;4;cl;;6.5;active
+Viski;Teerenpeli Hiidenkivi;;TODO;4;cl;;6;active
+Viski;Jim Beam;;TODO;4;cl;;2.5;active
+Viski;Caol Ila;;TODO;4;cl;;4;active
+Viski;Auchentoshan Heartwood;;TODO;4;cl;;3.5;active
+Viski;Lagavulin 16;;TODO;4;cl;;6;active
+Konjakki;Baron Otard XO Gold;;TODO;4;cl;;9;active
+Konjakki;Hennessy James Hennessy;;TODO;4;cl;;14.5;active
+Konjakki;Meukow VSOP;;TODO;4;cl;;5.5;active
+Konjakki;Renault Carte Noire XO;;TODO;4;cl;;5;active
+Konjakki;H by Hine VSOP;;TODO;4;cl;;3;active
+Konjakki;Martell VSOP;;TODO;4;cl;;3.5;active
+Konjakki;Braastad XO;;TODO;4;cl;;4;active
+Konjakki;Vallein Terciner Vielle Reserve XO;;TODO;4;cl;;8;active
+Konjakki;Remy Martin XO;;TODO;4;cl;;9;active
+Konjakki;Remy Martin VSOP;;TODO;4;cl;;5;active
+Konjakki;ABK6 XO;;TODO;4;cl;;7.5;active
+Konjakki;Delamain Pale&Dry XO;;TODO;4;cl;;7.5;active
+Konjakki;Hardy Noces D'Argent;;TODO;4;cl;;10;active
+Konjakki;Merlet XO;;TODO;4;cl;;9;active
+Absintti;Valamo;;TODO;4;cl;;1;active
+Absintti;Pernod Absinthe;;TODO;4;cl;;3.5;active
+Grappa;Poli Due Barili;;TODO;4;cl;;5;active
+Grappa;Poli Aromatica;;TODO;4;cl;;4.5;active
+Grappa;Grappa Prosecco;;TODO;4;cl;;1.5;active
+Grappa;Nardini Bianca;;TODO;4;cl;;4;active
+Grappa;Nardini 5 anni;;TODO;4;cl;;6;active
+Alkoholittomat;P√µhjala Prenzlauer 0‚Ä∞;;TODO;1;kpl;;3;active
+Alkoholittomat;Bottoms Up Ginger Beer;;TODO;1;kpl;;2;active
+Alkoholittomat;Kombucha;;TODO;1;kpl;;2.5;active
+Alkoholittomat;Kokis / Pepsi;;TODO;1;kpl;;2;active
+Alkoholittomat;Lohilo;;TODO;1;kpl;;3.5;active
+Alkoholittomat;Nocco;;TODO;1;kpl;;3;active
+Alkoholittomat;Sprite / 7up;;TODO;1;kpl;;2;active
+Alkoholittomat;Battery;;TODO;1;kpl;;2;active
+Alkoholittomat;Heineken 0‚Ä∞;;TODO;1;kpl;;2.5;active
+Alkoholittomat;Crisp;;TODO;1;kpl;;2.5;active
+Alkoholittomat;San Pellegrino;;TODO;1;kpl;;2.5;active
+Alkoholittomat;Muteman Ginger Beer;;TODO;1;kpl;;1.5;active
+Alkoholittomat;Fever Tree 20cl;;TODO;1;kpl;;2;active
+Alkoholittomat;Novelle Plus;;TODO;1;kpl;;1.5;active
+Alkoholittomat;Nocco Golden Grape;;TODO;1;kpl;;1;active
+Alkoholittomat;√ïllenaut - Kaineken Citra;;TODO;1;kpl;;3;active
+Ruoat;Thai Cube;;TODO;1;kpl;;4.5;active
+Ruoat;Pizza;;TODO;1;kpl;;2.5;active

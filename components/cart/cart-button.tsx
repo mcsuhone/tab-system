@@ -15,17 +15,22 @@ export function CartButton() {
   const prevItemsRef = useRef<number>(0)
 
   useEffect(() => {
-    const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
-    const prevTotal = prevItemsRef.current
-    console.log('Current total items:', totalItems, 'Previous:', prevTotal)
+    const uniqueItemCount = items.length
+    const prevCount = prevItemsRef.current
+    console.log(
+      'Current unique items:',
+      uniqueItemCount,
+      'Previous:',
+      prevCount
+    )
 
-    if (totalItems > prevTotal) {
+    if (uniqueItemCount > prevCount) {
       console.log('Items increased! Triggering animation')
       setIsAnimating(true)
       const timer = setTimeout(() => setIsAnimating(false), 800)
       return () => clearTimeout(timer)
     }
-    prevItemsRef.current = totalItems
+    prevItemsRef.current = uniqueItemCount
   }, [items])
 
   if (isLoading) {
@@ -75,8 +80,7 @@ export function CartButton() {
                 exit={{ opacity: 0, y: 10 }}
                 className="inline-flex items-center gap-2"
               >
-                Cart ({items.reduce((sum, item) => sum + item.quantity, 0)})
-                <span>{total.toFixed(2)}€</span>
+                Cart ({items.length})<span>{total.toFixed(2)}€</span>
               </motion.span>
             </AnimatePresence>
           </Button>
