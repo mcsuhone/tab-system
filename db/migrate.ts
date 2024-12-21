@@ -1,9 +1,8 @@
-import { migrate } from 'drizzle-orm/node-postgres/migrator'
-import { users } from './schema'
-import { eq } from 'drizzle-orm'
-import { db } from './db'
 import bcrypt from 'bcryptjs'
-import { fileURLToPath } from 'url'
+import { eq } from 'drizzle-orm'
+import { migrate } from 'drizzle-orm/node-postgres/migrator'
+import { db } from './db'
+import { users } from './schema'
 
 const DEFAULT_ADMIN_USERNAME = 'admin'
 
