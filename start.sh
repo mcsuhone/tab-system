@@ -40,4 +40,4 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
 done
 
 echo "✨ Starting the main application..."
-pnpm start 
+pnpm start

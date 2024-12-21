@@ -10,18 +10,23 @@ import { auth } from '@/lib/auth'
 
 export async function login(memberNo: string, password: string) {
   try {
+    console.log('Login attempt:', { memberNo })
+
     if (!memberNo) {
       console.log('No member number provided')
       return false
     }
 
+    console.log('Verifying credentials...')
     const isValid = await verifyCredentials(memberNo, password)
+    console.log('Credentials verification result:', isValid)
 
     if (!isValid) {
       console.log('Invalid credentials')
       return false
     }
 
+    console.log('Getting user data...')
     // Get user data including permission
     const user = await db
       .select({
@@ -32,8 +37,11 @@ export async function login(memberNo: string, password: string) {
       .where(eq(users.member_no, memberNo))
       .limit(1)
 
+    console.log('User data:', user[0])
+
     if (!user[0]) return false
 
+    console.log('Creating JWT token...')
     // Create JWT token with permission
     const secret = new TextEncoder().encode(process.env.JWT_SECRET)
     const token = await new SignJWT({
@@ -44,6 +52,7 @@ export async function login(memberNo: string, password: string) {
       .setExpirationTime('1d')
       .sign(secret)
 
+    console.log('Setting cookie...')
     // Set cookie
     cookies().set('token', token, {
       httpOnly: true,
@@ -52,6 +61,7 @@ export async function login(memberNo: string, password: string) {
       maxAge: 86400 * 165 // 1 day
     })
 
+    console.log('Login successful')
     return true
   } catch (error) {
     console.error('Login error:', error)
