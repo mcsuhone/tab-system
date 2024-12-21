@@ -2,10 +2,12 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install pnpm
+# Install pnpm and postgresql-client
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN apk add --no-cache postgresql-client && \
+    corepack enable && \
+    corepack prepare pnpm@latest --activate
 
 # Copy package files
 COPY package.json pnpm-lock.yaml ./

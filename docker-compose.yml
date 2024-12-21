@@ -13,6 +13,16 @@ services:
         condition: service_healthy
     networks:
       - app-network
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - JWT_SECRET=${JWT_SECRET}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - NODE_ENV=${NODE_ENV}
 
   db:
     image: postgres:16-alpine
