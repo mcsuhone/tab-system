@@ -53,12 +53,13 @@ export async function login(memberNo: string, password: string) {
       .sign(secret)
 
     console.log('Setting cookie...')
-    // Set cookie
+    // Set cookie with domain and path
     cookies().set('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 86400 * 165 // 1 day
+      secure: true,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 86400 // 1 day
     })
 
     console.log('Login successful')
