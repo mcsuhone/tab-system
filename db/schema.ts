@@ -44,7 +44,7 @@ export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   balance: integer('balance').notNull().default(0),
   name: text('name').notNull(),
-  member_no: text('member_no').notNull(),
+  member_no: text('member_no').notNull().unique(),
   password: text('password').notNull(),
   permission: userPermissionEnum('permission').notNull().default('default')
 })

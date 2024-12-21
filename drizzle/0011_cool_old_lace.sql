@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD CONSTRAINT "users_member_no_unique" UNIQUE("member_no");
