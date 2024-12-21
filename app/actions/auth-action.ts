@@ -59,7 +59,7 @@ export async function login(memberNo: string, password: string) {
       secure: true,
       sameSite: 'lax',
       path: '/',
-      maxAge: 86400 // 1 day
+      maxAge: 86400 * 165 // 1 day
     })
 
     console.log('Login successful')
