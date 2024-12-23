@@ -52,6 +52,9 @@ export function AddToCartDialog({
             setMeasurement(productMeasurement)
           }
         }
+      } else if (product?.isSpecialProduct) {
+        // Set default measurement for special products
+        setMeasurement({ id: 0, amount: 1, unit: 'pcs' })
       } else {
         setMeasurement(null)
       }
@@ -59,7 +62,7 @@ export function AddToCartDialog({
     if (open) {
       loadMeasurement()
     }
-  }, [open, product?.measureId])
+  }, [open, product?.measureId, product?.isSpecialProduct])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -74,7 +77,10 @@ export function AddToCartDialog({
       qty > 0 &&
       (!product.isSpecialProduct || (finalPrice && finalPrice > 0))
     ) {
-      addItem(product, qty)
+      const productToAdd = product.isSpecialProduct
+        ? { ...product, price: finalPrice }
+        : product
+      addItem(productToAdd, qty)
       onOpenChange(false)
     }
   }

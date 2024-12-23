@@ -65,7 +65,7 @@ export function ProductList({
   return (
     <>
       <h2 className="mb-4 text-xl font-semibold">Categories</h2>
-      <div className="grid grid-cols-[200px_1fr] gap-6">
+      <div className="grid grid-cols-[1fr] md:grid-cols-[200px_1fr] gap-6">
         <div className="sticky top-0">
           <CategoryNav
             activeCategory={category}
