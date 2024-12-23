@@ -1,10 +1,10 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { ProductCategory, productCategoryEnum } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Menu, PanelLeft } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { PanelLeft } from 'lucide-react'
 
 const PRODUCT_CATEGORIES = Object.values(
   productCategoryEnum.enumValues
