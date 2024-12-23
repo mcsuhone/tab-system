@@ -8,7 +8,6 @@ import type { User } from '@/db/schema'
 
 export async function verifyCredentials(memberNo: string, password: string) {
   try {
-    console.log('Finding user by member_no:', memberNo)
     // Find user by member_no instead of name
     const user = await db
       .select()
@@ -16,29 +15,22 @@ export async function verifyCredentials(memberNo: string, password: string) {
       .where(eq(users.member_no, memberNo))
       .execute()
 
-    console.log('User found:', user.length > 0)
-
     if (user.length === 0) {
-      console.log('User not found with member_no:', memberNo)
       return false
     }
 
     // If password is empty in DB and provided password is empty
     if (!user[0].password && !password) {
-      console.log('Empty password login successful')
       return true
     }
 
     // If password is empty in DB but password was provided, or vice versa
     if (!user[0].password || !password) {
-      console.log('Password mismatch: one empty, one provided')
       return false
     }
 
-    console.log('Verifying password...')
     // Verify password
     const isValid = await bcrypt.compare(password, user[0].password)
-    console.log('Password verification result:', isValid)
     return isValid
   } catch (error) {
     console.error('Error in verifyCredentials:', error)

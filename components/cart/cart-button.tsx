@@ -17,15 +17,8 @@ export function CartButton() {
   useEffect(() => {
     const uniqueItemCount = items.length
     const prevCount = prevItemsRef.current
-    console.log(
-      'Current unique items:',
-      uniqueItemCount,
-      'Previous:',
-      prevCount
-    )
 
     if (uniqueItemCount > prevCount) {
-      console.log('Items increased! Triggering animation')
       setIsAnimating(true)
       const timer = setTimeout(() => setIsAnimating(false), 800)
       return () => clearTimeout(timer)
