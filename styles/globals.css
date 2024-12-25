@@ -119,3 +119,14 @@
     font-family: var(--font-family);
   }
 }
+
+/* Add these styles */
+#dialog-portal {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+}
+
+#dialog-portal > * {
+  pointer-events: auto;
+}

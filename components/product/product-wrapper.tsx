@@ -1,12 +1,14 @@
 'use client'
 
 import { Product, ProductCategory } from '@/db/schema'
-import { CategoryNav } from './category-nav'
 import { SearchBar } from './search-bar'
 import { useState, useEffect } from 'react'
 import { useProducts } from '@/app/hooks/use-products'
 import { Skeleton } from '@/components/ui/skeleton'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useSearch } from '@/components/search/search-provider'
+import { CategoryNav } from './category-nav'
+import { ScrollToTopButton } from '@/components/ui/scroll-to-top'
 
 function ProductListSkeleton() {
   return (
@@ -30,12 +32,11 @@ interface ProductListProps {
   showDisabled?: boolean
 }
 
-export function ProductList({
+export function ProductWrapper({
   children,
   showDisabled = true
 }: ProductListProps) {
-  const [query, setQuery] = useState('')
-  const [category, setCategory] = useState<ProductCategory | null>(null)
+  const { query, setQuery, category, setCategory } = useSearch()
   const [showSkeleton, setShowSkeleton] = useState(false)
 
   const {
@@ -64,10 +65,14 @@ export function ProductList({
 
   return (
     <>
-      <h2 className="mb-4 text-xl font-semibold">Categories</h2>
+      <ScrollToTopButton />
       <div className="grid grid-cols-[1fr] md:grid-cols-[200px_1fr] gap-6">
         <div className="flex flex-col gap-4">
-          <div className="flex flex-row justify-between w-full items-center sticky top-0 z-10 bg-background pb-4">
+          <div className="flex flex-row justify-between w-full items-center bg-background pb-4 gap-4">
+            <CategoryNav
+              activeCategory={category}
+              onCategorySelect={setCategory}
+            />
             <SearchBar onSearch={setQuery} />
           </div>
           <AnimatePresence mode="wait">

@@ -28,16 +28,19 @@ export function CartButton() {
 
   if (isLoading) {
     return (
-      <Button variant="outline" className="flex items-center gap-2">
-        <ShoppingCart className="h-4 w-4" />
-        <span>Loading...</span>
-      </Button>
+      <>
+        <Button variant="outline" className="flex items-center gap-2">
+          <ShoppingCart className="h-4 w-4" />
+          <span>Loading...</span>
+        </Button>
+        <CartDialog open={cartOpen} onOpenChange={setCartOpen} />
+      </>
     )
   }
 
   return (
     <>
-      <div className="relative">
+      <div className="relative inline-block">
         <AnimatePresence>
           {isAnimating && (
             <motion.div

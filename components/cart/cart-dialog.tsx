@@ -72,7 +72,7 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
           <DialogTitle>Shopping Cart</DialogTitle>
           <DialogDescription>Total: {total.toFixed(2)}€</DialogDescription>
         </DialogHeader>
-        <div className="grid gap-6 py-4">
+        <div className="gap-6 py-4">
           {items.map((item) => (
             <div key={item.product.id} className="space-y-2">
               <div className="flex items-center justify-between">
@@ -86,14 +86,16 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
                 </Button>
               </div>
               <div className="grid grid-cols-3 text-sm text-gray-500 items-center">
-                <div>{item.product.price.toFixed(2)}€ each</div>
-                <div className="w-full flex justify-center">
+                <div className="col-span-1">
+                  {item.product.price.toFixed(2)}€ each
+                </div>
+                <div className="col-span-1 w-[120px] flex justify-center">
                   <QuantitySelector
                     quantity={item.quantity.toString()}
                     onQuantityChange={(qty) => handleQuantityChange(item, qty)}
                   />
                 </div>
-                <div className="text-right font-medium text-gray-400">
+                <div className="col-span-1 text-right font-medium text-gray-400">
                   {(item.product.price * item.quantity).toFixed(2)}€
                 </div>
               </div>

@@ -15,7 +15,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Ban, MoreHorizontal, Pencil } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { EditProductDialog } from './edit-product-dialog'
-import { ProductList } from './product-list'
+import { ProductWrapper } from './product-wrapper'
 
 const container = {
   hidden: { opacity: 0 },
@@ -157,8 +157,8 @@ export function AdminProductList() {
   }
 
   return (
-    <ProductList showDisabled={showDisabled}>
+    <ProductWrapper showDisabled={showDisabled}>
       {(products) => renderProducts(products)}
-    </ProductList>
+    </ProductWrapper>
   )
 }

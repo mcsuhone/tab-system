@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { ProductCategory, productCategoryEnum } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { PanelLeft } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 const PRODUCT_CATEGORIES = Object.values(
   productCategoryEnum.enumValues
@@ -48,6 +49,20 @@ export function CategoryNav({
   activeCategory,
   onCategorySelect
 }: CategoryNavProps) {
+  const [shouldNudge, setShouldNudge] = useState(false)
+
+  useEffect(() => {
+    const handleIntersection = (e: Event) => {
+      const customEvent = e as CustomEvent
+      setShouldNudge(!customEvent.detail.isIntersecting)
+    }
+
+    window.addEventListener('search-intersection', handleIntersection)
+    return () => {
+      window.removeEventListener('search-intersection', handleIntersection)
+    }
+  }, [])
+
   return (
     <>
       {/* Mobile View */}
@@ -70,7 +85,9 @@ export function CategoryNav({
       </div>
 
       {/* Desktop View */}
-      <nav className="hidden md:block w-48 pr-4 border-r">
+      <nav
+        className={`hidden md:block transition-all duration-200 ${shouldNudge ? 'ml-4' : ''}`}
+      >
         <CategoryList
           activeCategory={activeCategory}
           onCategorySelect={onCategorySelect}
