@@ -51,7 +51,7 @@ export function CategoryNav({
   return (
     <>
       {/* Mobile View */}
-      <div className="sm:hidden">
+      <div className="md:hidden">
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon">
@@ -70,7 +70,7 @@ export function CategoryNav({
       </div>
 
       {/* Desktop View */}
-      <nav className="hidden sm:block w-48 pr-4 border-r">
+      <nav className="hidden md:block w-48 pr-4 border-r">
         <CategoryList
           activeCategory={activeCategory}
           onCategorySelect={onCategorySelect}

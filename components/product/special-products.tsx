@@ -67,7 +67,7 @@ export function SpecialProducts({ products, isLoading }: SpecialProductsProps) {
   return (
     <div>
       <h2 className="text-lg font-semibold mb-4">Special Products</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-1 md:gap-4">
         {isLoading ? (
           <>
             <SpecialProductSkeleton />
@@ -82,10 +82,10 @@ export function SpecialProducts({ products, isLoading }: SpecialProductsProps) {
             return (
               <Card
                 key={product.id}
-                className="cursor-pointer hover:bg-accent transition-colors"
+                className="flex cursor-pointer hover:bg-accent items-center justify-center transition-colors"
                 onClick={() => handleProductClick(product)}
               >
-                <CardContent className="p-4 flex items-center gap-2">
+                <CardContent className="p-2 md:p-4 flex items-center gap-2">
                   <span className={config.color}>{config.icon}</span>
                   <span className="font-medium">{config.title}</span>
                 </CardContent>

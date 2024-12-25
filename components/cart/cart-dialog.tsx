@@ -13,7 +13,8 @@ import { useCart } from './cart-provider'
 import { createTransaction } from '@/app/actions/transactions'
 import { useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
-import { QuantitySelector } from './quantity-selector'
+import { QuantitySelector } from '../input/quantity-selector'
+import { Trash2 } from 'lucide-react'
 
 interface CartDialogProps {
   open: boolean
@@ -71,30 +72,30 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
           <DialogTitle>Shopping Cart</DialogTitle>
           <DialogDescription>Total: {total.toFixed(2)}€</DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-6 py-4">
           {items.map((item) => (
-            <div
-              key={item.product.id}
-              className="flex items-center justify-between gap-4"
-            >
-              <div className="flex-1">
+            <div key={item.product.id} className="space-y-2">
+              <div className="flex items-center justify-between">
                 <p className="font-medium">{item.product.name}</p>
-                <p className="text-sm text-gray-500">
-                  {item.product.price.toFixed(2)}€ each
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <QuantitySelector
-                  quantity={item.quantity.toString()}
-                  onQuantityChange={(qty) => handleQuantityChange(item, qty)}
-                />
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => removeItem(item.product.id)}
                 >
-                  Remove
+                  <Trash2 className="w-4 h-4" />
                 </Button>
+              </div>
+              <div className="grid grid-cols-3 text-sm text-gray-500 items-center">
+                <div>{item.product.price.toFixed(2)}€ each</div>
+                <div className="w-full flex justify-center">
+                  <QuantitySelector
+                    quantity={item.quantity.toString()}
+                    onQuantityChange={(qty) => handleQuantityChange(item, qty)}
+                  />
+                </div>
+                <div className="text-right font-medium text-gray-400">
+                  {(item.product.price * item.quantity).toFixed(2)}€
+                </div>
               </div>
             </div>
           ))}

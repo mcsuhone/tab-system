@@ -1,5 +1,10 @@
 1. Fix toasts!!
 
+2. UI Fixes
+
+- Add to cart view texts
+- Remove add to cart dialog from products
+
 2. Add pagination or rather infinite scroll to the products and users page
 
 - Products page

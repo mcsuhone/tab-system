@@ -1,11 +1,11 @@
 'use client'
 
 import { Product } from '@/db/schema'
-import { ProductList } from './product-list'
-import { ProductItems } from './product-items'
+import { ProductList } from '@/components/product/product-list'
+import { ProductItems } from '@/components/product/product-items'
 import { useSpecialProducts } from '@/app/hooks/use-special-products'
-import { CartButton } from '../cart/cart-button'
-import { SpecialProducts } from './special-products'
+import { CartButton } from '@/components/cart/cart-button'
+import { SpecialProducts } from '@/components/product/special-products'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export function UserProductList() {
@@ -20,7 +20,7 @@ export function UserProductList() {
 
   return (
     <div className="relative">
-      <div className="flex justify-end mt-6">
+      <div className="sticky top-4 flex justify-end mt-6">
         <CartButton />
       </div>
 

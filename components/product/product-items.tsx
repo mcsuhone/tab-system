@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { AddToCartDialog } from '../cart/add-to-cart-dialog'
 import { motion } from 'framer-motion'
+import { useCart } from '../cart/cart-provider'
 
 const container = {
   hidden: { opacity: 0 },
@@ -36,7 +37,11 @@ const item = {
 }
 
 export function ProductItems({ products }: { products: Product[] }) {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const { addItem, removeItem, updateQuantity } = useCart()
+
+  const handleProductClick = (product: Product) => {
+    addItem(product, 1)
+  }
 
   return (
     <motion.div
@@ -50,9 +55,9 @@ export function ProductItems({ products }: { products: Product[] }) {
           key={product.id}
           variants={item}
           className="flex items-center gap-4 px-4 py-3 rounded-lg border cursor-pointer hover:bg-accent transition-colors"
-          onClick={() => setSelectedProduct(product)}
+          onClick={() => handleProductClick(product)}
         >
-          <div className="flex-[60%]">
+          <div className="flex-[40%]">
             <p className="font-medium text-sm">{product.name}</p>
           </div>
           <div className="flex-[30%]">
@@ -60,17 +65,12 @@ export function ProductItems({ products }: { products: Product[] }) {
               {categoryDisplayNames[product.category]}
             </p>
           </div>
+          <div className="flex-[20%]">haloo</div>
           <div className="flex-[10%]">
             <p className="text-sm">{product.price.toFixed(2)}€</p>
           </div>
         </motion.div>
       ))}
-
-      <AddToCartDialog
-        product={selectedProduct!}
-        open={!!selectedProduct}
-        onOpenChange={(open) => !open && setSelectedProduct(null)}
-      />
     </motion.div>
   )
 }

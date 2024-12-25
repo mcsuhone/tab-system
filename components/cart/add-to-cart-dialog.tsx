@@ -12,8 +12,9 @@ import {
 import { Measurement, Product } from '@/db/schema'
 import { useEffect, useState } from 'react'
 import { useCart } from './cart-provider'
-import { QuantitySelector } from './quantity-selector'
+import { QuantitySelector } from '../input/quantity-selector'
 import { getMeasurements } from '@/app/actions/measurements'
+import PriceInput from '../input/price-input'
 
 interface AddToCartDialogProps {
   product: Product | null
@@ -111,10 +112,7 @@ export function AddToCartDialog({
                   Price
                 </label>
                 <div className="col-span-3">
-                  <QuantitySelector
-                    quantity={price}
-                    onQuantityChange={setPrice}
-                  />
+                  <PriceInput quantity={price} onQuantityChange={setPrice} />
                 </div>
               </div>
             )}
@@ -140,7 +138,6 @@ export function AddToCartDialog({
                 €
                 {measurement && (
                   <div className="mt-1 text-sm text-muted-foreground">
-                    Total volume:{' '}
                     {(measurement.amount * parseFloat(quantity || '0')).toFixed(
                       2
                     )}{' '}

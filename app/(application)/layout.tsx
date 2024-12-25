@@ -24,7 +24,6 @@ export default async function ApplicationLayout({
           </div>
         </PageContainer>
       </SidebarProvider>
-      <Toaster />
     </CartProvider>
   )
 }
