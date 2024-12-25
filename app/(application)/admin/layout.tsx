@@ -1,5 +1,4 @@
-import { auth } from '@/lib/auth'
-import UserInfo from '../user-info'
+import { PageContainer } from '@/components/containers/page-container'
 import { AdminNavbar } from './admin-navbar'
 
 export default async function AdminLayout({
@@ -7,14 +6,12 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
-  const { user } = await auth()
   return (
-    <div className="flex flex-col gap-12">
-      <UserInfo user={user} />
-      <div className="flex flex-col items-center justify-center mb-2">
+    <div className="">
+      <PageContainer>
         <AdminNavbar />
-      </div>
-      {children}
+        {children}
+      </PageContainer>
     </div>
   )
 }

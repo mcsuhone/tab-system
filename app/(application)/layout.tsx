@@ -1,11 +1,9 @@
 import { CartProvider } from '@/components/cart/cart-provider'
+import { SearchProvider } from '@/components/search/search-provider'
 import { SidebarProvider } from '@/components/ui/sidebar'
-import { Toaster } from '@/components/ui/toaster'
+import { auth } from '@/lib/auth'
 import { AppSidebar } from './app-sidebar'
 import { MobileMenu } from './mobile-menu'
-import { PageContainer } from '@/components/containers/page-container'
-import { auth } from '@/lib/auth'
-import { SearchProvider } from '@/components/search/search-provider'
 
 export default async function ApplicationLayout({
   children
@@ -15,7 +13,7 @@ export default async function ApplicationLayout({
   const { user } = await auth()
 
   return (
-    <div className="fixed inset-0 overflow-x-hidden">
+    <div className="overflow-x-hidden">
       <SearchProvider>
         <CartProvider>
           <SidebarProvider>

@@ -10,6 +10,7 @@ import { redirect } from 'next/navigation'
 // Move client components to a separate file
 import { RecentActivity } from './recent-activity'
 import { StatsGrid } from './stats-grid'
+import { PageContainer } from '@/components/containers/page-container'
 
 export default async function ProfilePage() {
   const { user } = await auth()
@@ -79,7 +80,7 @@ export default async function ProfilePage() {
   }
 
   return (
-    <>
+    <PageContainer>
       <div className="grid gap-8">
         {/* Profile Header */}
         <div className="flex items-start flex-wrap gap-6">
@@ -131,6 +132,6 @@ export default async function ProfilePage() {
         {/* Recent Activity */}
         <RecentActivity transactions={recentTransactions} />
       </div>
-    </>
+    </PageContainer>
   )
 }
