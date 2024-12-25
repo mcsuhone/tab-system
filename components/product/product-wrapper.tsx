@@ -68,7 +68,7 @@ export function ProductWrapper({
       <ScrollToTopButton />
       <div className="grid grid-cols-[1fr] md:grid-cols-[200px_1fr] gap-6">
         <div className="flex flex-col gap-4">
-          <div className="flex flex-row justify-between w-full items-center bg-background pb-4 gap-4">
+          <div className="flex flex-row justify-between w-full items-center bg-background pb-4 gap-2">
             <CategoryNav
               activeCategory={category}
               onCategorySelect={setCategory}
