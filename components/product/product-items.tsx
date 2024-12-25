@@ -6,6 +6,7 @@ import { categoryDisplayNames } from '@/lib/product-categories'
 import { AddToCartDialog } from '../cart/add-to-cart-dialog'
 import { motion } from 'framer-motion'
 import { useCart } from '../cart/cart-provider'
+import { QuantitySelector } from '../input/quantity-selector'
 
 const container = {
   hidden: { opacity: 0 },
@@ -37,10 +38,13 @@ const item = {
 }
 
 export function ProductItems({ products }: { products: Product[] }) {
-  const { addItem, removeItem, updateQuantity } = useCart()
+  const { items, addItem, removeItem, updateQuantity } = useCart()
 
   const handleProductClick = (product: Product) => {
-    addItem(product, 1)
+    const existingItem = items.find((item) => item.product.id === product.id)
+    if (!existingItem) {
+      addItem(product, 1)
+    }
   }
 
   return (
@@ -50,27 +54,48 @@ export function ProductItems({ products }: { products: Product[] }) {
       animate="show"
       className="space-y-0"
     >
-      {products.map((product) => (
-        <motion.div
-          key={product.id}
-          variants={item}
-          className="flex items-center gap-4 px-4 py-3 rounded-lg border cursor-pointer hover:bg-accent transition-colors"
-          onClick={() => handleProductClick(product)}
-        >
-          <div className="flex-[40%]">
-            <p className="font-medium text-sm">{product.name}</p>
-          </div>
-          <div className="flex-[30%]">
-            <p className="text-sm text-gray-500">
-              {categoryDisplayNames[product.category]}
-            </p>
-          </div>
-          <div className="flex-[20%]">haloo</div>
-          <div className="flex-[10%]">
-            <p className="text-sm">{product.price.toFixed(2)}€</p>
-          </div>
-        </motion.div>
-      ))}
+      {products.map((product) => {
+        const existingItem = items.find(
+          (item) => item.product.id === product.id
+        )
+        return (
+          <motion.div
+            key={product.id}
+            variants={item}
+            className="flex items-center gap-4 px-4 py-3 rounded-lg border hover:bg-accent transition-colors"
+            onClick={() => handleProductClick(product)}
+            style={{ cursor: existingItem ? 'default' : 'pointer' }}
+          >
+            <div className="flex-[40%]">
+              <p className="font-medium text-sm">{product.name}</p>
+            </div>
+            <div className="flex-[30%]">
+              <p className="text-sm text-gray-500">
+                {categoryDisplayNames[product.category]}
+              </p>
+            </div>
+            <div className="flex-[20%]">
+              {existingItem && existingItem.quantity > 0 && (
+                <QuantitySelector
+                  quantity={String(existingItem.quantity)}
+                  allowEmpty={true}
+                  onQuantityChange={(quantity) => {
+                    const newQuantity = Number(quantity)
+                    if (newQuantity === 0) {
+                      removeItem(product.id)
+                    } else {
+                      updateQuantity(product.id, newQuantity)
+                    }
+                  }}
+                />
+              )}
+            </div>
+            <div className="flex-[10%]">
+              <p className="text-sm">{product.price.toFixed(2)}€</p>
+            </div>
+          </motion.div>
+        )
+      })}
     </motion.div>
   )
 }

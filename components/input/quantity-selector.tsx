@@ -9,14 +9,18 @@ interface QuantitySelectorProps {
   onQuantityChange: (newQuantity: string) => void
   min?: string
   max?: string
+  allowEmpty?: boolean
 }
 
 export function QuantitySelector({
   quantity,
   onQuantityChange,
   min = '0.5',
-  max
+  max,
+  allowEmpty = false
 }: QuantitySelectorProps) {
+  const effectiveMin = allowEmpty ? '0' : min
+
   const handleIncrement = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     const newValue = (parseFloat(quantity) + 0.5).toString()
@@ -28,39 +32,39 @@ export function QuantitySelector({
   const handleDecrement = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     const newValue = (parseFloat(quantity) - 0.5).toString()
-    if (parseFloat(newValue) >= parseFloat(min)) {
+    if (parseFloat(newValue) >= parseFloat(effectiveMin)) {
       onQuantityChange(newValue)
     }
   }
 
   return (
-    <div className="relative w-full min-w-[120px] max-w-[160px]">
+    <div className="relative w-full min-w-[95px] max-w-[160px]">
       <Input
         type="number"
         value={quantity}
         onChange={(e) => onQuantityChange(e.target.value)}
         step="0.5"
-        min={min}
+        min={effectiveMin}
         max={max}
-        className="w-full text-center px-8 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        className="w-full text-center px-6 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       />
       <Button
         variant="ghost"
         size="icon"
-        className="absolute left-0 top-0 h-full w-10 hover:bg-transparent"
+        className="absolute left-0 top-0 h-full w-8 hover:bg-transparent"
         onClick={handleDecrement}
-        disabled={parseFloat(quantity) <= parseFloat(min)}
+        disabled={parseFloat(quantity) <= parseFloat(effectiveMin)}
       >
-        <Minus className="h-4 w-4" />
+        <Minus className="h-3 w-3" />
       </Button>
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-0 top-0 h-full w-10 hover:bg-transparent"
+        className="absolute right-0 top-0 h-full w-8 hover:bg-transparent"
         onClick={handleIncrement}
         disabled={max ? parseFloat(quantity) >= parseFloat(max) : false}
       >
-        <Plus className="h-4 w-4" />
+        <Plus size={8} />
       </Button>
     </div>
   )
