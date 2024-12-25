@@ -11,14 +11,20 @@ import {
 } from '@/components/ui/dialog'
 import { useCart } from './cart-provider'
 import { createTransaction } from '@/app/actions/transactions'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { QuantitySelector } from '../input/quantity-selector'
 import { Trash2 } from 'lucide-react'
+import { Product } from '@/db/schema'
 
 interface CartDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+}
+
+interface CartItem {
+  product: Product
+  quantity: number
 }
 
 export function CartDialog({ open, onOpenChange }: CartDialogProps) {
@@ -26,11 +32,34 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const { toast } = useToast()
 
+  useEffect(() => {
+    const handleKeyDown = async (e: KeyboardEvent) => {
+      if (
+        e.key === 'Enter' &&
+        open &&
+        document.activeElement?.tagName !== 'INPUT' &&
+        !isCheckingOut &&
+        items.length > 0
+      ) {
+        e.preventDefault()
+        handleCheckout()
+      }
+    }
+
+    if (open) {
+      window.addEventListener('keydown', handleKeyDown)
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [open, items.length, isCheckingOut])
+
   const handleCheckout = async () => {
     try {
       setIsCheckingOut(true)
       await createTransaction({
-        items: items.map((item) => ({
+        items: items.map((item: CartItem) => ({
           productId: item.product.id,
           quantity: item.quantity,
           pricePerUnit: item.product.price
@@ -53,10 +82,7 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
     }
   }
 
-  const handleQuantityChange = (
-    item: (typeof items)[0],
-    newQuantity: string
-  ) => {
+  const handleQuantityChange = (item: CartItem, newQuantity: string) => {
     const qty = parseFloat(newQuantity)
     if (qty <= 0) {
       removeItem(item.product.id)

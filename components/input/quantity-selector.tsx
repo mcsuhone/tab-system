@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Minus, Plus } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 interface QuantitySelectorProps {
   quantity: string
@@ -39,19 +40,27 @@ export function QuantitySelector({
 
   return (
     <div className="relative w-full min-w-[95px] max-w-[160px]">
-      <Input
-        type="number"
-        value={quantity}
-        onChange={(e) => onQuantityChange(e.target.value)}
-        step="0.5"
-        min={effectiveMin}
-        max={max}
-        className="w-full text-center px-6 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-      />
+      <motion.div
+        key={quantity}
+        initial={{ scale: 0.95 }}
+        animate={{ scale: 1 }}
+        transition={{ type: 'spring', stiffness: 500, damping: 40 }}
+      >
+        <Input
+          type="number"
+          value={quantity}
+          onChange={(e) => onQuantityChange(e.target.value)}
+          step="0.5"
+          min={effectiveMin}
+          max={max}
+          className="w-full text-center px-6 text-gray-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        />
+      </motion.div>
       <Button
         variant="ghost"
         size="icon"
-        className="absolute left-0 top-0 h-full w-8 hover:bg-transparent"
+        tabIndex={-1}
+        className="absolute left-0 top-0 h-full w-8 hover:bg-transparent focus:bg-transparent active:bg-transparent"
         onClick={handleDecrement}
         disabled={parseFloat(quantity) <= parseFloat(effectiveMin)}
       >
@@ -60,7 +69,8 @@ export function QuantitySelector({
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-0 top-0 h-full w-8 hover:bg-transparent"
+        tabIndex={-1}
+        className="absolute right-0 top-0 h-full w-8 hover:bg-transparent focus:bg-transparent active:bg-transparent"
         onClick={handleIncrement}
         disabled={max ? parseFloat(quantity) >= parseFloat(max) : false}
       >

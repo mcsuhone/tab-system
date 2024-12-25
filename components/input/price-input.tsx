@@ -80,6 +80,7 @@ const PriceInput = ({
       <Button
         variant="ghost"
         size="icon"
+        tabIndex={-1}
         className="absolute left-0 top-0 h-full w-10 hover:bg-transparent"
         onClick={handleDecrement}
         disabled={parseFloat(quantity) <= parseFloat(min)}
@@ -89,6 +90,7 @@ const PriceInput = ({
       <Button
         variant="ghost"
         size="icon"
+        tabIndex={-1}
         className="absolute right-0 top-0 h-full w-10 hover:bg-transparent"
         onClick={handleIncrement}
         disabled={max ? parseFloat(quantity) >= parseFloat(max) : false}

@@ -65,6 +65,29 @@ export function AddToCartDialog({
     }
   }, [open, product?.measureId, product?.isSpecialProduct])
 
+  // Add keydown event listener when dialog is open
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only handle Enter key when dialog is open and no input is focused
+      if (
+        e.key === 'Enter' &&
+        open &&
+        document.activeElement?.tagName !== 'INPUT'
+      ) {
+        e.preventDefault()
+        handleSubmit(e as unknown as React.FormEvent)
+      }
+    }
+
+    if (open) {
+      window.addEventListener('keydown', handleKeyDown)
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [open, product, price, quantity]) // Include dependencies used in handleSubmit
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!product) return
