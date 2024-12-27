@@ -49,20 +49,6 @@ export function CategoryNav({
   activeCategory,
   onCategorySelect
 }: CategoryNavProps) {
-  const [shouldNudge, setShouldNudge] = useState(false)
-
-  useEffect(() => {
-    const handleIntersection = (e: Event) => {
-      const customEvent = e as CustomEvent
-      setShouldNudge(!customEvent.detail.isIntersecting)
-    }
-
-    window.addEventListener('search-intersection', handleIntersection)
-    return () => {
-      window.removeEventListener('search-intersection', handleIntersection)
-    }
-  }, [])
-
   return (
     <>
       {/* Mobile View */}
@@ -85,9 +71,7 @@ export function CategoryNav({
       </div>
 
       {/* Desktop View */}
-      <nav
-        className={`hidden md:block transition-all duration-200 ${shouldNudge ? 'ml-4' : ''}`}
-      >
+      <nav className={`hidden md:block transition-all duration-200`}>
         <CategoryList
           activeCategory={activeCategory}
           onCategorySelect={onCategorySelect}

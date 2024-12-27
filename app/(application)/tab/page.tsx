@@ -12,7 +12,6 @@ export default async function TabPage() {
     <>
       <TopBar>
         <UserInfo user={user} />
-
         <div className="flex flex-row justify-end">
           <CartButton />
         </div>

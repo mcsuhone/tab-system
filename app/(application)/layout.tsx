@@ -17,7 +17,7 @@ export default async function ApplicationLayout({
       <SearchProvider>
         <CartProvider>
           <SidebarProvider>
-            <div className="relative flex h-full">
+            <div className="relative flex h-full w-full">
               <AppSidebar isAdmin={user?.permission === 'admin'} />
               <MobileMenu />
               <div className="flex flex-col flex-1 w-full overflow-y-auto">
