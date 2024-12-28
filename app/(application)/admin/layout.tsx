@@ -7,11 +7,9 @@ export default async function AdminLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="">
-      <PageContainer>
-        <AdminNavbar />
-        {children}
-      </PageContainer>
-    </div>
+    <PageContainer>
+      <AdminNavbar />
+      <div className="h-full overflow-y-auto">{children}</div>
+    </PageContainer>
   )
 }

@@ -15,7 +15,7 @@ import {
 import { useToast } from '@/components/ui/use-toast'
 import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 interface ActivityLog {
   id: number
@@ -160,7 +160,7 @@ export default function ActivityLogsPage() {
   }, [loadLogs])
 
   return (
-    <div className="w-full max-w-7xl">
+    <div className="w-full max-w-7xl h-full overflow-y-hidden">
       <h1 className="mb-8 text-3xl font-bold">Activity Logs</h1>
 
       <div className="mb-4 flex gap-2">
@@ -194,7 +194,7 @@ export default function ActivityLogsPage() {
         </FilterButton>
       </div>
 
-      <div className="mb-8 flex flex-wrap gap-4">
+      <div className="mb-4 flex flex-wrap gap-4">
         <DatePicker
           date={startDate}
           onSelect={(date) => {
@@ -222,54 +222,56 @@ export default function ActivityLogsPage() {
         </Button>
       </div>
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="space-y-0"
-        >
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Timestamp</TableHead>
-                <TableHead>Action</TableHead>
-                <TableHead>Member #</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Details</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {logs.map((log) => (
-                <motion.tr
-                  key={log.id}
-                  variants={item}
-                  className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                >
-                  <TableCell>
-                    {new Date(log.createdAt).toLocaleString('fi-FI', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit'
-                    })}
-                  </TableCell>
-                  <TableCell>{log.action}</TableCell>
-                  <TableCell>{log.memberNo || '-'}</TableCell>
-                  <TableCell>{log.userName || '-'}</TableCell>
-                  <TableCell>
-                    {typeof log.details === 'string'
-                      ? log.details
-                      : JSON.stringify(log.details, null, 2)}
-                  </TableCell>
-                </motion.tr>
-              ))}
-            </TableBody>
-          </Table>
-        </motion.div>
-      </AnimatePresence>
+      <div className="h-full overflow-y-auto">
+        <AnimatePresence mode="wait">
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="space-y-0"
+          >
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Timestamp</TableHead>
+                  <TableHead>Action</TableHead>
+                  <TableHead>Member #</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Details</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {logs.map((log) => (
+                  <motion.tr
+                    key={log.id}
+                    variants={item}
+                    className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                  >
+                    <TableCell>
+                      {new Date(log.createdAt).toLocaleString('fi-FI', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                      })}
+                    </TableCell>
+                    <TableCell>{log.action}</TableCell>
+                    <TableCell>{log.memberNo || '-'}</TableCell>
+                    <TableCell>{log.userName || '-'}</TableCell>
+                    <TableCell>
+                      {typeof log.details === 'string'
+                        ? log.details
+                        : JSON.stringify(log.details, null, 2)}
+                    </TableCell>
+                  </motion.tr>
+                ))}
+              </TableBody>
+            </Table>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   )
 }
