@@ -6,7 +6,7 @@ import { ScrollToTopButton } from '@/components/ui/scroll-to-top'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Product } from '@/db/schema'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { CategoryNav } from './category-nav'
 import { SearchBar } from './search-bar'
 
@@ -37,22 +37,33 @@ const DesktopProductLayout = ({
   isLoading,
   showSkeleton,
   error,
-  products
+  products,
+  onScroll,
+  isLoadingMore,
+  hasMore
 }: {
   children: (products: Product[]) => React.ReactNode
   isLoading: boolean
   showSkeleton: boolean
   error: Error | null
   products: Product[]
+  onScroll: (e: React.UIEvent<HTMLDivElement>) => void
+  isLoadingMore: boolean
+  hasMore: boolean
 }) => {
   const { setQuery, category, setCategory } = useSearch()
+  const contentRef = useRef<HTMLDivElement>(null)
 
   return (
     <div className="hidden md:grid grid-cols-[180px_1fr] h-full gap-6">
       <div className="flex flex-col gap-4 top-4 h-full overflow-y-auto">
         <CategoryNav activeCategory={category} onCategorySelect={setCategory} />
       </div>
-      <div className="flex flex-col gap-8 h-full overflow-y-auto">
+      <div
+        className="flex flex-col gap-8 h-full overflow-y-auto"
+        onScroll={onScroll}
+        ref={contentRef}
+      >
         <div className="flex justify-start sticky top-0 z-10">
           <SearchBar onSearch={setQuery} />
         </div>
@@ -89,6 +100,14 @@ const DesktopProductLayout = ({
               className="space-y-4 pr-2"
             >
               {children(products)}
+              {isLoadingMore && (
+                <div className="mt-4 text-center">Loading more products...</div>
+              )}
+              {!isLoading && !hasMore && products.length > 0 && (
+                <div className="mt-4 text-center text-muted-foreground">
+                  No more products
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -102,19 +121,30 @@ const MobileProductLayout = ({
   isLoading,
   showSkeleton,
   error,
-  products
+  products,
+  onScroll,
+  isLoadingMore,
+  hasMore
 }: {
   children: (products: Product[]) => React.ReactNode
   isLoading: boolean
   showSkeleton: boolean
   error: Error | null
   products: Product[]
+  onScroll: (e: React.UIEvent<HTMLDivElement>) => void
+  isLoadingMore: boolean
+  hasMore: boolean
 }) => {
   const { setQuery, category, setCategory } = useSearch()
+  const contentRef = useRef<HTMLDivElement>(null)
 
   return (
     <div className="md:hidden h-[calc(100vh-4rem)]">
-      <div className="flex flex-col gap-4 h-full">
+      <div
+        className="flex flex-col gap-4 h-full overflow-y-auto"
+        onScroll={onScroll}
+        ref={contentRef}
+      >
         <div className="flex flex-row justify-between w-full items-center bg-background pb-4 gap-2 sticky top-0 z-10">
           <CategoryNav
             activeCategory={category}
@@ -156,6 +186,16 @@ const MobileProductLayout = ({
                 className="space-y-4 pr-2"
               >
                 {children(products)}
+                {isLoadingMore && (
+                  <div className="mt-4 text-center">
+                    Loading more products...
+                  </div>
+                )}
+                {!isLoading && !hasMore && products.length > 0 && (
+                  <div className="mt-4 text-center text-muted-foreground">
+                    No more products
+                  </div>
+                )}
               </motion.div>
             </ScrollToTopButton>
           )}
@@ -172,15 +212,12 @@ export const ProductWrapper = ({
   const [showSkeleton, setShowSkeleton] = useState(false)
   const { query, category } = useSearch()
 
-  const {
-    data: productsData,
-    error,
-    isLoading
-  } = useProducts({
-    query: query || '',
-    showDisabled,
-    category: category || undefined
-  })
+  const { data, error, isLoading, isLoadingMore, hasMore, fetchNextPage } =
+    useProducts({
+      query: query || '',
+      showDisabled,
+      category: category || undefined
+    })
 
   useEffect(() => {
     if (isLoading) {
@@ -194,7 +231,17 @@ export const ProductWrapper = ({
     }
   }, [isLoading])
 
-  const products = productsData?.data || []
+  const products = data?.data || []
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement
+    const scrolledToBottom =
+      target.scrollHeight - target.scrollTop <= target.clientHeight + 100
+
+    if (scrolledToBottom && hasMore && !isLoadingMore) {
+      fetchNextPage()
+    }
+  }
 
   return (
     <>
@@ -203,6 +250,9 @@ export const ProductWrapper = ({
         showSkeleton={showSkeleton}
         error={error}
         products={products}
+        onScroll={handleScroll}
+        isLoadingMore={isLoadingMore}
+        hasMore={hasMore}
       >
         {children}
       </MobileProductLayout>
@@ -211,6 +261,9 @@ export const ProductWrapper = ({
         showSkeleton={showSkeleton}
         error={error}
         products={products}
+        onScroll={handleScroll}
+        isLoadingMore={isLoadingMore}
+        hasMore={hasMore}
       >
         {children}
       </DesktopProductLayout>

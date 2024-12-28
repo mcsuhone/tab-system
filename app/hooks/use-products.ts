@@ -45,6 +45,7 @@ export function useProducts(filters: ProductFilters = {}) {
     isLoading,
     isLoadingMore,
     hasMore: hasNextPage,
-    error
+    error,
+    fetchNextPage
   }
 }
