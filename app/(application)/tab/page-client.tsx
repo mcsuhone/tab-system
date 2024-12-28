@@ -6,14 +6,31 @@ import { ProductWrapper } from '@/components/product/product-wrapper'
 import { SpecialProducts } from '@/components/product/special-products'
 import { Product } from '@/db/schema'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useProducts } from '@/app/hooks/use-products'
+import { useSearch } from '@/components/search/search-provider'
 
 export function TabPageClient() {
   const { data: specialProductsData, isLoading: isSpecialProductsLoading } =
     useSpecialProducts()
 
-  const renderProducts = (products: Product[]) => {
+  const { query, category } = useSearch()
+
+  const {
+    data: products,
+    isLoading,
+    isLoadingMore,
+    hasMore
+  } = useProducts({
+    limit: 30,
+    showDisabled: false,
+    query,
+    category: category || undefined
+  })
+
+  const renderProducts = () => {
     // Filter out special products from regular list
-    const regularProducts = products.filter((p) => !p.isSpecialProduct)
+    const regularProducts = products.data?.filter((p) => !p.isSpecialProduct)
+
     return (
       <>
         <AnimatePresence mode="wait">
@@ -33,13 +50,15 @@ export function TabPageClient() {
         </AnimatePresence>
         <h2 className="text-lg font-semibold mb-4">Products</h2>
         <ProductItems products={regularProducts} />
+        {isLoadingMore && <div className="mt-4">Loading more products...</div>}
+        {!isLoading && !hasMore && products.data?.length > 0 && (
+          <div className="mt-4 text-center text-muted-foreground">
+            No more products
+          </div>
+        )}
       </>
     )
   }
 
-  return (
-    <>
-      <ProductWrapper>{renderProducts}</ProductWrapper>
-    </>
-  )
+  return <ProductWrapper>{renderProducts}</ProductWrapper>
 }

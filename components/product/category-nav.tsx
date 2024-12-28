@@ -1,42 +1,82 @@
 'use client'
 
-import { ProductCategory } from '@/db/schema'
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { ProductCategory, productCategoryEnum } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
-import { cn } from '@/lib/utils'
-import { Button } from '../ui/button'
+import { PanelLeft } from 'lucide-react'
+import { useEffect, useState } from 'react'
+
+const PRODUCT_CATEGORIES = Object.values(
+  productCategoryEnum.enumValues
+) as ProductCategory[]
 
 interface CategoryNavProps {
-  activeCategory: ProductCategory | undefined
-  onCategorySelect: (category: ProductCategory | undefined) => void
-  className?: string
+  activeCategory: ProductCategory | null
+  onCategorySelect: (category: ProductCategory | null) => void
+}
+
+function CategoryList({ activeCategory, onCategorySelect }: CategoryNavProps) {
+  return (
+    <ul className="space-y-2">
+      <li>
+        <button
+          onClick={() => onCategorySelect(null)}
+          className={`w-full text-left block p-2 rounded-md hover:bg-accent ${
+            activeCategory === null ? 'bg-accent text-sm' : 'text-sm'
+          }`}
+        >
+          All Products
+        </button>
+      </li>
+      {PRODUCT_CATEGORIES.map((category) => (
+        <li key={category}>
+          <button
+            onClick={() => onCategorySelect(category)}
+            className={`w-full text-left block p-2 rounded-md hover:bg-accent ${
+              activeCategory === category ? 'bg-accent text-sm' : 'text-sm'
+            }`}
+          >
+            {categoryDisplayNames[category]}
+          </button>
+        </li>
+      ))}
+    </ul>
+  )
 }
 
 export function CategoryNav({
   activeCategory,
-  onCategorySelect,
-  className
+  onCategorySelect
 }: CategoryNavProps) {
   return (
-    <div className={cn('flex gap-2 overflow-x-auto pb-2 -mb-2', className)}>
-      <Button
-        variant={!activeCategory ? 'secondary' : 'ghost'}
-        size="sm"
-        onClick={() => onCategorySelect(undefined)}
-        className="whitespace-nowrap"
-      >
-        All
-      </Button>
-      {Object.entries(categoryDisplayNames).map(([category, displayName]) => (
-        <Button
-          key={category}
-          variant={activeCategory === category ? 'secondary' : 'ghost'}
-          size="sm"
-          onClick={() => onCategorySelect(category as ProductCategory)}
-          className="whitespace-nowrap"
-        >
-          {displayName}
-        </Button>
-      ))}
-    </div>
+    <>
+      {/* Mobile View */}
+      <div className="md:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon">
+              <PanelLeft className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-64">
+            <div className="mt-8">
+              <CategoryList
+                activeCategory={activeCategory}
+                onCategorySelect={onCategorySelect}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+
+      {/* Desktop View */}
+      <nav className={`hidden md:block transition-all duration-200`}>
+        <CategoryList
+          activeCategory={activeCategory}
+          onCategorySelect={onCategorySelect}
+        />
+      </nav>
+    </>
   )
 }
