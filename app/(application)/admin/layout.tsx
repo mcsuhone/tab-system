@@ -9,7 +9,7 @@ export default async function AdminLayout({
   return (
     <PageContainer>
       <AdminNavbar />
-      <div className="h-full overflow-y-auto">{children}</div>
+      <div className="h-full overflow-y-hidden">{children}</div>
     </PageContainer>
   )
 }

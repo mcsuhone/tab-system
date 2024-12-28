@@ -176,7 +176,7 @@ export default function AdminProductsClient() {
   const [dialogOpen, setDialogOpen] = useState(false)
 
   return (
-    <div className="w-full max-w-7xl">
+    <div className="w-full max-w-7xl h-full overflow-y-hidden">
       <div className="mb-8 flex justify-between items-center">
         <h1 className="text-3xl font-bold">Product Management</h1>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -195,8 +195,8 @@ export default function AdminProductsClient() {
         </Dialog>
       </div>
 
-      <div>
-        <h2 className="mb-4 text-xl font-semibold">Products</h2>
+      <h2 className="mb-4 text-xl font-semibold">Products</h2>
+      <div className="h-full overflow-y-hidden">
         <AdminProductList />
       </div>
     </div>
