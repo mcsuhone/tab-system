@@ -5,7 +5,6 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { ProductCategory, productCategoryEnum } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { PanelLeft } from 'lucide-react'
-import { useEffect, useState } from 'react'
 
 const PRODUCT_CATEGORIES = Object.values(
   productCategoryEnum.enumValues

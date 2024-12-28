@@ -1,13 +1,12 @@
 'use client'
 
+import { useProducts } from '@/app/hooks/use-products'
 import { useSpecialProducts } from '@/app/hooks/use-special-products'
 import { ProductItems } from '@/components/product/product-items'
 import { ProductWrapper } from '@/components/product/product-wrapper'
 import { SpecialProducts } from '@/components/product/special-products'
-import { Product } from '@/db/schema'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useProducts } from '@/app/hooks/use-products'
 import { useSearch } from '@/components/search/search-provider'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export function TabPageClient() {
   const { data: specialProductsData, isLoading: isSpecialProductsLoading } =

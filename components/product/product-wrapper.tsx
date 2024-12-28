@@ -5,7 +5,6 @@ import { useSearch } from '@/components/search/search-provider'
 import { ScrollToTopButton } from '@/components/ui/scroll-to-top'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Product } from '@/db/schema'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { CategoryNav } from './category-nav'
@@ -46,7 +45,7 @@ const DesktopProductLayout = ({
   error: Error | null
   products: Product[]
 }) => {
-  const { query, setQuery, category, setCategory } = useSearch()
+  const { setQuery, category, setCategory } = useSearch()
 
   return (
     <div className="hidden md:grid grid-cols-[200px_1fr] gap-6">
@@ -111,7 +110,7 @@ const MobileProductLayout = ({
   error: Error | null
   products: Product[]
 }) => {
-  const { query, setQuery, category, setCategory } = useSearch()
+  const { setQuery, category, setCategory } = useSearch()
 
   return (
     <div className="md:hidden">
@@ -169,7 +168,7 @@ export const ProductWrapper = ({
   showDisabled = true
 }: ProductListProps) => {
   const [showSkeleton, setShowSkeleton] = useState(false)
-  const { query, category, setCategory } = useSearch()
+  const { query, category } = useSearch()
 
   const {
     data: productsData,
