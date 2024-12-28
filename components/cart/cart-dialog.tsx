@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { useCart } from './cart-provider'
 import { createTransaction } from '@/app/actions/transactions'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { QuantitySelector } from '../input/quantity-selector'
 import { Trash2 } from 'lucide-react'
@@ -32,32 +32,10 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const { toast } = useToast()
 
-  useEffect(() => {
-    const handleKeyDown = async (e: KeyboardEvent) => {
-      if (
-        e.key === 'Enter' &&
-        open &&
-        document.activeElement?.tagName !== 'INPUT' &&
-        !isCheckingOut &&
-        items.length > 0
-      ) {
-        e.preventDefault()
-        handleCheckout()
-      }
-    }
-
-    if (open) {
-      window.addEventListener('keydown', handleKeyDown)
-    }
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [open, items.length, isCheckingOut])
-
-  const handleCheckout = async () => {
+  const handleCheckout = useCallback(async () => {
+    if (isCheckingOut || items.length === 0) return
+    setIsCheckingOut(true)
     try {
-      setIsCheckingOut(true)
       await createTransaction({
         items: items.map((item: CartItem) => ({
           productId: item.product.id,
@@ -80,7 +58,36 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
     } finally {
       setIsCheckingOut(false)
     }
-  }
+  }, [isCheckingOut, items, clearCart, onOpenChange, toast])
+
+  useEffect(() => {
+    const handleKeyDown = async (e: KeyboardEvent) => {
+      if (
+        e.key === 'Enter' &&
+        open &&
+        document.activeElement?.tagName !== 'INPUT' &&
+        !isCheckingOut &&
+        items.length > 0
+      ) {
+        e.preventDefault()
+        handleCheckout()
+      }
+    }
+
+    if (open) {
+      window.addEventListener('keydown', handleKeyDown)
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [open, items.length, isCheckingOut, handleCheckout])
+
+  useEffect(() => {
+    if (open) {
+      handleCheckout()
+    }
+  }, [open, handleCheckout])
 
   const handleQuantityChange = (item: CartItem, newQuantity: string) => {
     const qty = parseFloat(newQuantity)

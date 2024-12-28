@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../cart/cart-provider'
 import { QuantitySelector } from '../input/quantity-selector'
 import { ProductSkeleton } from './product-skeleton'
-import { Suspense } from 'react'
 
 const container = {
   hidden: { opacity: 0 },

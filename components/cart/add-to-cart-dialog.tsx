@@ -10,7 +10,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { Measurement, Product } from '@/db/schema'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useCart } from './cart-provider'
 import { QuantitySelector } from '../input/quantity-selector'
 import { getMeasurements } from '@/app/actions/measurements'
@@ -31,6 +31,30 @@ export function AddToCartDialog({
   const [price, setPrice] = useState('')
   const { addItem } = useCart()
   const [measurement, setMeasurement] = useState<Measurement | null>(null)
+
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault()
+      if (!product) return
+
+      const qty = parseFloat(quantity)
+      const finalPrice = product.isSpecialProduct
+        ? parseFloat(price)
+        : product.price
+
+      if (
+        qty > 0 &&
+        (!product.isSpecialProduct || (finalPrice && finalPrice > 0))
+      ) {
+        const productToAdd = product.isSpecialProduct
+          ? { ...product, price: finalPrice }
+          : product
+        addItem(productToAdd, qty)
+        onOpenChange(false)
+      }
+    },
+    [product, quantity, price, addItem, onOpenChange]
+  )
 
   // Reset quantity and price when dialog opens with a new product
   useEffect(() => {
@@ -86,28 +110,7 @@ export function AddToCartDialog({
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [open, product, price, quantity]) // Include dependencies used in handleSubmit
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!product) return
-
-    const qty = parseFloat(quantity)
-    const finalPrice = product.isSpecialProduct
-      ? parseFloat(price)
-      : product.price
-
-    if (
-      qty > 0 &&
-      (!product.isSpecialProduct || (finalPrice && finalPrice > 0))
-    ) {
-      const productToAdd = product.isSpecialProduct
-        ? { ...product, price: finalPrice }
-        : product
-      addItem(productToAdd, qty)
-      onOpenChange(false)
-    }
-  }
+  }, [open, handleSubmit])
 
   if (!product) return null
 
