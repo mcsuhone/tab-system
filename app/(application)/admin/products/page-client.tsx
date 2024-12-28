@@ -1,7 +1,15 @@
 'use client'
 
-import { updateProduct } from '@/app/actions/products'
+import React from 'react'
 import { Button } from '@/components/ui/button'
+import { Plus, Ban, MoreHorizontal, Pencil } from 'lucide-react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,13 +17,14 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Switch } from '@/components/ui/switch'
+import { useState, useEffect } from 'react'
+import { AddProductForm } from '@/components/product/add-product-form'
 import { Product } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Ban, MoreHorizontal, Pencil } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { EditProductDialog } from './edit-product-dialog'
-import { ProductWrapper } from './product-wrapper'
+import { EditProductDialog } from '@/components/product/edit-product-dialog'
+import { ProductWrapper } from '@/components/product/product-wrapper'
+import { updateProduct } from '@/app/actions/products'
 
 const container = {
   hidden: { opacity: 0 },
@@ -113,7 +122,7 @@ function AdminProductItem({
   )
 }
 
-export function AdminProductList() {
+function AdminProductList() {
   const [showDisabled, setShowDisabled] = useState(false)
   const [lastModifiedId, setLastModifiedId] = useState<number | null>(null)
 
@@ -160,5 +169,36 @@ export function AdminProductList() {
     <ProductWrapper showDisabled={showDisabled}>
       {(products) => renderProducts(products)}
     </ProductWrapper>
+  )
+}
+
+export default function AdminProductsClient() {
+  const [dialogOpen, setDialogOpen] = useState(false)
+
+  return (
+    <div className="w-full max-w-7xl">
+      <div className="mb-8 flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Product Management</h1>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus strokeWidth={2.5} className="h-4 w-4" />
+              Add Product
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Add New Product</DialogTitle>
+            </DialogHeader>
+            <AddProductForm onSuccess={() => setDialogOpen(false)} />
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <div>
+        <h2 className="mb-4 text-xl font-semibold">Products</h2>
+        <AdminProductList />
+      </div>
+    </div>
   )
 }
