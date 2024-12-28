@@ -8,7 +8,7 @@ export default async function AdminLayout({
 }) {
   return (
     <PageContainer>
-      <div className="flex flex-col h-full w-full">
+      <div className="flex flex-col h-full w-full overflow-hidden">
         <AdminNavbar />
         <div className="flex-1 min-h-0 overflow-hidden">{children}</div>
       </div>

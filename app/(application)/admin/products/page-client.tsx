@@ -36,6 +36,25 @@ const container = {
   }
 }
 
+const item = {
+  hidden: {
+    opacity: 0,
+    y: -10,
+    marginTop: 0
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    marginTop: 10,
+    transition: {
+      type: 'spring',
+      stiffness: 700,
+      damping: 35,
+      mass: 0.35
+    }
+  }
+}
+
 interface ProductItemProps {
   product: Product
   lastModifiedId: number | null
@@ -67,8 +86,9 @@ function AdminProductItem({
 
   return (
     <>
-      <div
-        className={`flex items-center gap-4 p-4 rounded-lg border mb-4 transition-all duration-300 ${
+      <motion.div
+        variants={item}
+        className={`flex items-center gap-4 p-4 rounded-lg border transition-all duration-300 ${
           product.disabled
             ? 'border-muted text-muted-foreground'
             : 'border-border text-foreground'
@@ -107,7 +127,7 @@ function AdminProductItem({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </div>
+      </motion.div>
 
       <EditProductDialog
         product={product}
@@ -140,28 +160,33 @@ function AdminProductList() {
     const regularProducts = products.filter((p) => !p.isSpecialProduct)
 
     return (
-      <div className="space-y-4">
-        <div className="flex items-center space-x-2 mb-6">
-          <Switch
-            checked={showDisabled}
-            onCheckedChange={setShowDisabled}
-            id="show-disabled"
-          />
-          <label htmlFor="show-disabled">Show disabled products</label>
-        </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key="product-list"
+          variants={container}
+          initial="hidden"
+          animate="show"
+          exit="hidden"
+          className="space-y-0"
+        >
+          <div className="flex items-center space-x-2 mb-6">
+            <Switch
+              checked={showDisabled}
+              onCheckedChange={setShowDisabled}
+              id="show-disabled"
+            />
+            <label htmlFor="show-disabled">Show disabled products</label>
+          </div>
 
-        <AnimatePresence mode="wait">
-          <motion.div variants={container} initial="hidden" animate="show">
-            {regularProducts.map((product) => (
-              <AdminProductItem
-                key={product.id}
-                product={product}
-                lastModifiedId={lastModifiedId}
-              />
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+          {regularProducts.map((product) => (
+            <AdminProductItem
+              key={product.id}
+              product={product}
+              lastModifiedId={lastModifiedId}
+            />
+          ))}
+        </motion.div>
+      </AnimatePresence>
     )
   }
 
@@ -176,8 +201,8 @@ export default function AdminProductsClient() {
   const [dialogOpen, setDialogOpen] = useState(false)
 
   return (
-    <div className="w-full max-w-7xl h-full overflow-y-hidden">
-      <div className="mb-8 flex justify-between items-center">
+    <div className="flex flex-col h-full overflow-hidden">
+      <div className="shrink-0 mb-8 flex justify-between items-center">
         <h1 className="text-3xl font-bold">Product Management</h1>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
@@ -195,8 +220,8 @@ export default function AdminProductsClient() {
         </Dialog>
       </div>
 
-      <h2 className="mb-4 text-xl font-semibold">Products</h2>
-      <div className="h-full overflow-y-hidden">
+      <h2 className="shrink-0 mb-4 text-xl font-semibold">Products</h2>
+      <div className="flex-1 min-h-0 overflow-hidden">
         <AdminProductList />
       </div>
     </div>
