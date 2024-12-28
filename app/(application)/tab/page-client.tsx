@@ -1,7 +1,7 @@
 'use client'
 
 import { useSpecialProducts } from '@/app/hooks/use-special-products'
-import { ProductItems } from '@/components/product/product-items'
+import { ProductItems } from './product-items'
 import { ProductWrapper } from '@/components/product/product-wrapper'
 import { SpecialProducts } from '@/components/product/special-products'
 import { Product } from '@/db/schema'

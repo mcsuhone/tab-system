@@ -4,9 +4,9 @@ import { Product } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useCart } from '../cart/cart-provider'
-import { QuantitySelector } from '../input/quantity-selector'
-import { ProductSkeleton } from './product-skeleton'
+import { useCart } from '@/components/cart/cart-provider'
+import { QuantitySelector } from '@/components/input/quantity-selector'
+import { ProductSkeleton } from '@/components/product/product-skeleton'
 
 const container = {
   hidden: { opacity: 0 },

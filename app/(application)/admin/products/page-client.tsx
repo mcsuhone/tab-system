@@ -167,7 +167,7 @@ function AdminProductList() {
 
   return (
     <ProductWrapper showDisabled={showDisabled}>
-      {(products) => renderProducts(products)}
+      {renderProducts}
     </ProductWrapper>
   )
 }
