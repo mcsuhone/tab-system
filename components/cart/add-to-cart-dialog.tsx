@@ -147,6 +147,7 @@ export function AddToCartDialog({
                 <QuantitySelector
                   quantity={quantity}
                   onQuantityChange={setQuantity}
+                  className="h-10"
                 />
               </div>
             </div>

@@ -66,15 +66,15 @@ export function ProductItems({ products }: { products: Product[] }) {
             onClick={() => handleProductClick(product)}
             style={{ cursor: existingItem ? 'default' : 'pointer' }}
           >
-            <div className="flex-[40%]">
+            <div className="flex-[50%]">
               <p className="font-medium text-sm">{product.name}</p>
             </div>
-            <div className="flex-[30%]">
+            <div className="flex-[15%]">
               <p className="text-sm text-gray-500">
                 {categoryDisplayNames[product.category]}
               </p>
             </div>
-            <div className="flex-[20%]">
+            <div className="flex-[25%] flex justify-center">
               {existingItem && existingItem.quantity > 0 && (
                 <QuantitySelector
                   quantity={String(existingItem.quantity)}
@@ -90,7 +90,7 @@ export function ProductItems({ products }: { products: Product[] }) {
                 />
               )}
             </div>
-            <div className="flex-[10%]">
+            <div className="flex-[10%] text-right">
               <p className="text-sm">{product.price.toFixed(2)}€</p>
             </div>
           </motion.div>

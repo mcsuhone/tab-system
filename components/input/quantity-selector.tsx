@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Minus, Plus } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 interface QuantitySelectorProps {
   quantity: string
@@ -11,6 +12,7 @@ interface QuantitySelectorProps {
   min?: string
   max?: string
   allowEmpty?: boolean
+  className?: string
 }
 
 export function QuantitySelector({
@@ -18,7 +20,8 @@ export function QuantitySelector({
   onQuantityChange,
   min = '0.5',
   max,
-  allowEmpty = false
+  allowEmpty = false,
+  className
 }: QuantitySelectorProps) {
   const effectiveMin = allowEmpty ? '0' : min
 
@@ -39,12 +42,13 @@ export function QuantitySelector({
   }
 
   return (
-    <div className="relative w-full min-w-[95px] max-w-[160px]">
+    <div className="relative w-full min-w-[80px] max-w-[160px]">
       <motion.div
         key={quantity}
         initial={{ scale: 0.95 }}
         animate={{ scale: 1 }}
         transition={{ type: 'spring', stiffness: 500, damping: 40 }}
+        className="h-full"
       >
         <Input
           type="number"
@@ -53,14 +57,17 @@ export function QuantitySelector({
           step="0.5"
           min={effectiveMin}
           max={max}
-          className="w-full text-center px-6 text-gray-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className={cn(
+            'w-full h-full text-center px-6 text-gray-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
+            className
+          )}
         />
       </motion.div>
       <Button
         variant="ghost"
         size="icon"
         tabIndex={-1}
-        className="absolute left-0 top-0 h-full w-8 hover:bg-transparent focus:bg-transparent active:bg-transparent"
+        className="absolute left-0 top-0 h-full w-10 hover:bg-transparent focus:bg-transparent active:bg-transparent px-0"
         onClick={handleDecrement}
         disabled={parseFloat(quantity) <= parseFloat(effectiveMin)}
       >
@@ -70,11 +77,11 @@ export function QuantitySelector({
         variant="ghost"
         size="icon"
         tabIndex={-1}
-        className="absolute right-0 top-0 h-full w-8 hover:bg-transparent focus:bg-transparent active:bg-transparent"
+        className="absolute right-0 top-0 h-full w-10 hover:bg-transparent focus:bg-transparent active:bg-transparent px-0"
         onClick={handleIncrement}
         disabled={max ? parseFloat(quantity) >= parseFloat(max) : false}
       >
-        <Plus size={8} />
+        <Plus className="h-3 w-3" />
       </Button>
     </div>
   )
