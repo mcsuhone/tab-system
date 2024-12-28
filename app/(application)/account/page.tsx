@@ -81,7 +81,7 @@ export default async function ProfilePage() {
 
   return (
     <PageContainer>
-      <div className="grid gap-8">
+      <div className="grid gap-8 h-full">
         {/* Profile Header */}
         <div className="flex items-start flex-wrap gap-6">
           <Avatar className="h-24 w-24">
@@ -130,7 +130,9 @@ export default async function ProfilePage() {
         <StatsGrid stats={stats} />
 
         {/* Recent Activity */}
-        <RecentActivity transactions={recentTransactions} />
+        <div className="h-full overflow-y-auto">
+          <RecentActivity transactions={recentTransactions} />
+        </div>
       </div>
     </PageContainer>
   )
