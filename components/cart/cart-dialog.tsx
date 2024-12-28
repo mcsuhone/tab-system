@@ -43,6 +43,7 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
           pricePerUnit: item.product.price
         }))
       })
+
       clearCart()
       onOpenChange(false)
       toast({
@@ -82,12 +83,6 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [open, items.length, isCheckingOut, handleCheckout])
-
-  useEffect(() => {
-    if (open) {
-      handleCheckout()
-    }
-  }, [open, handleCheckout])
 
   const handleQuantityChange = (item: CartItem, newQuantity: string) => {
     const qty = parseFloat(newQuantity)
