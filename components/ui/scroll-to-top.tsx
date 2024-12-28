@@ -4,25 +4,33 @@ import { Button } from '@/components/ui/button'
 import { useIntersection } from '@/hooks/use-intersection'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
-import React from 'react'
+import React, { useRef } from 'react'
 
-export function ScrollToTopButton() {
+interface ScrollToTopButtonProps {
+  children?: React.ReactNode
+}
+
+export function ScrollToTopButton({ children }: ScrollToTopButtonProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
   const { targetRef, isIntersecting } = useIntersection({
     threshold: 0,
-    root: null,
+    root: scrollContainerRef.current,
     rootMargin: '0px'
   })
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+    }
   }
 
   return (
-    <>
+    <div ref={scrollContainerRef} className="h-full overflow-y-auto">
       <div
         ref={targetRef as React.RefObject<HTMLDivElement>}
-        className="h-1 w-full absolute top-0"
+        className="h-1 w-full"
       />
+      {children}
       <AnimatePresence>
         {!isIntersecting && (
           <motion.div
@@ -42,6 +50,6 @@ export function ScrollToTopButton() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   )
 }

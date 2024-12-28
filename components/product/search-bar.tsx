@@ -30,7 +30,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
       placeholder="Search drinks..."
       value={value}
       onChange={(e) => setValue(e.target.value)}
-      className="max-w-xs"
+      className="max-w-xs ring-offset-0 m-1"
     />
   )
 }

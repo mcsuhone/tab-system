@@ -48,12 +48,12 @@ const DesktopProductLayout = ({
   const { setQuery, category, setCategory } = useSearch()
 
   return (
-    <div className="hidden md:grid grid-cols-[200px_1fr] gap-6">
-      <div className="flex flex-col gap-4 sticky top-4 h-fit">
+    <div className="hidden md:grid grid-cols-[180px_1fr] h-full gap-6">
+      <div className="flex flex-col gap-4 top-4 h-full overflow-y-auto">
         <CategoryNav activeCategory={category} onCategorySelect={setCategory} />
       </div>
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-start top-4 bg-background z-10 pb-4">
+      <div className="flex flex-col gap-8 h-full overflow-y-auto">
+        <div className="flex justify-start sticky top-0 z-10">
           <SearchBar onSearch={setQuery} />
         </div>
         <AnimatePresence mode="wait">
@@ -86,7 +86,7 @@ const DesktopProductLayout = ({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="space-y-4"
+              className="space-y-4 pr-2"
             >
               {children(products)}
             </motion.div>
@@ -113,9 +113,9 @@ const MobileProductLayout = ({
   const { setQuery, category, setCategory } = useSearch()
 
   return (
-    <div className="md:hidden">
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-row justify-between w-full items-center bg-background pb-4 gap-2">
+    <div className="md:hidden h-[calc(100vh-4rem)]">
+      <div className="flex flex-col gap-4 h-full">
+        <div className="flex flex-row justify-between w-full items-center bg-background pb-4 gap-2 sticky top-0 z-10">
           <CategoryNav
             activeCategory={category}
             onCategorySelect={setCategory}
@@ -146,16 +146,18 @@ const MobileProductLayout = ({
               {error.message}
             </motion.div>
           ) : (
-            <motion.div
-              key="products"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-4"
-            >
-              {children(products)}
-            </motion.div>
+            <ScrollToTopButton>
+              <motion.div
+                key="products"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-4 pr-2"
+              >
+                {children(products)}
+              </motion.div>
+            </ScrollToTopButton>
           )}
         </AnimatePresence>
       </div>
@@ -196,7 +198,6 @@ export const ProductWrapper = ({
 
   return (
     <>
-      <ScrollToTopButton />
       <MobileProductLayout
         isLoading={isLoading}
         showSkeleton={showSkeleton}

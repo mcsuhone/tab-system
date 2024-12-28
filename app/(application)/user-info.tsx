@@ -9,7 +9,7 @@ interface UserInfoProps {
   className?: string
 }
 
-export default function UserInfo({ user, className }: UserInfoProps) {
+export const UserInfo = ({ user, className }: UserInfoProps) => {
   if (!user) {
     return (
       <Card className={cn('p-3', className)}>
