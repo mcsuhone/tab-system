@@ -286,112 +286,120 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="w-full max-w-7xl">
-      <div className="mb-8 flex justify-between items-center">
+    <div className="flex flex-col h-full w-full">
+      <div className="shrink-0 mb-8 flex justify-between items-center">
         <h1 className="text-3xl font-bold">User Management</h1>
         <AddUserDialog onSuccess={loadUsers} />
       </div>
+      <div className="min-h-0 flex-1 overflow-hidden">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-[200px]">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+          </div>
+        ) : users.length > 0 ? (
+          <div className="h-full overflow-y-auto">
+            <Table>
+              <TableHeader className="sticky top-0 bg-background">
+                <TableRow>
+                  <TableHead>Member #</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Permission</TableHead>
+                  <TableHead className="w-[100px]">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {users.map((user, index) => (
+                  <motion.tr
+                    key={user.id}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: index * 0.1,
+                      ease: 'easeOut'
+                    }}
+                    className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                  >
+                    <TableCell>{user.member_no}</TableCell>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell className="capitalize">
+                      {user.permission}
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className="h-8 w-8 p-0 hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
+                          >
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => setEditingUser(user)}
+                          >
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setResetUserId(user.id)
+                              setIsResetDialogOpen(true)
+                            }}
+                          >
+                            <KeyRound className="mr-2 h-4 w-4" />
+                            Reset Password
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
 
-      {isLoading ? (
-        <div className="flex justify-center items-center h-[200px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
-        </div>
-      ) : users.length > 0 ? (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Member #</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Permission</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users.map((user, index) => (
-              <motion.tr
-                key={user.id}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.3,
-                  delay: index * 0.1,
-                  ease: 'easeOut'
-                }}
-                className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-              >
-                <TableCell>{user.member_no}</TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell className="capitalize">{user.permission}</TableCell>
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="h-8 w-8 p-0 hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
-                      >
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => setEditingUser(user)}>
-                        <Pencil className="mr-2 h-4 w-4" />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setResetUserId(user.id)
-                          setIsResetDialogOpen(true)
+                      <Dialog
+                        open={isResetDialogOpen && resetUserId === user.id}
+                        onOpenChange={(open) => {
+                          setIsResetDialogOpen(open)
+                          if (!open) setResetUserId(null)
                         }}
                       >
-                        <KeyRound className="mr-2 h-4 w-4" />
-                        Reset Password
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
-                  <Dialog
-                    open={isResetDialogOpen && resetUserId === user.id}
-                    onOpenChange={(open) => {
-                      setIsResetDialogOpen(open)
-                      if (!open) setResetUserId(null)
-                    }}
-                  >
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Reset User Password</DialogTitle>
-                        <DialogDescription>
-                          Are you sure you want to reset the password for{' '}
-                          {user.name}? The password will be cleared and the user
-                          will need to set a new password on their next login.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <DialogFooter>
-                        <Button
-                          variant="outline"
-                          onClick={() => setIsResetDialogOpen(false)}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          onClick={handleResetPassword}
-                        >
-                          Reset Password
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                </TableCell>
-              </motion.tr>
-            ))}
-          </TableBody>
-        </Table>
-      ) : (
-        <div className="text-center py-8 text-muted-foreground">
-          No users found
-        </div>
-      )}
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Reset User Password</DialogTitle>
+                            <DialogDescription>
+                              Are you sure you want to reset the password for{' '}
+                              {user.name}? The password will be cleared and the
+                              user will need to set a new password on their next
+                              login.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <Button
+                              variant="outline"
+                              onClick={() => setIsResetDialogOpen(false)}
+                            >
+                              Cancel
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              onClick={handleResetPassword}
+                            >
+                              Reset Password
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
+                  </motion.tr>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        ) : (
+          <div className="text-center py-8 text-muted-foreground">
+            No users found
+          </div>
+        )}
+      </div>
 
       {editingUser && (
         <EditUserDialog
