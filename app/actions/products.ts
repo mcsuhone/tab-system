@@ -2,19 +2,23 @@
 
 import { db } from '@/db/db'
 import { ProductCategory, products } from '@/db/schema'
-import { and, eq, ilike } from 'drizzle-orm'
+import { and, eq, ilike, sql } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
 export type ProductFilters = {
   query?: string
   category?: ProductCategory
   showDisabled?: boolean
+  page?: number
+  limit?: number
 }
 
 export async function getProducts({
   query,
   category,
-  showDisabled = true
+  showDisabled = true,
+  page = 1,
+  limit = 30
 }: ProductFilters = {}) {
   try {
     const conditions = []
@@ -28,12 +32,31 @@ export async function getProducts({
       conditions.push(eq(products.disabled, false))
     }
 
-    const allProducts = await db
-      .select()
-      .from(products)
-      .where(conditions.length > 0 ? and(...conditions) : undefined)
+    const offset = (page - 1) * limit
 
-    return { data: allProducts }
+    const [allProducts, totalCount] = await Promise.all([
+      db
+        .select()
+        .from(products)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .limit(limit)
+        .offset(offset),
+      db
+        .select({ count: sql<number>`count(*)` })
+        .from(products)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .then((result) => Number(result[0].count))
+    ])
+
+    return {
+      data: allProducts,
+      pagination: {
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        currentPage: page,
+        hasMore: page * limit < totalCount
+      }
+    }
   } catch (error) {
     console.error('Error fetching products:', error)
     return { error: 'Failed to fetch products' }
