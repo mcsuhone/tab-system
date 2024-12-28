@@ -53,7 +53,7 @@ const DesktopProductLayout = ({
         <CategoryNav activeCategory={category} onCategorySelect={setCategory} />
       </div>
       <div className="flex flex-col gap-4">
-        <div className="flex justify-end sticky top-4 bg-background z-10 pb-4">
+        <div className="flex justify-start top-4 bg-background z-10 pb-4">
           <SearchBar onSearch={setQuery} />
         </div>
         <AnimatePresence mode="wait">
