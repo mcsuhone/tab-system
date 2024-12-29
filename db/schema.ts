@@ -55,21 +55,15 @@ export const measurements = pgTable('measurements', {
   unit: text('unit').notNull()
 })
 
-export const products = pgTable(
-  'products',
-  {
-    id: serial('id').primaryKey(),
-    name: text('name').notNull(),
-    category: productCategoryEnum('category').notNull(),
-    price: real('price').notNull(),
-    disabled: boolean('disabled').notNull().default(false),
-    isSpecialProduct: boolean('is_special_product').notNull().default(false),
-    measureId: integer('measure_id').references(() => measurements.id)
-  },
-  (table) => ({
-    nameIdx: uniqueIndex('product_name_idx').on(table.name)
-  })
-)
+export const products = pgTable('products', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  category: productCategoryEnum('category').notNull(),
+  price: real('price').notNull(),
+  disabled: boolean('disabled').notNull().default(false),
+  isSpecialProduct: boolean('is_special_product').notNull().default(false),
+  measureId: integer('measure_id').references(() => measurements.id)
+})
 
 export const activityLogs = pgTable('activity_logs', {
   id: serial('id').primaryKey(),

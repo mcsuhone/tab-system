@@ -4,6 +4,7 @@ import { db } from '@/db/db'
 import { ProductCategory, products } from '@/db/schema'
 import { and, eq, ilike, sql } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
+import { withAuth } from '@/lib/auth-guard'
 
 export type ProductFilters = {
   query?: string
@@ -64,36 +65,48 @@ export async function getProducts({
 }
 
 export async function addProduct(formData: FormData) {
-  try {
-    const name = formData.get('name') as string
-    const category = formData.get('category') as ProductCategory
-    const price = parseFloat(formData.get('price') as string)
-    const isSpecialProduct = formData.get('isSpecialProduct') === 'true'
-    const measureId = parseInt(formData.get('measureId') as string)
+  return withAuth(
+    async () => {
+      const name = formData.get('name') as string
+      const category = formData.get('category') as ProductCategory
+      const price = parseFloat(formData.get('price') as string)
+      const isSpecialProduct = formData.get('isSpecialProduct') === 'true'
+      const measureId = parseInt(formData.get('measureId') as string)
 
-    if (!name || !category || !price || !measureId) {
-      return { error: 'Missing required fields' }
-    }
+      if (!name || !category || !price || !measureId) {
+        return {
+          error: {
+            title: 'Validation Error',
+            description: 'Missing required fields'
+          }
+        }
+      }
 
-    const newProduct = await db
-      .insert(products)
-      .values({
-        name,
-        category,
-        price,
-        disabled: false,
-        isSpecialProduct,
-        measureId
-      })
-      .returning()
+      const [newProduct] = await db
+        .insert(products)
+        .values({
+          name,
+          category,
+          price,
+          disabled: false,
+          isSpecialProduct,
+          measureId
+        })
+        .returning()
 
-    revalidatePath('/tab')
-    revalidatePath('/admin/products')
-    return { data: newProduct[0] }
-  } catch (error) {
-    console.error('Error adding product:', error)
-    throw error
-  }
+      revalidatePath('/tab')
+      revalidatePath('/admin/products')
+
+      return {
+        data: newProduct,
+        success: {
+          title: 'Success',
+          description: 'Product added successfully'
+        }
+      }
+    },
+    { adminOnly: true }
+  )
 }
 
 interface UpdateProductData {
@@ -109,46 +122,58 @@ export async function updateProduct(
   productId: number,
   data: UpdateProductData
 ) {
-  try {
-    const updateData: UpdateProductData = {}
+  return withAuth(
+    async () => {
+      const updateData: UpdateProductData = {}
 
-    if (typeof data.disabled === 'boolean') {
-      updateData.disabled = data.disabled
-    }
+      if (typeof data.disabled === 'boolean') {
+        updateData.disabled = data.disabled
+      }
 
-    if (typeof data.price === 'number') {
-      updateData.price = data.price
-    }
+      if (typeof data.price === 'number') {
+        updateData.price = data.price
+      }
 
-    if (typeof data.name === 'string') {
-      updateData.name = data.name
-    }
+      if (typeof data.name === 'string') {
+        updateData.name = data.name
+      }
 
-    if (data.category) {
-      updateData.category = data.category
-    }
+      if (data.category) {
+        updateData.category = data.category
+      }
 
-    if (typeof data.isSpecialProduct === 'boolean') {
-      updateData.isSpecialProduct = data.isSpecialProduct
-    }
+      if (typeof data.isSpecialProduct === 'boolean') {
+        updateData.isSpecialProduct = data.isSpecialProduct
+      }
 
-    const updatedProduct = await db
-      .update(products)
-      .set(updateData)
-      .where(eq(products.id, productId))
-      .returning()
+      const [updatedProduct] = await db
+        .update(products)
+        .set(updateData)
+        .where(eq(products.id, productId))
+        .returning()
 
-    if (!updatedProduct.length) {
-      throw new Error('Product not found')
-    }
+      if (!updatedProduct) {
+        return {
+          error: {
+            title: 'Error',
+            description: 'Product not found'
+          }
+        }
+      }
 
-    revalidatePath('/admin/products')
-    revalidatePath('/tab')
-    return { success: true, data: updatedProduct[0] }
-  } catch (error) {
-    console.error('Error updating product:', error)
-    throw new Error('Failed to update product')
-  }
+      revalidatePath('/admin/products')
+      revalidatePath('/tab')
+
+      return {
+        data: updatedProduct,
+        success: {
+          title: 'Success',
+          description: 'Product updated successfully'
+        }
+      }
+    },
+    { adminOnly: true }
+  )
 }
 
 export async function getProductByName(name: string) {
@@ -158,11 +183,21 @@ export async function getProductByName(name: string) {
     })
 
     if (!product) {
-      throw new Error('Product not found')
+      return {
+        error: {
+          title: 'Error',
+          description: 'Product not found'
+        }
+      }
     }
 
-    return product
+    return { data: product }
   } catch (error) {
-    throw new Error('Failed to fetch product')
+    return {
+      error: {
+        title: 'Error',
+        description: 'Failed to fetch product'
+      }
+    }
   }
 }

@@ -75,7 +75,7 @@ function AdminProductItem({
         disabled: !product.disabled
       })
       if (result.success && result.data) {
-        setProduct(result.data)
+        setProduct(result.data as Product)
       }
     } catch (error) {
       console.error('Failed to update product:', error)
