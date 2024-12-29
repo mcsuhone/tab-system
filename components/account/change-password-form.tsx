@@ -37,19 +37,19 @@ export function ChangePasswordForm({ userId }: ChangePasswordFormProps) {
     }
 
     setIsLoading(true)
-    const { error, success } = await changePassword(userId, newPassword)
+    const result = await changePassword(userId, newPassword)
     setIsLoading(false)
 
-    if (error) {
+    if (!result.success) {
       toast({
         variant: 'destructive',
-        title: error.title,
-        description: error.description
+        title: result.error.title,
+        description: result.error.description
       })
     } else {
       toast({
-        title: success?.title,
-        description: success?.description
+        title: result.data.success?.title,
+        description: result.data.success?.description
       })
       setNewPassword('')
       setConfirmPassword('')

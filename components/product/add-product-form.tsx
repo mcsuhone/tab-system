@@ -88,9 +88,11 @@ export function AddProductForm({ onSuccess }: AddProductFormProps) {
       } catch (error) {
         if (error instanceof Error && error.message.includes('duplicate')) {
           try {
-            const product = await getProductByName(values.name)
-            setExistingProduct(product)
-            setDialogOpen(true)
+            const response = await getProductByName(values.name)
+            if ('data' in response) {
+              setExistingProduct(response.data as Product)
+              setDialogOpen(true)
+            }
           } catch (e) {
             console.error(e)
           }

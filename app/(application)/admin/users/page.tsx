@@ -78,7 +78,7 @@ function EditUserDialog({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const result = await updateUser(user.id, formData)
-    if (result.error) {
+    if (!result.success) {
       toast({
         variant: 'destructive',
         title: result.error.title,
@@ -86,10 +86,10 @@ function EditUserDialog({
       })
     } else if (result.data) {
       toast({
-        title: result.success?.title,
-        description: result.success?.description
+        title: result.data.success?.title,
+        description: result.data.success?.description
       })
-      onSuccess(result.data)
+      onSuccess(result.data.data as User)
       onOpenChange(false)
     }
   }
@@ -151,17 +151,17 @@ function AddUserDialog({ onSuccess }: { onSuccess: () => void }) {
 
   async function handleCreateUser(e: React.FormEvent) {
     e.preventDefault()
-    const { error, success } = await createUser(newUser)
-    if (error) {
+    const result = await createUser(newUser)
+    if (!result.success) {
       toast({
         variant: 'destructive',
-        title: error.title,
-        description: error.description
+        title: result.error.title,
+        description: result.error.description
       })
     } else {
       toast({
-        title: success?.title,
-        description: success?.description
+        title: result.data.success?.title,
+        description: result.data.success?.description
       })
       setNewUser({ name: '', member_no: '', permission: 'default' })
       setDialogOpen(false)
@@ -246,15 +246,15 @@ export default function UsersPage() {
   const loadUsers = useCallback(async () => {
     try {
       setIsLoading(true)
-      const { data, error } = await getUsers()
-      if (error) {
+      const result = await getUsers()
+      if (!result.success) {
         toast({
           variant: 'destructive',
-          title: error.title,
-          description: error.description
+          title: result.error.title,
+          description: result.error.description
         })
-      } else if (data) {
-        setUsers(data)
+      } else if (result.data) {
+        setUsers(result.data as User[])
       }
     } finally {
       setIsLoading(false)
@@ -268,17 +268,17 @@ export default function UsersPage() {
   async function handleResetPassword() {
     if (!resetUserId) return
 
-    const { error, success } = await resetUserPassword(resetUserId)
-    if (error) {
+    const result = await resetUserPassword(resetUserId)
+    if (!result.success) {
       toast({
         variant: 'destructive',
-        title: error.title,
-        description: error.description
+        title: result.error.title,
+        description: result.error.description
       })
     } else {
       toast({
-        title: success?.title,
-        description: success?.description
+        title: result.data.success?.title,
+        description: result.data.success?.description
       })
     }
     setIsResetDialogOpen(false)

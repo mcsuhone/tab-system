@@ -93,7 +93,7 @@ export function EditProductDialog({
         measureId: values.measureId
       })
       if (result.success && result.data) {
-        onSuccess(result.data)
+        onSuccess(result.data.data as Product)
         onOpenChange(false)
       }
     } catch (error) {
