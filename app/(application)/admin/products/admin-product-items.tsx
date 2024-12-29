@@ -94,7 +94,7 @@ export function AdminProductItem({
         <div className="flex-[10%]">
           <p className="text-sm">{product.price.toFixed(2)}€</p>
         </div>
-        <div className="flex-[10%] flex justify-end">
+        <div className="flex-[10%] flex justify-end relative">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -106,7 +106,7 @@ export function AdminProductItem({
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-[200px] z-50">
               <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
                 <Pencil className="mr-2 h-4 w-4" />
                 Edit
