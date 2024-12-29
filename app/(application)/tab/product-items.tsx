@@ -84,7 +84,7 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
                 <p className="font-medium text-sm">{product.name}</p>
               </div>
               <div className="flex-[15%]">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   {categoryDisplayNames[product.category]}
                 </p>
               </div>

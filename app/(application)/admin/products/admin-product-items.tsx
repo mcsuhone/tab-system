@@ -89,7 +89,9 @@ export function AdminProductItem({
           <p className="font-medium text-sm">{product.name}</p>
         </div>
         <div className="flex-[30%]">
-          <p className="text-sm">{categoryDisplayNames[product.category]}</p>
+          <p className="text-sm text-muted-foreground">
+            {categoryDisplayNames[product.category]}
+          </p>
         </div>
         <div className="flex-[10%]">
           <p className="text-sm">{product.price.toFixed(2)}€</p>

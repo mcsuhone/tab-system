@@ -2,6 +2,8 @@ Fixes:
 
 1. Fix mobile UI, headers that stick are too large
 
+- Add a little shadow to the header
+
 2. Improvement to activity logs
 
 - .csv export from admin activity logs
@@ -10,7 +12,7 @@ Fixes:
 
 3. Add "annoskoko" to drinks page
 
-4.
+4. Add little animation to price selector (same one as in quantity selector)
 
 TODO:
 
