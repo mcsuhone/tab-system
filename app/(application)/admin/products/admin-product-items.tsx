@@ -79,7 +79,7 @@ export function AdminProductItem({
     <>
       <motion.div
         variants={item}
-        className={`flex items-center gap-4 p-4 rounded-lg border transition-all duration-300 ${
+        className={`flex items-center gap-4 p-4 rounded-lg border transition-all duration-300 overflow-visible ${
           product.disabled
             ? 'border-muted text-muted-foreground'
             : 'border-border text-foreground'
@@ -94,29 +94,31 @@ export function AdminProductItem({
         <div className="flex-[10%]">
           <p className="text-sm">{product.price.toFixed(2)}€</p>
         </div>
-        <div className="flex-[10%] flex justify-end relative">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="h-8 w-8 p-0 hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
-                disabled={isPending}
-              >
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[200px] z-50">
-              <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
-                <Pencil className="mr-2 h-4 w-4" />
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleToggleStatus}>
-                <Ban className="mr-2 h-4 w-4" />
-                {product.disabled ? 'Enable' : 'Disable'}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <div className="flex-[10%] flex justify-end">
+          <div className="relative">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8 p-0 hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
+                  disabled={isPending}
+                >
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[200px] z-[100]">
+                <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleToggleStatus}>
+                  <Ban className="mr-2 h-4 w-4" />
+                  {product.disabled ? 'Enable' : 'Disable'}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </motion.div>
 

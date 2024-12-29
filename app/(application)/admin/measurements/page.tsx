@@ -45,7 +45,7 @@ function AddMeasurementDialog({ onSuccess }: { onSuccess: () => void }) {
     form.append('unit', formData.unit)
 
     const result = await addMeasurement(form)
-    if (result.error) {
+    if (!result.success) {
       toast({
         variant: 'destructive',
         title: result.error.title,
@@ -53,8 +53,8 @@ function AddMeasurementDialog({ onSuccess }: { onSuccess: () => void }) {
       })
     } else {
       toast({
-        title: result.success?.title,
-        description: result.success?.description
+        title: 'Success',
+        description: 'Measurement added successfully'
       })
       setFormData({ amount: '', unit: '' })
       setDialogOpen(false)
@@ -144,7 +144,7 @@ export default function MeasurementsPage() {
 
   async function handleDelete(measurement: Measurement) {
     const result = await deleteMeasurement(measurement.id)
-    if (result.error) {
+    if (!result.success) {
       toast({
         variant: 'destructive',
         title: result.error.title,
@@ -152,8 +152,8 @@ export default function MeasurementsPage() {
       })
     } else {
       toast({
-        title: result.success?.title,
-        description: result.success?.description
+        title: 'Success',
+        description: 'Measurement deleted successfully'
       })
       loadMeasurements()
     }
