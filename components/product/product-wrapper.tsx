@@ -9,6 +9,10 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState, useRef } from 'react'
 import { CategoryNav } from './category-nav'
 import { SearchBar } from './search-bar'
+import { cn } from '@/lib/utils'
+
+const scrollbarStyles =
+  'scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/50'
 
 const ProductListSkeleton = () => {
   return (
@@ -56,11 +60,19 @@ const DesktopProductLayout = ({
 
   return (
     <div className="hidden md:grid grid-cols-[180px_1fr] h-full gap-6">
-      <div className="flex flex-col gap-4 top-4 h-full overflow-y-auto">
+      <div
+        className={cn(
+          'flex flex-col gap-4 top-4 h-full overflow-y-auto',
+          scrollbarStyles
+        )}
+      >
         <CategoryNav activeCategory={category} onCategorySelect={setCategory} />
       </div>
       <div
-        className="flex flex-col gap-8 h-full overflow-y-auto"
+        className={cn(
+          'flex flex-col gap-8 h-full overflow-y-auto',
+          scrollbarStyles
+        )}
         onScroll={onScroll}
         ref={contentRef}
       >
@@ -141,7 +153,10 @@ const MobileProductLayout = ({
   return (
     <div className="md:hidden h-[calc(100vh-4rem)]">
       <div
-        className="flex flex-col gap-4 h-full overflow-y-auto"
+        className={cn(
+          'flex flex-col gap-4 h-full overflow-y-auto',
+          scrollbarStyles
+        )}
         onScroll={onScroll}
         ref={contentRef}
       >
