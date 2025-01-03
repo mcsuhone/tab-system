@@ -41,7 +41,7 @@ export function useProducts(filters: ProductFilters = {}) {
   const isLoadingMore = isFetchingNextPage
 
   return {
-    data: { data: allProducts },
+    data: { products: allProducts },
     isLoading,
     isLoadingMore,
     hasMore: hasNextPage,

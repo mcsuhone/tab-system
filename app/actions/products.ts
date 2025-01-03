@@ -22,7 +22,8 @@ export async function getProducts({
   limit = 30
 }: ProductFilters = {}) {
   try {
-    const conditions = []
+    const conditions = [eq(products.isAdminProduct, false)]
+
     if (query) {
       conditions.push(ilike(products.name, `%${query}%`))
     }
@@ -39,13 +40,13 @@ export async function getProducts({
       db
         .select()
         .from(products)
-        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .where(and(...conditions))
         .limit(limit)
         .offset(offset),
       db
         .select({ count: sql<number>`count(*)` })
         .from(products)
-        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .where(and(...conditions))
         .then((result) => Number(result[0].count))
     ])
 

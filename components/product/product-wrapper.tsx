@@ -246,7 +246,7 @@ export const ProductWrapper = ({
     }
   }, [isLoading])
 
-  const products = data?.data || []
+  const products = data?.products || []
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement
