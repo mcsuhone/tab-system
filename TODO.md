@@ -1,10 +1,11 @@
 Fixes:
 
-1. Add money to users!!
+1. Add colors and emojiis to user balance to represent how much money they have
 
-2. Fix mobile UI, headers that stick are too large
+2. Top bar UI
 
-- Add a little shadow to the header
+- Redo for mobile
+- Add a little shadow to the header on desktop
 
 3. Improvement to activity logs
 

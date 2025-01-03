@@ -19,13 +19,18 @@ export default async function ProfilePage() {
     redirect('/login')
   }
 
+  // Filter out admin transactions for calculations
+  const regularTransactions = user.transactions.filter(
+    (t: Transaction) => !t.product.isAdminProduct
+  )
+
   // Calculate total spent and group transactions by category
-  const totalSpent = user.transactions.reduce(
+  const totalSpent = regularTransactions.reduce(
     (sum: number, t: Transaction) => sum + t.amount,
     0
   )
   const categoryCount: Record<string, number> = {}
-  user.transactions.forEach((t: Transaction) => {
+  regularTransactions.forEach((t: Transaction) => {
     const category = t.product.category
     categoryCount[category] = (categoryCount[category] || 0) + 1
   })
@@ -35,19 +40,22 @@ export default async function ProfilePage() {
     (a, b) => b[1] - a[1]
   )[0]
   const favoriteCategoryPercentage = favoriteCategory
-    ? Math.round((favoriteCategory[1] / user.transactions.length) * 100)
+    ? Math.round((favoriteCategory[1] / regularTransactions.length) * 100)
     : 0
 
-  // Get recent transactions (15)
+  // Get recent transactions (15) - include admin transactions here
   const recentTransactions = [...user.transactions]
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     .slice(0, 15)
 
-  // Get last order date
-  const lastOrder = recentTransactions[0]
-  const daysSinceLastOrder = lastOrder
+  // Get last order date - from regular transactions only
+  const lastRegularTransaction = regularTransactions.sort(
+    (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+  )[0]
+  const daysSinceLastOrder = lastRegularTransaction
     ? Math.round(
-        (Date.now() - lastOrder.createdAt.getTime()) / (1000 * 60 * 60 * 24)
+        (Date.now() - lastRegularTransaction.createdAt.getTime()) /
+          (1000 * 60 * 60 * 24)
       )
     : null
 
@@ -57,8 +65,8 @@ export default async function ProfilePage() {
         daysSinceLastOrder === null
           ? 'No orders yet'
           : `${daysSinceLastOrder} day${daysSinceLastOrder !== 1 ? 's' : ''} ago`,
-      subtitle: lastOrder
-        ? `${lastOrder.product.name}, ${lastOrder.amount.toFixed(2)}€`
+      subtitle: lastRegularTransaction
+        ? `${lastRegularTransaction.product.name}, ${lastRegularTransaction.amount.toFixed(2)}€`
         : undefined
     },
     favoriteCategory: {
@@ -71,8 +79,8 @@ export default async function ProfilePage() {
     },
     averageOrder: {
       value: `${
-        user.transactions.length > 0
-          ? (totalSpent / user.transactions.length).toFixed(2)
+        regularTransactions.length > 0
+          ? (totalSpent / regularTransactions.length).toFixed(2)
           : '0.00'
       }€`,
       subtitle: 'Per transaction'
@@ -94,7 +102,7 @@ export default async function ProfilePage() {
             <div className="flex gap-4 text-sm text-muted-foreground pt-2">
               <div>
                 <strong className="text-foreground">
-                  {user.transactions.length}
+                  {regularTransactions.length}
                 </strong>{' '}
                 Orders
               </div>

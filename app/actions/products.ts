@@ -201,3 +201,25 @@ export async function getProductByName(name: string) {
     }
   }
 }
+
+export async function getAdminProducts() {
+  return withAuth(
+    async () => {
+      const adminProducts = await db
+        .select()
+        .from(products)
+        .where(eq(products.isAdminProduct, true))
+        .execute()
+
+      console.log('adminProducts', adminProducts)
+      return {
+        data: adminProducts,
+        success: {
+          title: 'Success',
+          description: 'Admin products fetched successfully'
+        }
+      }
+    },
+    { adminOnly: true }
+  )
+}

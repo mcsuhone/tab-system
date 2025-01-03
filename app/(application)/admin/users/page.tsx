@@ -6,6 +6,9 @@ import {
   resetUserPassword,
   updateUser
 } from '@/app/actions/users'
+import { createAdminTransaction } from '@/app/actions/transactions'
+import { getAdminProducts } from '@/app/actions/products'
+import PriceInput from '@/components/input/price-input'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -41,7 +44,7 @@ import {
 import { useToast } from '@/components/ui/use-toast'
 import { UserPermission } from '@/db/schema'
 import { motion } from 'framer-motion'
-import { KeyRound, MoreHorizontal, Pencil, Plus } from 'lucide-react'
+import { HandCoins, KeyRound, MoreHorizontal, Pencil, Plus } from 'lucide-react'
 import React, { useCallback, useEffect, useState } from 'react'
 
 interface User {
@@ -49,6 +52,18 @@ interface User {
   member_no: string
   name: string
   permission: UserPermission
+}
+
+interface AdminMoneyDialog {
+  user: User
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onSuccess: () => void
+  specialProducts: {
+    id: number
+    name: string
+    price: number
+  }[]
 }
 
 function EditUserDialog({
@@ -235,6 +250,96 @@ function AddUserDialog({ onSuccess }: { onSuccess: () => void }) {
   )
 }
 
+function AdminMoneyDialog({
+  user,
+  open,
+  onOpenChange,
+  onSuccess,
+  specialProducts
+}: AdminMoneyDialog) {
+  const { toast } = useToast()
+  const [amount, setAmount] = useState('0')
+  const [selectedProduct, setSelectedProduct] = useState<number | null>(null)
+
+  useEffect(() => {
+    setSelectedProduct(specialProducts[0].id)
+  }, [specialProducts])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!selectedProduct) return
+
+    const result = await createAdminTransaction({
+      userId: user.id,
+      productId: selectedProduct,
+      amount: parseFloat(amount)
+    })
+
+    if (!result.success) {
+      toast({
+        variant: 'destructive',
+        title: result.error.title,
+        description: result.error.description
+      })
+    } else {
+      toast({
+        title: result.data.success?.title,
+        description: result.data.success?.description
+      })
+      onSuccess()
+      onOpenChange(false)
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Modify Balance</DialogTitle>
+          <DialogDescription>
+            Add or subtract money from {user.name}'s balance.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-4">
+            <div className="grid w-full items-center gap-2">
+              <Select
+                value={selectedProduct?.toString()}
+                onValueChange={(value) => setSelectedProduct(Number(value))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select operation" />
+                </SelectTrigger>
+                <SelectContent>
+                  {specialProducts.map((product) => (
+                    <SelectItem key={product.id} value={product.id.toString()}>
+                      {product.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid w-full items-center gap-2">
+              <PriceInput
+                quantity={amount}
+                onQuantityChange={setAmount}
+                min="0"
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button type="submit" disabled={!selectedProduct}>
+              Confirm
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 export default function UsersPage() {
   const { toast } = useToast()
   const [users, setUsers] = useState<User[]>([])
@@ -242,6 +347,8 @@ export default function UsersPage() {
   const [resetUserId, setResetUserId] = useState<number | null>(null)
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [adminProducts, setAdminProducts] = useState<Array<any>>([])
+  const [moneyDialogUser, setMoneyDialogUser] = useState<User | null>(null)
 
   const loadUsers = useCallback(async () => {
     try {
@@ -262,8 +369,34 @@ export default function UsersPage() {
   }, [toast])
 
   useEffect(() => {
-    loadUsers()
-  }, [loadUsers])
+    const loadData = async () => {
+      try {
+        setIsLoading(true)
+        const [usersResult, productsResult] = await Promise.all([
+          getUsers(),
+          getAdminProducts()
+        ])
+
+        if (!usersResult.success) {
+          toast({
+            variant: 'destructive',
+            title: usersResult.error.title,
+            description: usersResult.error.description
+          })
+        } else if (usersResult.data) {
+          setUsers(usersResult.data as User[])
+        }
+
+        if (productsResult.success) {
+          setAdminProducts(productsResult.data.data)
+        }
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadData()
+  }, [toast])
 
   async function handleResetPassword() {
     if (!resetUserId) return
@@ -304,6 +437,7 @@ export default function UsersPage() {
                   <TableHead>Member #</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Permission</TableHead>
+                  <TableHead>Balance</TableHead>
                   <TableHead className="w-[100px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -325,6 +459,13 @@ export default function UsersPage() {
                     <TableCell className="capitalize">
                       {user.permission}
                     </TableCell>
+                    <TableCell
+                      className={`${
+                        user.balance < -100 ? 'text-red-500 font-medium' : ''
+                      }`}
+                    >
+                      {user.balance.toFixed(2)} €
+                    </TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -337,6 +478,12 @@ export default function UsersPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => setMoneyDialogUser(user)}
+                          >
+                            <HandCoins className="mr-2 h-4 w-4" />
+                            Modify Balance
+                          </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => setEditingUser(user)}
                           >
@@ -411,6 +558,16 @@ export default function UsersPage() {
               users.map((u) => (u.id === updatedUser.id ? updatedUser : u))
             )
           }}
+        />
+      )}
+
+      {moneyDialogUser && (
+        <AdminMoneyDialog
+          user={moneyDialogUser}
+          open={!!moneyDialogUser}
+          onOpenChange={(open) => !open && setMoneyDialogUser(null)}
+          onSuccess={loadUsers}
+          specialProducts={adminProducts}
         />
       )}
     </div>

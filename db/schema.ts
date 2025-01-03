@@ -42,7 +42,7 @@ export type UserPermission = (typeof userPermissionEnum.enumValues)[number]
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
-  balance: integer('balance').notNull().default(0),
+  balance: real('balance').notNull().default(0),
   name: text('name').notNull(),
   member_no: text('member_no').notNull().unique(),
   password: text('password').notNull(),
@@ -62,6 +62,7 @@ export const products = pgTable('products', {
   price: real('price').notNull(),
   disabled: boolean('disabled').notNull().default(false),
   isSpecialProduct: boolean('is_special_product').notNull().default(false),
+  isAdminProduct: boolean('is_admin_product').notNull().default(false),
   measureId: integer('measure_id').references(() => measurements.id)
 })
 

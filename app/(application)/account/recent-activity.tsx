@@ -12,6 +12,13 @@ import {
 } from '@/components/ui/table'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Transaction } from '@/db/schema'
+import {
+  Coins,
+  HandCoins,
+  MinusCircle,
+  PlusCircle,
+  TicketMinus
+} from 'lucide-react'
 
 interface RecentActivityProps {
   transactions: Transaction[]
@@ -55,7 +62,10 @@ export function RecentActivity({ transactions }: RecentActivityProps) {
                       )
                       const dateDisplay = isToday
                         ? `Today, ${timeString}`
-                        : `${transactionDate.getDate().toString().padStart(2, '0')}.${(
+                        : `${transactionDate
+                            .getDate()
+                            .toString()
+                            .padStart(2, '0')}.${(
                             transactionDate.getMonth() + 1
                           )
                             .toString()
@@ -72,13 +82,35 @@ export function RecentActivity({ transactions }: RecentActivityProps) {
                           transition={{ delay: index * 0.05, duration: 0.3 }}
                           className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
                         >
-                          <TableCell className="font-medium">
-                            {transaction.product.name}
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              {transaction.product.isAdminProduct ? (
+                                transaction.amount < 0 ? (
+                                  <TicketMinus className="h-4 w-4 text-red-500 shrink-0" />
+                                ) : (
+                                  <HandCoins className="h-4 w-4 text-green-500 shrink-0" />
+                                )
+                              ) : (
+                                <></>
+                              )}
+                              <span className="font-medium">
+                                {transaction.product.name}
+                              </span>
+                            </div>
                           </TableCell>
                           <TableCell className="text-muted-foreground">
                             {dateDisplay}
                           </TableCell>
-                          <TableCell className="text-right tabular-nums">
+                          <TableCell
+                            className={`text-right tabular-nums ${
+                              transaction.amount > 0
+                                ? 'text-green-500'
+                                : transaction.product.isAdminProduct
+                                  ? 'text-red-500'
+                                  : ''
+                            }`}
+                          >
+                            {transaction.amount > 0 ? '+' : ''}
                             {transaction.amount.toFixed(2)} €
                           </TableCell>
                         </motion.tr>

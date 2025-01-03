@@ -1,10 +1,27 @@
 import bcrypt from 'bcryptjs'
-import { eq } from 'drizzle-orm'
+import { eq, and, inArray } from 'drizzle-orm'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import { db } from './db'
-import { users } from './schema'
+import { users, products } from './schema'
 
 const DEFAULT_ADMIN_USERNAME = 'admin'
+
+const ADMIN_PRODUCTS = {
+  ADD_MONEY: {
+    name: 'Add Money',
+    price: -1,
+    category: 'OTHER' as const,
+    isSpecialProduct: false,
+    isAdminProduct: true
+  },
+  SUBTRACT_MONEY: {
+    name: 'Subtract Money',
+    price: 1,
+    category: 'OTHER' as const,
+    isSpecialProduct: false,
+    isAdminProduct: true
+  }
+} as const
 
 async function main() {
   console.log('Starting migration...')
@@ -47,6 +64,40 @@ async function main() {
         .execute()
 
       console.log('Root user created successfully!')
+    }
+
+    // After creating root user, check for required admin products
+    console.log('\nChecking for required admin products...')
+    const existingAdminProducts = await db
+      .select()
+      .from(products)
+      .where(
+        and(
+          eq(products.isAdminProduct, true),
+          inArray(products.name, [
+            ADMIN_PRODUCTS.ADD_MONEY.name,
+            ADMIN_PRODUCTS.SUBTRACT_MONEY.name
+          ])
+        )
+      )
+      .execute()
+
+    const missingProducts = [
+      ADMIN_PRODUCTS.ADD_MONEY,
+      ADMIN_PRODUCTS.SUBTRACT_MONEY
+    ].filter(
+      (product) => !existingAdminProducts.some((p) => p.name === product.name)
+    )
+
+    if (missingProducts.length > 0) {
+      console.log(
+        'Creating missing admin products:',
+        missingProducts.map((p) => p.name).join(', ')
+      )
+      await db.insert(products).values(missingProducts).execute()
+      console.log('Admin products created successfully!')
+    } else {
+      console.log('All required admin products exist')
     }
   } catch (error) {
     console.error('Error during migration:', error)
