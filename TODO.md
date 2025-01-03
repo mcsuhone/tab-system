@@ -1,7 +1,5 @@
 Fixes:
 
-1. Add colors and emojiis to user balance to represent how much money they have
-
 2. Top bar UI
 
 - Redo for mobile

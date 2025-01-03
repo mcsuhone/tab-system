@@ -66,7 +66,7 @@ function AddMeasurementDialog({ onSuccess }: { onSuccess: () => void }) {
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button className="m-1">
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus className="h-4 w-4" />
           Add Measurement
         </Button>
       </DialogTrigger>
