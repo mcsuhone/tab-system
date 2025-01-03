@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation'
 import { RecentActivity } from './recent-activity'
 import { StatsGrid } from './stats-grid'
 import { PageContainer } from '@/components/containers/page-container'
+import { BalanceText } from '@/components/balance-text'
 
 export default async function ProfilePage() {
   const { user } = await auth()
@@ -124,13 +125,7 @@ export default async function ProfilePage() {
           <div className="ml-auto flex items-center gap-8">
             <div>
               <p className="text-sm text-muted-foreground mb-1">Balance</p>
-              <p className="text-1xl font-bold tabular-nums">
-                {user.balance.toLocaleString('en-GB', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
-                })}
-                €
-              </p>
+              <BalanceText balance={user.balance} />
             </div>
             <LogoutButton />
           </div>
