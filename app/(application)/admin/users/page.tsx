@@ -1,14 +1,10 @@
 'use client'
 
-import {
-  createUser,
-  getUsers,
-  resetUserPassword,
-  updateUser
-} from '@/app/actions/users'
 import { createAdminTransaction } from '@/app/actions/transactions'
-import { getAdminProducts } from '@/app/actions/products'
+import { createUser, resetUserPassword, updateUser } from '@/app/actions/users'
+import { useUsers } from '@/app/hooks/use-users'
 import PriceInput from '@/components/input/price-input'
+import { SearchBar } from '@/components/product/search-bar'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -42,20 +38,28 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { useToast } from '@/components/ui/use-toast'
-import { UserPermission } from '@/db/schema'
+import type { UserPermission } from '@/db/schema'
 import { motion } from 'framer-motion'
-import { HandCoins, KeyRound, MoreHorizontal, Pencil, Plus } from 'lucide-react'
-import React, { useCallback, useEffect, useState } from 'react'
+import {
+  HandCoins,
+  KeyRound,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  Search
+} from 'lucide-react'
+import React, { useEffect, useRef, useState } from 'react'
 
-interface User {
+interface AdminUser {
   id: number
   member_no: string
   name: string
   permission: UserPermission
+  balance: number
 }
 
 interface AdminMoneyDialog {
-  user: User
+  user: AdminUser
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess: () => void
@@ -72,10 +76,10 @@ function EditUserDialog({
   onOpenChange,
   onSuccess
 }: {
-  user: User
+  user: AdminUser
   open: boolean
   onOpenChange: (open: boolean) => void
-  onSuccess: (user: User) => void
+  onSuccess: (user: AdminUser) => void
 }) {
   const { toast } = useToast()
   const [formData, setFormData] = useState({
@@ -104,7 +108,7 @@ function EditUserDialog({
         title: result.data.success?.title,
         description: result.data.success?.description
       })
-      onSuccess(result.data.data as User)
+      onSuccess(result.data.data as AdminUser)
       onOpenChange(false)
     }
   }
@@ -342,61 +346,32 @@ function AdminMoneyDialog({
 
 export default function UsersPage() {
   const { toast } = useToast()
-  const [users, setUsers] = useState<User[]>([])
-  const [editingUser, setEditingUser] = useState<User | null>(null)
+  const [editingUser, setEditingUser] = useState<AdminUser | null>(null)
   const [resetUserId, setResetUserId] = useState<number | null>(null)
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
   const [adminProducts, setAdminProducts] = useState<Array<any>>([])
-  const [moneyDialogUser, setMoneyDialogUser] = useState<User | null>(null)
+  const [moneyDialogUser, setMoneyDialogUser] = useState<AdminUser | null>(null)
+  const [search, setSearch] = useState('')
+  const contentRef = useRef<HTMLDivElement>(null)
 
-  const loadUsers = useCallback(async () => {
-    try {
-      setIsLoading(true)
-      const result = await getUsers()
-      if (!result.success) {
-        toast({
-          variant: 'destructive',
-          title: result.error.title,
-          description: result.error.description
-        })
-      } else if (result.data) {
-        setUsers(result.data as User[])
-      }
-    } finally {
-      setIsLoading(false)
+  const {
+    users,
+    isLoading,
+    isLoadingMore,
+    hasMore,
+    refetch: loadData,
+    fetchNextPage
+  } = useUsers({ query: search, limit: 10 })
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement
+    const scrolledToBottom =
+      target.scrollHeight - target.scrollTop <= target.clientHeight + 100
+
+    if (scrolledToBottom && hasMore && !isLoadingMore) {
+      fetchNextPage()
     }
-  }, [toast])
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        setIsLoading(true)
-        const [usersResult, productsResult] = await Promise.all([
-          getUsers(),
-          getAdminProducts()
-        ])
-
-        if (!usersResult.success) {
-          toast({
-            variant: 'destructive',
-            title: usersResult.error.title,
-            description: usersResult.error.description
-          })
-        } else if (usersResult.data) {
-          setUsers(usersResult.data as User[])
-        }
-
-        if (productsResult.success) {
-          setAdminProducts(productsResult.data.data)
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    loadData()
-  }, [toast])
+  }
 
   async function handleResetPassword() {
     if (!resetUserId) return
@@ -422,7 +397,7 @@ export default function UsersPage() {
     <div className="flex flex-col h-full w-full">
       <div className="shrink-0 mb-8 flex justify-between items-center">
         <h1 className="text-3xl font-bold">User Management</h1>
-        <AddUserDialog onSuccess={loadUsers} />
+        <AddUserDialog onSuccess={loadData} />
       </div>
       <div className="min-h-0 flex-1 overflow-hidden">
         {isLoading ? (
@@ -430,7 +405,14 @@ export default function UsersPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
           </div>
         ) : users.length > 0 ? (
-          <div className="h-full overflow-y-auto">
+          <div
+            className="h-full overflow-y-auto"
+            onScroll={handleScroll}
+            ref={contentRef}
+          >
+            <div className="sticky top-0 bg-background z-10 pb-4">
+              <SearchBar onSearch={setSearch} placeholder="Search users..." />
+            </div>
             <Table>
               <TableHeader className="sticky top-0 bg-background">
                 <TableRow>
@@ -448,8 +430,7 @@ export default function UsersPage() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
-                      duration: 0.3,
-                      delay: index * 0.1,
+                      duration: 0.15,
                       ease: 'easeOut'
                     }}
                     className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
@@ -461,7 +442,7 @@ export default function UsersPage() {
                     </TableCell>
                     <TableCell
                       className={`${
-                        user.balance < -100 ? 'text-red-500 font-medium' : ''
+                        user.balance < -50 ? 'text-red-500 font-medium' : ''
                       }`}
                     >
                       {user.balance.toFixed(2)} €
@@ -554,9 +535,7 @@ export default function UsersPage() {
           open={!!editingUser}
           onOpenChange={(open) => !open && setEditingUser(null)}
           onSuccess={(updatedUser) => {
-            setUsers(
-              users.map((u) => (u.id === updatedUser.id ? updatedUser : u))
-            )
+            loadData()
           }}
         />
       )}
@@ -566,9 +545,15 @@ export default function UsersPage() {
           user={moneyDialogUser}
           open={!!moneyDialogUser}
           onOpenChange={(open) => !open && setMoneyDialogUser(null)}
-          onSuccess={loadUsers}
+          onSuccess={loadData}
           specialProducts={adminProducts}
         />
+      )}
+
+      {isLoadingMore && (
+        <div className="flex justify-center py-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+        </div>
       )}
     </div>
   )

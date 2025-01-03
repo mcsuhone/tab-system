@@ -2,15 +2,60 @@
 
 import { db } from '@/db/db'
 import { users, UserPermission } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, or, ilike, and, sql, asc } from 'drizzle-orm'
 import { hash } from 'bcryptjs'
 import { withAuth } from '@/lib/auth-guard'
 
-export async function getUsers() {
+interface GetUsersOptions {
+  query?: string
+  page?: number
+  limit?: number
+}
+
+export async function getUsers({
+  query,
+  page = 1,
+  limit = 10
+}: GetUsersOptions = {}) {
   return withAuth(
     async () => {
-      const data = await db.select().from(users)
-      return data
+      const conditions = []
+
+      if (query) {
+        conditions.push(
+          or(
+            ilike(users.name, `%${query}%`),
+            ilike(users.member_no, `%${query}%`)
+          )
+        )
+      }
+
+      const offset = (page - 1) * limit
+
+      const [data, totalCount] = await Promise.all([
+        db
+          .select()
+          .from(users)
+          .where(conditions.length > 0 ? and(...conditions) : undefined)
+          .orderBy(sql`CAST(${users.member_no} AS INTEGER)`)
+          .limit(limit)
+          .offset(offset),
+        db
+          .select({ count: sql<number>`count(*)` })
+          .from(users)
+          .where(conditions.length > 0 ? and(...conditions) : undefined)
+          .then((result) => Number(result[0].count))
+      ])
+
+      return {
+        data,
+        pagination: {
+          total: totalCount,
+          totalPages: Math.ceil(totalCount / limit),
+          currentPage: page,
+          hasMore: page * limit < totalCount
+        }
+      }
     },
     { adminOnly: true }
   )
