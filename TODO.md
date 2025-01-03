@@ -1,18 +1,20 @@
 Fixes:
 
-1. Fix mobile UI, headers that stick are too large
+1. Add money to users!!
+
+2. Fix mobile UI, headers that stick are too large
 
 - Add a little shadow to the header
 
-2. Improvement to activity logs
+3. Improvement to activity logs
 
 - .csv export from admin activity logs
 - Better filters etc.
 - Different section for transactions and users (different raports or sth?)
 
-3. Add "annoskoko" to drinks page
+4. Add "annoskoko" to drinks page
 
-4. Add little animation to price selector (same one as in quantity selector)
+5. Add little animation to price selector (same one as in quantity selector)
 
 TODO:
 
