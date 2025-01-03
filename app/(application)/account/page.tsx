@@ -64,7 +64,11 @@ export default async function ProfilePage() {
       value:
         daysSinceLastOrder === null
           ? 'No orders yet'
-          : `${daysSinceLastOrder} day${daysSinceLastOrder !== 1 ? 's' : ''} ago`,
+          : daysSinceLastOrder === 0
+            ? 'Today'
+            : daysSinceLastOrder === 1
+              ? 'Yesterday'
+              : `${daysSinceLastOrder} days ago`,
       subtitle: lastRegularTransaction
         ? `${lastRegularTransaction.product.name}, ${lastRegularTransaction.amount.toFixed(2)}€`
         : undefined
