@@ -1,7 +1,13 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger
+} from '@/components/ui/sheet'
 import { ProductCategory, productCategoryEnum } from '@/db/schema'
 import { categoryDisplayNames } from '@/lib/product-categories'
 import { PanelLeft } from 'lucide-react'
@@ -59,7 +65,11 @@ export function CategoryNav({
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-64">
-            <div className="mt-8">
+            <div className="mt-8 gap-4 flex flex-col">
+              <SheetTitle>Categories</SheetTitle>
+              <SheetDescription className="hidden">
+                Select a category to filter products
+              </SheetDescription>
               <CategoryList
                 activeCategory={activeCategory}
                 onCategorySelect={onCategorySelect}
