@@ -13,7 +13,7 @@ const getBalanceEmoji = (balance: number) => {
   if (balance < 100) return '😊' // Slightly positive
   if (balance < 200) return '🤗' // Positive
   if (balance < 500) return '🤑' // Quite positive
-  return '👑🔥💰' // Very positive - King with fire and money
+  return '👑' // Very positive - King with fire and money
 }
 
 export const BalanceText = ({ balance }: BalanceTextProps) => {
