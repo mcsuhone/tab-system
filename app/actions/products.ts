@@ -213,7 +213,7 @@ export async function getAdminProducts() {
 
       console.log('adminProducts', adminProducts)
       return {
-        data: adminProducts,
+        products: adminProducts,
         success: {
           title: 'Success',
           description: 'Admin products fetched successfully'

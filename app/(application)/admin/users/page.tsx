@@ -2,6 +2,7 @@
 
 import { createAdminTransaction } from '@/app/actions/transactions'
 import { createUser, resetUserPassword, updateUser } from '@/app/actions/users'
+import { getAdminProducts } from '@/app/actions/products'
 import { useUsers } from '@/app/hooks/use-users'
 import PriceInput from '@/components/input/price-input'
 import { SearchBar } from '@/components/product/search-bar'
@@ -38,7 +39,7 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { useToast } from '@/components/ui/use-toast'
-import type { UserPermission } from '@/db/schema'
+import type { Product, UserPermission } from '@/db/schema'
 import { motion } from 'framer-motion'
 import {
   HandCoins,
@@ -63,11 +64,7 @@ interface AdminMoneyDialog {
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess: () => void
-  specialProducts: {
-    id: number
-    name: string
-    price: number
-  }[]
+  adminProducts: Product[]
 }
 
 function EditUserDialog({
@@ -259,15 +256,17 @@ function AdminMoneyDialog({
   open,
   onOpenChange,
   onSuccess,
-  specialProducts
+  adminProducts
 }: AdminMoneyDialog) {
   const { toast } = useToast()
   const [amount, setAmount] = useState('0')
   const [selectedProduct, setSelectedProduct] = useState<number | null>(null)
 
   useEffect(() => {
-    setSelectedProduct(specialProducts[0].id)
-  }, [specialProducts])
+    if (adminProducts.length > 0) {
+      setSelectedProduct(adminProducts[0].id)
+    }
+  }, [adminProducts])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -316,7 +315,7 @@ function AdminMoneyDialog({
                   <SelectValue placeholder="Select operation" />
                 </SelectTrigger>
                 <SelectContent>
-                  {specialProducts.map((product) => (
+                  {adminProducts?.map((product) => (
                     <SelectItem key={product.id} value={product.id.toString()}>
                       {product.name}
                     </SelectItem>
@@ -349,10 +348,25 @@ export default function UsersPage() {
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null)
   const [resetUserId, setResetUserId] = useState<number | null>(null)
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false)
-  const [adminProducts, setAdminProducts] = useState<Array<any>>([])
+  const [adminProducts, setAdminProducts] = useState<Product[]>([])
   const [moneyDialogUser, setMoneyDialogUser] = useState<AdminUser | null>(null)
   const [search, setSearch] = useState('')
   const contentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    async function fetchAdminProducts() {
+      const result = await getAdminProducts()
+      if (
+        result.success &&
+        result.data &&
+        Array.isArray(result.data.products)
+      ) {
+        console.log('result', result.data.products)
+        setAdminProducts(result.data.products)
+      }
+    }
+    fetchAdminProducts()
+  }, [])
 
   const {
     users,
@@ -361,7 +375,7 @@ export default function UsersPage() {
     hasMore,
     refetch: loadData,
     fetchNextPage
-  } = useUsers({ query: search, limit: 10 })
+  } = useUsers({ query: search, limit: 30 })
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement
@@ -546,7 +560,7 @@ export default function UsersPage() {
           open={!!moneyDialogUser}
           onOpenChange={(open) => !open && setMoneyDialogUser(null)}
           onSuccess={loadData}
-          specialProducts={adminProducts}
+          adminProducts={adminProducts}
         />
       )}
 
