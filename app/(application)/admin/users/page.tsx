@@ -324,11 +324,7 @@ function AdminMoneyDialog({
               </Select>
             </div>
             <div className="grid w-full items-center gap-2">
-              <PriceInput
-                quantity={amount}
-                onQuantityChange={setAmount}
-                min="0"
-              />
+              <PriceInput price={amount} onPriceChange={setAmount} min="0" />
             </div>
           </div>
 

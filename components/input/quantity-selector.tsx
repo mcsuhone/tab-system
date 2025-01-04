@@ -58,7 +58,7 @@ export function QuantitySelector({
           min={effectiveMin}
           max={max}
           className={cn(
-            'w-full h-full text-center px-6 text-gray-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
+            'w-full h-full text-center px-6 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
             className
           )}
         />

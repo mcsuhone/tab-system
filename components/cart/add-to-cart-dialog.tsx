@@ -138,7 +138,7 @@ export function AddToCartDialog({
                   Price
                 </label>
                 <div className="col-span-3">
-                  <PriceInput quantity={price} onQuantityChange={setPrice} />
+                  <PriceInput price={price} onPriceChange={setPrice} />
                 </div>
               </div>
             )}
