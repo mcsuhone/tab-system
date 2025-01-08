@@ -21,7 +21,9 @@ export default async function ApplicationLayout({
               <AppSidebar isAdmin={user?.permission === 'admin'} />
               <MobileMenu />
 
-              <div className="flex flex-col w-full h-screen">{children}</div>
+              <div className="flex flex-col w-full h-screen items-center">
+                {children}
+              </div>
             </>
           </SidebarProvider>
         </CartProvider>

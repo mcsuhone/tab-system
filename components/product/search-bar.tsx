@@ -31,7 +31,7 @@ export function SearchBar({
       placeholder={placeholder}
       value={value}
       onChange={(e) => setValue(e.target.value)}
-      className={cn('max-w-xs ring-offset-0 m-1', className)}
+      className={cn('max-w-xs ring-offset-0', className)}
     />
   )
 }

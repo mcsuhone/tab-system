@@ -1,6 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { ProductFilters, getProducts } from '@/app/actions/products'
-import { useEffect } from 'react'
 
 export function useProducts(filters: ProductFilters = {}) {
   const {
@@ -22,20 +21,6 @@ export function useProducts(filters: ProductFilters = {}) {
     },
     initialPageParam: 1
   })
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrolledToBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 100
-      if (scrolledToBottom && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage()
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   const allProducts = data?.pages.flatMap((page) => page.data ?? []) ?? []
   const isLoadingMore = isFetchingNextPage

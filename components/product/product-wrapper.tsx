@@ -10,6 +10,7 @@ import { useEffect, useState, useRef } from 'react'
 import { CategoryNav } from './category-nav'
 import { SearchBar } from './search-bar'
 import { cn } from '@/lib/utils'
+import { CartButton } from '../cart/cart-button'
 
 const scrollbarStyles =
   'scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/50'
@@ -31,201 +32,15 @@ const ProductListSkeleton = () => {
   )
 }
 
-interface ProductListProps {
-  children: (products: Product[]) => React.ReactNode
-  showDisabled?: boolean
-}
-
-const DesktopProductLayout = ({
-  children,
-  isLoading,
-  showSkeleton,
-  error,
-  products,
-  onScroll,
-  isLoadingMore,
-  hasMore
-}: {
-  children: (products: Product[]) => React.ReactNode
-  isLoading: boolean
-  showSkeleton: boolean
-  error: Error | null
-  products: Product[]
-  onScroll: (e: React.UIEvent<HTMLDivElement>) => void
-  isLoadingMore: boolean
-  hasMore: boolean
-}) => {
-  const { setQuery, category, setCategory } = useSearch()
-  const contentRef = useRef<HTMLDivElement>(null)
-
-  return (
-    <div className="hidden md:grid grid-cols-[180px_1fr] h-full gap-6">
-      <div
-        className={cn(
-          'flex flex-col gap-4 top-4 h-full overflow-y-auto',
-          scrollbarStyles
-        )}
-      >
-        <CategoryNav activeCategory={category} onCategorySelect={setCategory} />
-      </div>
-      <div
-        className={cn(
-          'flex flex-col gap-8 h-full overflow-y-auto',
-          scrollbarStyles
-        )}
-        onScroll={onScroll}
-        ref={contentRef}
-      >
-        <div className="flex justify-start sticky top-0 z-10">
-          <SearchBar onSearch={setQuery} />
-        </div>
-        <AnimatePresence mode="wait">
-          {isLoading && showSkeleton ? (
-            <motion.div
-              key="skeleton"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-4"
-            >
-              <ProductListSkeleton />
-            </motion.div>
-          ) : error ? (
-            <motion.div
-              key="error"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="text-red-500"
-            >
-              {error.message}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="products"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-4 pr-2"
-            >
-              {children(products)}
-              {isLoadingMore && (
-                <div className="mt-4 text-center">Loading more products...</div>
-              )}
-              {!isLoading && !hasMore && products.length > 0 && (
-                <div className="mt-4 text-center text-muted-foreground">
-                  No more products
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </div>
-  )
-}
-
-const MobileProductLayout = ({
-  children,
-  isLoading,
-  showSkeleton,
-  error,
-  products,
-  onScroll,
-  isLoadingMore,
-  hasMore
-}: {
-  children: (products: Product[]) => React.ReactNode
-  isLoading: boolean
-  showSkeleton: boolean
-  error: Error | null
-  products: Product[]
-  onScroll: (e: React.UIEvent<HTMLDivElement>) => void
-  isLoadingMore: boolean
-  hasMore: boolean
-}) => {
-  const { setQuery, category, setCategory } = useSearch()
-  const contentRef = useRef<HTMLDivElement>(null)
-
-  return (
-    <div className="md:hidden h-[calc(100vh-4rem)]">
-      <div
-        className={cn(
-          'flex flex-col gap-4 h-full overflow-y-auto',
-          scrollbarStyles
-        )}
-        onScroll={onScroll}
-        ref={contentRef}
-      >
-        <div className="flex flex-row justify-between w-full items-center bg-background pb-4 gap-2 sticky top-0 z-10">
-          <CategoryNav
-            activeCategory={category}
-            onCategorySelect={setCategory}
-          />
-          <SearchBar onSearch={setQuery} />
-        </div>
-        <AnimatePresence mode="wait">
-          {isLoading && showSkeleton ? (
-            <motion.div
-              key="skeleton"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-4"
-            >
-              <ProductListSkeleton />
-            </motion.div>
-          ) : error ? (
-            <motion.div
-              key="error"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="text-red-500"
-            >
-              {error.message}
-            </motion.div>
-          ) : (
-            <ScrollToTopButton>
-              <motion.div
-                key="products"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-4 pr-2"
-              >
-                {children(products)}
-                {isLoadingMore && (
-                  <div className="mt-4 text-center">
-                    Loading more products...
-                  </div>
-                )}
-                {!isLoading && !hasMore && products.length > 0 && (
-                  <div className="mt-4 text-center text-muted-foreground">
-                    No more products
-                  </div>
-                )}
-              </motion.div>
-            </ScrollToTopButton>
-          )}
-        </AnimatePresence>
-      </div>
-    </div>
-  )
-}
-
 export const ProductWrapper = ({
   children,
   showDisabled = true
-}: ProductListProps) => {
+}: {
+  children: (products: Product[]) => React.ReactNode
+  showDisabled?: boolean
+}) => {
   const [showSkeleton, setShowSkeleton] = useState(false)
-  const { query, category } = useSearch()
+  const { query, category, setQuery, setCategory } = useSearch()
 
   const { data, error, isLoading, isLoadingMore, hasMore, fetchNextPage } =
     useProducts({
@@ -236,9 +51,7 @@ export const ProductWrapper = ({
 
   useEffect(() => {
     if (isLoading) {
-      const timer = setTimeout(() => {
-        setShowSkeleton(true)
-      }, 400)
+      const timer = setTimeout(() => setShowSkeleton(true), 400)
       return () => {
         clearTimeout(timer)
         setShowSkeleton(false)
@@ -258,30 +71,113 @@ export const ProductWrapper = ({
     }
   }
 
+  const content = (
+    <AnimatePresence mode="wait">
+      {isLoading && showSkeleton ? (
+        <motion.div
+          key="skeleton"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="space-y-4"
+        >
+          <ProductListSkeleton />
+        </motion.div>
+      ) : error ? (
+        <motion.div
+          key="error"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="text-red-500"
+        >
+          {error.message}
+        </motion.div>
+      ) : (
+        <motion.div
+          key="products"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="space-y-4 pr-2"
+        >
+          {children(products)}
+          {isLoadingMore && (
+            <div className="mt-4 text-center">Loading more products...</div>
+          )}
+          {!isLoading && !hasMore && products.length > 0 && (
+            <div className="mt-4 text-center text-muted-foreground">
+              No more products
+            </div>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+
   return (
     <>
-      <MobileProductLayout
-        isLoading={isLoading}
-        showSkeleton={showSkeleton}
-        error={error}
-        products={products}
-        onScroll={handleScroll}
-        isLoadingMore={isLoadingMore}
-        hasMore={hasMore}
-      >
-        {children}
-      </MobileProductLayout>
-      <DesktopProductLayout
-        isLoading={isLoading}
-        showSkeleton={showSkeleton}
-        error={error}
-        products={products}
-        onScroll={handleScroll}
-        isLoadingMore={isLoadingMore}
-        hasMore={hasMore}
-      >
-        {children}
-      </DesktopProductLayout>
+      {/* Mobile Layout */}
+      <div className="md:hidden flex flex-col">
+        <div className="sticky top-0 z-10 bg-background">
+          {/* Container with explicit dimensions */}
+          <div className="w-full h-[140px] flex flex-col">
+            {/* Top section with cart */}
+            <div className="flex-none w-full px-4 pt-4">
+              <div className="flex justify-end">
+                <CartButton />
+              </div>
+            </div>
+            {/* Bottom section with nav and search */}
+            <div className="flex-none w-full px-4 py-4">
+              <div className="flex justify-between items-center gap-2">
+                <CategoryNav
+                  activeCategory={category}
+                  onCategorySelect={setCategory}
+                />
+                <SearchBar onSearch={setQuery} />
+              </div>
+            </div>
+          </div>
+          {/* Divider */}
+          <div className="h-[1px] bg-border/50" />
+        </div>
+
+        <ScrollToTopButton>{content}</ScrollToTopButton>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:block w-full">
+        <div className="hidden md:grid md:grid-cols-[180px_1fr] md:h-[calc(100vh-100px)] md:gap-6 p-4">
+          <div
+            className={cn(
+              'flex flex-col gap-4 overflow-y-auto h-full',
+              scrollbarStyles
+            )}
+          >
+            <CategoryNav
+              activeCategory={category}
+              onCategorySelect={setCategory}
+            />
+          </div>
+          <div
+            className={cn(
+              'flex flex-col gap-8 h-full overflow-y-auto',
+              scrollbarStyles
+            )}
+            onScroll={handleScroll}
+          >
+            <div className="flex justify-between sticky top-0 z-10 bg-background py-3 pr-2">
+              <SearchBar onSearch={setQuery} />
+              <CartButton />
+            </div>
+            {content}
+          </div>
+        </div>
+      </div>
     </>
   )
 }

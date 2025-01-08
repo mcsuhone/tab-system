@@ -67,7 +67,7 @@ export function SpecialProducts({ products, isLoading }: SpecialProductsProps) {
   return (
     <div>
       <h2 className="text-lg font-semibold mb-4">Open prices</h2>
-      <div className="grid grid-cols-3 gap-1 md:gap-4">
+      <div className="grid md:grid-cols-3 gap-2">
         {isLoading ? (
           <>
             <SpecialProductSkeleton />
@@ -87,7 +87,7 @@ export function SpecialProducts({ products, isLoading }: SpecialProductsProps) {
               >
                 <CardContent className="p-2 md:p-4 flex items-center gap-2">
                   <span className={config.color}>{config.icon}</span>
-                  <span className="font-semibold md:font-medium text-xs md:text-base">
+                  <span className="font-semibold md:font-medium text-base">
                     {config.title}
                   </span>
                 </CardContent>

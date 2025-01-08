@@ -4,10 +4,14 @@ import { useSpecialProducts } from '@/app/hooks/use-special-products'
 import { ProductItems } from './product-items'
 import { ProductWrapper } from '@/components/product/product-wrapper'
 import { SpecialProducts } from '@/components/product/special-products'
-import { Product } from '@/db/schema'
+import { Product, User } from '@/db/schema'
 import { AnimatePresence, motion } from 'framer-motion'
+import { PageLayout } from '@/components/containers/page-layout'
+import { TopBar } from '@/components/containers/top-bar'
+import { UserInfo } from '../user-info'
+import { CartButton } from '@/components/cart/cart-button'
 
-export function TabPageClient() {
+export function TabPageClient({ user }: { user: User | null }) {
   const { data: specialProductsData, isLoading: isSpecialProductsLoading } =
     useSpecialProducts()
 
@@ -38,5 +42,12 @@ export function TabPageClient() {
     )
   }
 
-  return <ProductWrapper>{renderProducts}</ProductWrapper>
+  return (
+    <PageLayout>
+      <TopBar>
+        <UserInfo user={user} />
+      </TopBar>
+      <ProductWrapper>{renderProducts}</ProductWrapper>
+    </PageLayout>
+  )
 }
