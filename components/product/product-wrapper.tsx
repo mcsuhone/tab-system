@@ -66,6 +66,10 @@ export const ProductWrapper = ({
     const scrolledToBottom =
       target.scrollHeight - target.scrollTop <= target.clientHeight + 100
 
+    console.log('scrolledToBottom', scrolledToBottom)
+    console.log('hasMore', hasMore)
+    console.log('isLoadingMore', isLoadingMore)
+
     if (scrolledToBottom && hasMore && !isLoadingMore) {
       fetchNextPage()
     }
@@ -102,7 +106,7 @@ export const ProductWrapper = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="space-y-4 pr-2"
+          className="space-y-4"
         >
           {children(products)}
           {isLoadingMore && (
@@ -122,7 +126,7 @@ export const ProductWrapper = ({
     <>
       {/* Mobile Layout */}
       <div className="md:hidden flex flex-col">
-        <div className="sticky top-0 z-10 bg-background">
+        <div className="sticky top-0 z-10 bg-background border-b border-border shadow-lg">
           {/* Container with explicit dimensions */}
           <div className="w-full h-[140px] flex flex-col">
             {/* Top section with cart */}
@@ -142,11 +146,18 @@ export const ProductWrapper = ({
               </div>
             </div>
           </div>
-          {/* Divider */}
-          <div className="h-[1px] bg-border/50" />
         </div>
 
-        <ScrollToTopButton>{content}</ScrollToTopButton>
+        <div
+          className={cn(
+            'flex flex-col gap-8 h-full overflow-y-auto',
+            scrollbarStyles
+          )}
+          onScroll={handleScroll}
+          onTouchMove={handleScroll}
+        >
+          {content}
+        </div>
       </div>
 
       {/* Desktop Layout */}

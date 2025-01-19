@@ -1,15 +1,14 @@
 'use client'
 
 import { useSpecialProducts } from '@/app/hooks/use-special-products'
-import { ProductItems } from './product-items'
+import { PageLayout } from '@/components/containers/page-layout'
+import { TopBar } from '@/components/containers/top-bar'
 import { ProductWrapper } from '@/components/product/product-wrapper'
 import { SpecialProducts } from '@/components/product/special-products'
 import { Product, User } from '@/db/schema'
 import { AnimatePresence, motion } from 'framer-motion'
-import { PageLayout } from '@/components/containers/page-layout'
-import { TopBar } from '@/components/containers/top-bar'
 import { UserInfo } from '../user-info'
-import { CartButton } from '@/components/cart/cart-button'
+import { ProductItems } from './product-items'
 
 export function TabPageClient({ user }: { user: User | null }) {
   const { data: specialProductsData, isLoading: isSpecialProductsLoading } =

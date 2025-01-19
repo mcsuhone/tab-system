@@ -1,35 +1,51 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import { useIntersection } from '@/hooks/use-intersection'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 interface ScrollToTopButtonProps {
   children?: React.ReactNode
+  containerRef?: React.RefObject<HTMLDivElement>
 }
 
-export function ScrollToTopButton({ children }: ScrollToTopButtonProps) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
+export function ScrollToTopButton({
+  children,
+  containerRef
+}: ScrollToTopButtonProps) {
+  const defaultRef = useRef<HTMLDivElement>(null)
   const { targetRef, isIntersecting } = useIntersection({
     threshold: 0,
-    root: scrollContainerRef.current,
+    root: containerRef?.current || defaultRef.current,
     rootMargin: '0px'
   })
 
   const scrollToTop = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+    const container = containerRef?.current
+    if (container) {
+      container.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      // Fallback to window scroll if no container ref is provided
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
+  // Set up an observer target at the top of the container
+  useEffect(() => {
+    const container = containerRef?.current
+    if (container && targetRef.current) {
+      const target = targetRef.current
+      target.style.position = 'absolute'
+      target.style.top = '0'
+      target.style.height = '1px'
+      target.style.width = '100%'
+      container.insertBefore(target, container.firstChild)
+    }
+  }, [containerRef, targetRef])
+
   return (
-    <div ref={scrollContainerRef} className="h-full overflow-y-auto">
-      <div
-        ref={targetRef as React.RefObject<HTMLDivElement>}
-        className="h-1 w-full"
-      />
+    <>
+      <div ref={targetRef as React.RefObject<HTMLDivElement>} />
       {children}
       <AnimatePresence>
         {!isIntersecting && (
@@ -50,6 +66,6 @@ export function ScrollToTopButton({ children }: ScrollToTopButtonProps) {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   )
 }
