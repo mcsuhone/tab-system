@@ -94,7 +94,7 @@ export function AdminProductItem({
           </p>
         </div>
         <div className="flex-[10%]">
-          <p className="text-sm">{product.price.toFixed(2)}€</p>
+          <p className="text-sm">{product.price?.toFixed(2) || '0.00'}€</p>
         </div>
         <div className="flex-[10%] flex justify-end">
           <div className="relative">
@@ -165,7 +165,7 @@ export function AdminProductItems() {
             exit="hidden"
             className="space-y-0"
           >
-            <div className="flex items-center space-x-2 mb-6">
+            <div className="flex items-center space-x-2 my-6">
               <Switch
                 checked={showDisabled}
                 onCheckedChange={setShowDisabled}
@@ -188,7 +188,7 @@ export function AdminProductItems() {
   }
 
   return (
-    <ProductWrapper showDisabled={showDisabled}>
+    <ProductWrapper showDisabled={showDisabled} showCart={false}>
       {renderProducts}
     </ProductWrapper>
   )

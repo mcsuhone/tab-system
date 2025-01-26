@@ -34,9 +34,11 @@ const ProductListSkeleton = () => {
 
 export const ProductWrapper = ({
   children,
+  showCart = true,
   showDisabled = true
 }: {
   children: (products: Product[]) => React.ReactNode
+  showCart?: boolean
   showDisabled?: boolean
 }) => {
   const [showSkeleton, setShowSkeleton] = useState(false)
@@ -83,21 +85,6 @@ export const ProductWrapper = ({
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement
-    const scrolledToBottom =
-      target.scrollHeight - target.scrollTop <= target.clientHeight + 100
-
-    console.log('scrolledToBottom', scrolledToBottom)
-    console.log('hasMore', hasMore)
-    console.log('isLoadingMore', isLoadingMore)
-
-    if (scrolledToBottom && hasMore && !isLoadingMore) {
-      fetchNextPage()
-    }
-  }
-
-  const handleTouch = (e: React.TouchEvent<HTMLDivElement>) => {
-    e.stopPropagation()
-    const target = e.currentTarget
     const scrolledToBottom =
       target.scrollHeight - target.scrollTop <= target.clientHeight + 100
 
@@ -158,12 +145,11 @@ export const ProductWrapper = ({
       {/* Mobile Layout */}
       <div className="md:hidden flex flex-col">
         <div className="sticky top-0 z-10 bg-background border-b border-border shadow-lg">
-          {/* Container with explicit dimensions */}
-          <div className="w-full h-[140px] flex flex-col">
+          <div className="w-full flex flex-col">
             {/* Top section with cart */}
             <div className="flex-none w-full px-4 pt-4">
               <div className="flex justify-end">
-                <CartButton />
+                {showCart && <CartButton />}
               </div>
             </div>
             {/* Bottom section with nav and search */}
@@ -213,9 +199,9 @@ export const ProductWrapper = ({
             )}
             onScroll={handleScroll}
           >
-            <div className="flex justify-between sticky top-0 z-10 bg-background py-3 pr-2">
+            <div className="flex justify-between sticky top-0 z-10 bg-background py-3 px-1">
               <SearchBar onSearch={setQuery} />
-              <CartButton />
+              {showCart && <CartButton />}
             </div>
             {content}
           </div>

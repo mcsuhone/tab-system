@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from 'react'
 import { CartDialog } from './cart-dialog'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LoadingContainer } from '@/components/containers/loading-container'
+import { Skeleton } from '../ui/skeleton'
 
 export function CartButton() {
   const [cartOpen, setCartOpen] = useState(false)
@@ -30,12 +31,10 @@ export function CartButton() {
   if (isLoading) {
     return (
       <>
-        <LoadingContainer isLoading={isLoading}>
-          <Button variant="outline" className="flex items-center gap-2">
-            <ShoppingCart className="h-4 w-4" />
-            <span>Cart</span>
-          </Button>
-        </LoadingContainer>
+        <Button variant="outline" className="flex items-center gap-2">
+          <ShoppingCart className="h-4 w-4" />
+          <span>Cart</span>
+        </Button>
         <CartDialog open={cartOpen} onOpenChange={setCartOpen} />
       </>
     )

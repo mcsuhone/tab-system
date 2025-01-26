@@ -29,7 +29,7 @@ export function AdminNavbar() {
   return (
     <Tabs
       defaultValue="/admin/activity-logs"
-      className="w-full"
+      className="w-full mb-8"
       value={pathname}
     >
       <TabsList>
