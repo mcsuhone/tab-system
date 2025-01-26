@@ -1,6 +1,6 @@
 TODO:
 
-1. Fix admin products view
+1. Fix admin products DESKTOP VIEW
 
 - Just redo UI
 

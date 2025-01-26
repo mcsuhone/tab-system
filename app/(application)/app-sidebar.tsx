@@ -1,6 +1,13 @@
 'use client'
 
-import { Menu, SlidersHorizontal, User, Wine } from 'lucide-react'
+import {
+  Menu,
+  Ruler,
+  SlidersHorizontal,
+  SquareActivity,
+  User,
+  Wine
+} from 'lucide-react'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -19,7 +26,30 @@ import {
   useSidebar
 } from '@/components/ui/sidebar'
 
-const baseItems = [
+const adminItems = [
+  {
+    title: 'Activity',
+    url: '/admin/activity-logs',
+    icon: SquareActivity
+  },
+  {
+    title: 'Products',
+    url: '/admin/products',
+    icon: Wine
+  },
+  {
+    title: 'Users',
+    url: '/admin/users',
+    icon: User
+  },
+  {
+    title: 'Measurements',
+    url: '/admin/measurements',
+    icon: Ruler
+  }
+] as const
+
+const items = [
   {
     title: 'Drinks',
     url: '/tab',
@@ -31,12 +61,6 @@ const baseItems = [
     icon: User
   }
 ] as const
-
-const adminItem = {
-  title: 'Admin',
-  url: '/admin',
-  icon: SlidersHorizontal
-} as const
 
 interface AppSidebarProps {
   isAdmin: boolean
@@ -54,8 +78,6 @@ export function AppSidebar({ isAdmin }: AppSidebarProps) {
   useEffect(() => {
     setOpenMobile(false)
   }, [pathname, setOpenMobile])
-
-  const items = isAdmin ? [...baseItems, adminItem] : baseItems
 
   const isItemActive = (url: string) => {
     if (url === '/admin') {
@@ -113,6 +135,33 @@ export function AppSidebar({ isAdmin }: AppSidebarProps) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {isAdmin && (
+          <SidebarGroup>
+            <div className="px-3 pt-4">
+              <h4 className="mb-2 text-xs font-semibold">Admin</h4>
+            </div>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {adminItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isItemActive(item.url)}
+                      tooltip={item.title}
+                      variant="outline"
+                    >
+                      <Link href={item.url}>
+                        <item.icon className="h-5 w-5" />
+                        <span className="text-sm">{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
     </Sidebar>
   )
