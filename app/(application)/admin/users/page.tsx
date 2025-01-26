@@ -50,6 +50,7 @@ import {
   Search
 } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
+import { LoadingContainer } from '@/components/containers/loading-container'
 
 interface AdminUser {
   id: number
@@ -561,9 +562,9 @@ export default function UsersPage() {
       )}
 
       {isLoadingMore && (
-        <div className="flex justify-center py-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
-        </div>
+        <LoadingContainer isLoading={isLoadingMore}>
+          <div />
+        </LoadingContainer>
       )}
     </div>
   )

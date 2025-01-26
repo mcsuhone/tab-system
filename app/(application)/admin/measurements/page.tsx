@@ -29,6 +29,7 @@ import { Measurement } from '@/db/schema'
 import { motion } from 'framer-motion'
 import { Plus, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
+import { LoadingContainer } from '@/components/containers/loading-container'
 
 function AddMeasurementDialog({ onSuccess }: { onSuccess: () => void }) {
   const { toast } = useToast()
@@ -161,17 +162,13 @@ export default function MeasurementsPage() {
   }
 
   return (
-    <div className="w-full max-w-7xl h-full">
+    <div className="w-full max-w-7xl">
       <div className="mb-8 flex justify-between items-center">
         <h1 className="text-3xl font-bold">Measurement Management</h1>
         <AddMeasurementDialog onSuccess={loadMeasurements} />
       </div>
-      <div className="overflow-y-auto h-full">
-        {isLoading ? (
-          <div className="flex justify-center items-center h-[200px]">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
-          </div>
-        ) : measurements.length > 0 ? (
+      <LoadingContainer isLoading={isLoading}>
+        {measurements.length > 0 ? (
           <Table>
             <TableHeader>
               <TableRow>
@@ -217,7 +214,7 @@ export default function MeasurementsPage() {
             No measurements found
           </div>
         )}
-      </div>
+      </LoadingContainer>
 
       <Dialog
         open={!!measurementToDelete}

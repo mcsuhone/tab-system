@@ -16,6 +16,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { useCallback, useEffect, useState } from 'react'
+import { LoadingContainer } from '@/components/containers/loading-container'
 
 interface ActivityLog {
   id: number
@@ -222,56 +223,66 @@ export default function ActivityLogsPage() {
         </Button>
       </div>
 
-      <div className="h-full overflow-y-auto">
-        <AnimatePresence mode="wait">
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate="show"
-            className="space-y-0"
-          >
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Timestamp</TableHead>
-                  <TableHead>Action</TableHead>
-                  <TableHead>Member #</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Details</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {logs.map((log) => (
-                  <motion.tr
-                    key={log.id}
-                    variants={item}
-                    className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                  >
-                    <TableCell>
-                      {new Date(log.createdAt).toLocaleString('fi-FI', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
-                      })}
-                    </TableCell>
-                    <TableCell>{log.action}</TableCell>
-                    <TableCell>{log.memberNo || '-'}</TableCell>
-                    <TableCell>{log.userName || '-'}</TableCell>
-                    <TableCell>
-                      {typeof log.details === 'string'
-                        ? log.details
-                        : JSON.stringify(log.details, null, 2)}
-                    </TableCell>
-                  </motion.tr>
-                ))}
-              </TableBody>
-            </Table>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      <LoadingContainer isLoading={isLoading}>
+        <div className="space-y-4">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key="activity-logs"
+              variants={container}
+              initial="hidden"
+              animate="show"
+              exit="hidden"
+              className="space-y-0"
+            >
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Timestamp</TableHead>
+                    <TableHead>Action</TableHead>
+                    <TableHead>Member #</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Details</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {logs.map((log) => (
+                    <motion.tr
+                      key={log.id}
+                      variants={item}
+                      className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                    >
+                      <TableCell>
+                        {new Date(log.createdAt).toLocaleString('fi-FI', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit'
+                        })}
+                      </TableCell>
+                      <TableCell>{log.action}</TableCell>
+                      <TableCell>{log.memberNo || '-'}</TableCell>
+                      <TableCell>{log.userName || '-'}</TableCell>
+                      <TableCell>
+                        {typeof log.details === 'string'
+                          ? log.details
+                          : JSON.stringify(log.details, null, 2)}
+                      </TableCell>
+                    </motion.tr>
+                  ))}
+                </TableBody>
+              </Table>
+
+              {logs.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  No activity logs found
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </LoadingContainer>
     </div>
   )
 }
