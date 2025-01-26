@@ -85,7 +85,7 @@ export function SpecialProducts({ products, isLoading }: SpecialProductsProps) {
                 className="flex cursor-pointer hover:bg-accent items-center justify-center transition-colors"
                 onClick={() => handleProductClick(product)}
               >
-                <CardContent className="p-2 md:p-4 flex items-center gap-2">
+                <CardContent className="p-4 flex items-center gap-2">
                   <span className={config.color}>{config.icon}</span>
                   <span className="font-semibold md:font-medium text-base">
                     {config.title}
