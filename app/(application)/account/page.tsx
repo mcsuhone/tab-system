@@ -134,11 +134,13 @@ export default async function ProfilePage() {
         <Separator />
 
         {/* Stats Grid */}
-        <StatsGrid stats={stats} />
+        <div className="space-y-8 overflow-y-auto md:overflow-y-hidden">
+          <StatsGrid stats={stats} />
 
-        {/* Recent Activity */}
-        <div className="h-full overflow-y-auto">
-          <RecentActivity transactions={recentTransactions} />
+          {/* Recent Activity */}
+          <div className="h-full overflow-x-hidden md:overflow-y-auto">
+            <RecentActivity transactions={recentTransactions} />
+          </div>
         </div>
       </div>
     </PageContainer>
