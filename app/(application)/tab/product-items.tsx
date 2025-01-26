@@ -75,7 +75,7 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
               key={product.id}
               variants={item}
               className={cn(
-                'flex items-center gap-4 px-4 py-3 rounded-lg border transition-colors',
+                'flex items-center gap-4 px-4 py-3 h-16 rounded-lg border transition-colors',
                 !existingItem && 'hover:bg-accent cursor-pointer'
               )}
               onClick={() => handleProductClick(product)}
@@ -88,7 +88,7 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
                   {categoryDisplayNames[product.category]}
                 </p>
               </div>
-              <div className="flex-[25%] flex justify-center">
+              <div className="flex-[30%] flex justify-center">
                 {existingItem && existingItem.quantity > 0 && (
                   <div className="group">
                     <QuantitySelector
