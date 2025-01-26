@@ -120,6 +120,11 @@
   }
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-x: none;
+}
+
 /* Add these styles */
 #dialog-portal {
   position: fixed;

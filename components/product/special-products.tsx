@@ -66,7 +66,7 @@ export function SpecialProducts({ products, isLoading }: SpecialProductsProps) {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold mb-4">Open prices</h2>
+      <h2 className="text-lg font-semibold mb-4 mt-4">Open prices</h2>
       <div className="grid md:grid-cols-3 gap-2">
         {isLoading ? (
           <>

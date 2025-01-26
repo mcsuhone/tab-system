@@ -9,7 +9,7 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       {/* Mobile Layout */}
-      <div className="md:hidden min-h-screen flex flex-col mt-12">
+      <div className="md:hidden min-h-screen flex flex-col w-full mt-12 px-4">
         {children}
       </div>
 

@@ -59,6 +59,26 @@ export const ProductWrapper = ({
     }
   }, [isLoading])
 
+  const observerRef = useRef<IntersectionObserver>()
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoadingMore) {
+          fetchNextPage()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (bottomRef.current) {
+      observerRef.current.observe(bottomRef.current)
+    }
+
+    return () => observerRef.current?.disconnect()
+  }, [hasMore, isLoadingMore, fetchNextPage])
+
   const products = data?.products || []
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -69,6 +89,17 @@ export const ProductWrapper = ({
     console.log('scrolledToBottom', scrolledToBottom)
     console.log('hasMore', hasMore)
     console.log('isLoadingMore', isLoadingMore)
+
+    if (scrolledToBottom && hasMore && !isLoadingMore) {
+      fetchNextPage()
+    }
+  }
+
+  const handleTouch = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+    const target = e.currentTarget
+    const scrolledToBottom =
+      target.scrollHeight - target.scrollTop <= target.clientHeight + 100
 
     if (scrolledToBottom && hasMore && !isLoadingMore) {
       fetchNextPage()
@@ -150,13 +181,14 @@ export const ProductWrapper = ({
 
         <div
           className={cn(
-            'flex flex-col gap-8 h-full overflow-y-auto',
+            'flex flex-col gap-8 h-full overflow-y-auto w-full',
+            'touch-pan-y overscroll-none',
             scrollbarStyles
           )}
-          onScroll={handleScroll}
-          onTouchMove={handleScroll}
+          style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {content}
+          <div ref={bottomRef} className="h-4" />
         </div>
       </div>
 
