@@ -20,3 +20,11 @@ TODO:
 6. Add a "top drinks" section to the products page include fire emoji
 
 - This includes "most popular" drinks based on sales
+
+7. Fix searching in users admin page ,,,,
+
+8. Fix disabling / enabling products
+
+9. Add "auto logout" button to login page
+
+10. Maybe add some cool animation for logging in?

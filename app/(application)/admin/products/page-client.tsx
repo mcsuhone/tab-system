@@ -13,9 +13,18 @@ import {
 import { useState } from 'react'
 import { AddProductForm } from '@/components/product/add-product-form'
 import { AdminProductItems } from './admin-product-items'
+import { toast } from '@/hooks/use-toast'
 
 const AddProductDialog = () => {
   const [dialogOpen, setDialogOpen] = useState(false)
+
+  const handleSuccess = () => {
+    setDialogOpen(false)
+    toast({
+      title: 'Product added successfully',
+      description: 'The product has been added to the database.'
+    })
+  }
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -29,7 +38,7 @@ const AddProductDialog = () => {
         <DialogHeader>
           <DialogTitle>Add New Product</DialogTitle>
         </DialogHeader>
-        <AddProductForm onSuccess={() => setDialogOpen(false)} />
+        <AddProductForm onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>
   )
