@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useToast } from '@/components/ui/use-toast'
+import { useToast } from '@/hooks/use-toast'
 import { Measurement } from '@/db/schema'
 import { motion } from 'framer-motion'
 import { Plus, Trash2 } from 'lucide-react'

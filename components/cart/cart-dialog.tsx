@@ -12,7 +12,7 @@ import {
 import { useCart } from './cart-provider'
 import { createTransaction } from '@/app/actions/transactions'
 import { useState, useEffect, useCallback } from 'react'
-import { useToast } from '@/components/ui/use-toast'
+import { useToast } from '@/hooks/use-toast'
 import { QuantitySelector } from '../input/quantity-selector'
 import { Trash2 } from 'lucide-react'
 import { Product } from '@/db/schema'

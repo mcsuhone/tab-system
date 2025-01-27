@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useToast } from '@/components/ui/use-toast'
+import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { useCallback, useEffect, useState } from 'react'
