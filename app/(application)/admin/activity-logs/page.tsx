@@ -161,7 +161,7 @@ export default function ActivityLogsPage() {
   }, [loadLogs])
 
   return (
-    <div className="w-full max-w-7xl h-full overflow-y-hidden">
+    <div className="w-full max-w-7xl">
       <h1 className="mb-8 text-3xl font-bold">Activity Logs</h1>
 
       <div className="mb-4 flex gap-2">
@@ -224,7 +224,7 @@ export default function ActivityLogsPage() {
       </div>
 
       <LoadingContainer isLoading={isLoading}>
-        <div className="space-y-4">
+        <div className="overflow-y-auto h-full">
           <AnimatePresence mode="wait">
             <motion.div
               key="activity-logs"

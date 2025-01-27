@@ -1,8 +1,6 @@
 TODO:
 
-1. Fix admin products DESKTOP VIEW
-
-- Just redo UI
+1. Fix activity logs and measurements pages to scroll properly...
 
 2. Improvement to activity logs
 
