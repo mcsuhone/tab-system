@@ -94,7 +94,7 @@ export function AdminProductItem({
           </p>
         </div>
         <div className="flex-[10%]">
-          <p className="text-sm">{product.price?.toFixed(2) || '0.00'}€</p>
+          <p className="text-sm">{product.price.toFixed(2)}€</p>
         </div>
         <div className="flex-[10%] flex justify-end">
           <div className="relative">

@@ -421,7 +421,7 @@ export default function UsersPage() {
             onScroll={handleScroll}
             ref={contentRef}
           >
-            <div className="sticky top-0 bg-background z-10 pb-4">
+            <div className="sticky top-1 ml-1 bg-background z-10 pb-4">
               <SearchBar onSearch={setSearch} placeholder="Search users..." />
             </div>
             <Table>
