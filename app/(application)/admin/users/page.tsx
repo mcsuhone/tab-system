@@ -105,7 +105,9 @@ export default function UsersPage() {
   return (
     <div className="flex flex-col h-full w-full">
       <div className="shrink-0 mb-8 flex justify-between items-center">
-        <h1 className="text-3xl font-bold">User Management</h1>
+        <h1 className="ml-12 md:ml-0 text-2xl md:text-3xl font-bold">
+          User Management
+        </h1>
         <AddUserDialog onSuccess={loadData} />
       </div>
       <div className="min-h-0 flex-1 overflow-hidden">
@@ -182,40 +184,6 @@ export default function UsersPage() {
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
-
-                      <Dialog
-                        open={isResetDialogOpen && resetUserId === user.id}
-                        onOpenChange={(open) => {
-                          setIsResetDialogOpen(open)
-                          if (!open) setResetUserId(null)
-                        }}
-                      >
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Reset User Password</DialogTitle>
-                            <DialogDescription>
-                              Are you sure you want to reset the password for{' '}
-                              {user.name}? The password will be cleared and the
-                              user will need to set a new password on their next
-                              login.
-                            </DialogDescription>
-                          </DialogHeader>
-                          <DialogFooter>
-                            <Button
-                              variant="outline"
-                              onClick={() => setIsResetDialogOpen(false)}
-                            >
-                              Cancel
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              onClick={handleResetPassword}
-                            >
-                              Reset Password
-                            </Button>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
                     </TableCell>
                   </TableRowMotion>
                 ))}
@@ -249,6 +217,33 @@ export default function UsersPage() {
           onSuccess={loadData}
           adminProducts={adminProducts}
         />
+      )}
+
+      {resetUserId && (
+        <Dialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Reset User Password</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to reset the password for{' '}
+                {users.find((u) => u.id === resetUserId)?.name}? The password
+                will be cleared and the user will need to set a new password on
+                their next login.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setIsResetDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="destructive" onClick={handleResetPassword}>
+                Reset Password
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
 
       {isLoadingMore && (
