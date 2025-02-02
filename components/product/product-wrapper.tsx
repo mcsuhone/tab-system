@@ -177,7 +177,7 @@ export const ProductWrapper = ({
 
       {/* Desktop Layout */}
       <div className="hidden md:block w-full">
-        <div className="hidden md:grid md:grid-cols-[180px_1fr] md:h-[calc(100vh-100px)] md:gap-6">
+        <div className="hidden md:grid md:grid-cols-[180px_1fr] md:h-[calc(100vh-130px)] mt-8 md:gap-6">
           <div
             className={cn(
               'flex flex-col gap-4 overflow-y-auto h-full',
