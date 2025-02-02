@@ -28,7 +28,7 @@ export const PageLayout = ({
       <div className="hidden md:flex md:flex-col md:h-screen w-full max-w-[800px]">
         <div
           className={cn(
-            'flex-1 flex-col mt-8 overflow-hidden',
+            'flex-1 flex-col overflow-hidden m-4',
             scrollbarStyles,
             className
           )}

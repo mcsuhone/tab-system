@@ -2,7 +2,6 @@
 
 import { useProducts } from '@/app/hooks/use-products'
 import { useSearch } from '@/components/search/search-provider'
-import { ScrollToTopButton } from '@/components/ui/scroll-to-top'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Product } from '@/db/schema'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -11,9 +10,7 @@ import { CategoryNav } from './category-nav'
 import { SearchBar } from './search-bar'
 import { cn } from '@/lib/utils'
 import { CartButton } from '../cart/cart-button'
-
-const scrollbarStyles =
-  'scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/50'
+import { scrollbarStyles } from '@/lib/scrollbar-styles'
 
 const ProductListSkeleton = () => {
   return (
@@ -124,7 +121,7 @@ export const ProductWrapper = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="space-y-4"
+          className="space-y-4 p-1"
         >
           {children(products)}
           {isLoadingMore && (
@@ -180,7 +177,7 @@ export const ProductWrapper = ({
 
       {/* Desktop Layout */}
       <div className="hidden md:block w-full">
-        <div className="hidden md:grid md:grid-cols-[180px_1fr] md:h-[calc(100vh-100px)] md:gap-6 p-4">
+        <div className="hidden md:grid md:grid-cols-[180px_1fr] md:h-[calc(100vh-100px)] md:gap-6">
           <div
             className={cn(
               'flex flex-col gap-4 overflow-y-auto h-full',

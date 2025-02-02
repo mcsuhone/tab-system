@@ -1,9 +1,10 @@
 'use client'
 
+import { getAdminProducts } from '@/app/actions/products'
 import { createAdminTransaction } from '@/app/actions/transactions'
 import { createUser, resetUserPassword, updateUser } from '@/app/actions/users'
-import { getAdminProducts } from '@/app/actions/products'
 import { useUsers } from '@/app/hooks/use-users'
+import { LoadingContainer } from '@/components/containers/loading-container'
 import PriceInput from '@/components/input/price-input'
 import { SearchBar } from '@/components/product/search-bar'
 import { Button } from '@/components/ui/button'
@@ -38,19 +39,13 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useToast } from '@/hooks/use-toast'
 import type { Product, UserPermission } from '@/db/schema'
+import { useToast } from '@/hooks/use-toast'
+import { scrollbarStyles } from '@/lib/scrollbar-styles'
+import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
-import {
-  HandCoins,
-  KeyRound,
-  MoreHorizontal,
-  Pencil,
-  Plus,
-  Search
-} from 'lucide-react'
+import { HandCoins, KeyRound, MoreHorizontal, Pencil, Plus } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
-import { LoadingContainer } from '@/components/containers/loading-container'
 
 interface AdminUser {
   id: number
@@ -417,7 +412,7 @@ export default function UsersPage() {
           </div>
         ) : users.length > 0 ? (
           <div
-            className="h-full overflow-y-auto"
+            className={cn('h-full overflow-y-auto', scrollbarStyles)}
             onScroll={handleScroll}
             ref={contentRef}
           >

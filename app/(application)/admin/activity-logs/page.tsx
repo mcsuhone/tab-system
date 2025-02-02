@@ -1,6 +1,7 @@
 'use client'
 
 import { getActivityLogs } from '@/app/actions/activity-logs'
+import { LoadingContainer } from '@/components/containers/loading-container'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Input } from '@/components/ui/input'
@@ -16,7 +17,7 @@ import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { useCallback, useEffect, useState } from 'react'
-import { LoadingContainer } from '@/components/containers/loading-container'
+import { scrollbarStyles } from '@/lib/scrollbar-styles'
 
 interface ActivityLog {
   id: number
@@ -161,128 +162,134 @@ export default function ActivityLogsPage() {
   }, [loadLogs])
 
   return (
-    <div className="w-full max-w-7xl">
-      <h1 className="mb-8 text-3xl font-bold">Activity Logs</h1>
-
-      <div className="mb-4 flex gap-2">
-        <FilterButton
-          active={activeFilter === 'all'}
-          onClick={() => {
-            setStartDate(undefined)
-            setEndDate(undefined)
-            loadLogs()
-          }}
-        >
-          All Time
-        </FilterButton>
-        <FilterButton
-          active={activeFilter === 'today'}
-          onClick={() => loadLogs('today')}
-        >
-          Today
-        </FilterButton>
-        <FilterButton
-          active={activeFilter === 'week'}
-          onClick={() => loadLogs('week')}
-        >
-          Last 7 Days
-        </FilterButton>
-        <FilterButton
-          active={activeFilter === 'month'}
-          onClick={() => loadLogs('month')}
-        >
-          Last 30 Days
-        </FilterButton>
+    <div className="flex flex-col h-full w-full">
+      <div className="shrink-0 mb-8">
+        <h1 className="text-3xl font-bold">Activity Logs</h1>
       </div>
 
-      <div className="mb-4 flex flex-wrap gap-4">
-        <DatePicker
-          date={startDate}
-          onSelect={(date) => {
-            setStartDate(date)
-            setActiveFilter('all')
-          }}
-          placeholder="Start date"
-        />
-        <DatePicker
-          date={endDate}
-          onSelect={(date) => {
-            setEndDate(date)
-            setActiveFilter('all')
-          }}
-          placeholder="End date"
-        />
-        <Input
-          placeholder="Member number"
-          value={memberNo}
-          onChange={(e) => setMemberNo(e.target.value)}
-          className="max-w-[200px]"
-        />
-        <Button onClick={() => loadLogs()} disabled={isLoading}>
-          {isLoading ? 'Loading...' : 'Filter'}
-        </Button>
+      <div className="min-h-0 flex-1 overflow-hidden">
+        <LoadingContainer isLoading={isLoading} className="h-full">
+          <div className={cn('h-full overflow-y-auto', scrollbarStyles)}>
+            <div className="sticky top-0 bg-background z-10 pb-4 space-y-4">
+              <div className="flex gap-2">
+                <FilterButton
+                  active={activeFilter === 'all'}
+                  onClick={() => {
+                    setStartDate(undefined)
+                    setEndDate(undefined)
+                    loadLogs()
+                  }}
+                >
+                  All Time
+                </FilterButton>
+                <FilterButton
+                  active={activeFilter === 'today'}
+                  onClick={() => loadLogs('today')}
+                >
+                  Today
+                </FilterButton>
+                <FilterButton
+                  active={activeFilter === 'week'}
+                  onClick={() => loadLogs('week')}
+                >
+                  Last 7 Days
+                </FilterButton>
+                <FilterButton
+                  active={activeFilter === 'month'}
+                  onClick={() => loadLogs('month')}
+                >
+                  Last 30 Days
+                </FilterButton>
+              </div>
+
+              <div className="flex flex-wrap gap-4 bg-background">
+                <DatePicker
+                  date={startDate}
+                  onSelect={(date) => {
+                    setStartDate(date)
+                    setActiveFilter('all')
+                  }}
+                  placeholder="Start date"
+                />
+                <DatePicker
+                  date={endDate}
+                  onSelect={(date) => {
+                    setEndDate(date)
+                    setActiveFilter('all')
+                  }}
+                  placeholder="End date"
+                />
+                <Input
+                  placeholder="Member number"
+                  value={memberNo}
+                  onChange={(e) => setMemberNo(e.target.value)}
+                  className="max-w-[200px]"
+                />
+                <Button onClick={() => loadLogs()} disabled={isLoading}>
+                  {isLoading ? 'Loading...' : 'Filter'}
+                </Button>
+              </div>
+            </div>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key="activity-logs"
+                variants={container}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                className="space-y-0"
+              >
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Timestamp</TableHead>
+                      <TableHead>Action</TableHead>
+                      <TableHead>Member #</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Details</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {logs.map((log) => (
+                      <motion.tr
+                        key={log.id}
+                        variants={item}
+                        className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                      >
+                        <TableCell>
+                          {new Date(log.createdAt).toLocaleString('fi-FI', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                          })}
+                        </TableCell>
+                        <TableCell>{log.action}</TableCell>
+                        <TableCell>{log.memberNo || '-'}</TableCell>
+                        <TableCell>{log.userName || '-'}</TableCell>
+                        <TableCell>
+                          {typeof log.details === 'string'
+                            ? log.details
+                            : JSON.stringify(log.details, null, 2)}
+                        </TableCell>
+                      </motion.tr>
+                    ))}
+                  </TableBody>
+                </Table>
+
+                {logs.length === 0 && (
+                  <div className="text-center py-8 text-muted-foreground">
+                    No activity logs found
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </LoadingContainer>
       </div>
-
-      <LoadingContainer isLoading={isLoading}>
-        <div className="overflow-y-auto h-full">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key="activity-logs"
-              variants={container}
-              initial="hidden"
-              animate="show"
-              exit="hidden"
-              className="space-y-0"
-            >
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Timestamp</TableHead>
-                    <TableHead>Action</TableHead>
-                    <TableHead>Member #</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Details</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {logs.map((log) => (
-                    <motion.tr
-                      key={log.id}
-                      variants={item}
-                      className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                    >
-                      <TableCell>
-                        {new Date(log.createdAt).toLocaleString('fi-FI', {
-                          year: 'numeric',
-                          month: '2-digit',
-                          day: '2-digit',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          second: '2-digit'
-                        })}
-                      </TableCell>
-                      <TableCell>{log.action}</TableCell>
-                      <TableCell>{log.memberNo || '-'}</TableCell>
-                      <TableCell>{log.userName || '-'}</TableCell>
-                      <TableCell>
-                        {typeof log.details === 'string'
-                          ? log.details
-                          : JSON.stringify(log.details, null, 2)}
-                      </TableCell>
-                    </motion.tr>
-                  ))}
-                </TableBody>
-              </Table>
-
-              {logs.length === 0 && (
-                <div className="text-center py-8 text-muted-foreground">
-                  No activity logs found
-                </div>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </LoadingContainer>
     </div>
   )
 }
