@@ -1,11 +1,11 @@
 'use server'
 
 import { db } from '@/db/db'
-import { Product, products, transactions } from '@/db/schema'
+import { products, transactions } from '@/db/schema'
 import { auth } from '@/lib/auth'
-import { revalidatePath } from 'next/cache'
-import { eq, inArray } from 'drizzle-orm'
 import { withAuth } from '@/lib/auth-guard'
+import { eq, inArray } from 'drizzle-orm'
+import { revalidatePath } from 'next/cache'
 
 interface TransactionItem {
   productId: number

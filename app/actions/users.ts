@@ -1,10 +1,10 @@
 'use server'
 
 import { db } from '@/db/db'
-import { users, UserPermission } from '@/db/schema'
-import { eq, or, ilike, and, sql, asc } from 'drizzle-orm'
-import { hash } from 'bcryptjs'
+import { UserPermission, users } from '@/db/schema'
 import { withAuth } from '@/lib/auth-guard'
+import { hash } from 'bcryptjs'
+import { and, eq, ilike, or, sql } from 'drizzle-orm'
 
 interface GetUsersOptions {
   query?: string

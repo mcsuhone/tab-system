@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  Menu,
-  Ruler,
-  SlidersHorizontal,
-  SquareActivity,
-  User,
-  Wine
-} from 'lucide-react'
+import { Menu, Ruler, SquareActivity, User, Wine } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import Link from 'next/link'

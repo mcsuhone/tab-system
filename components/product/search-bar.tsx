@@ -1,7 +1,7 @@
 'use client'
 
-import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 
 interface SearchBarProps {
@@ -24,7 +24,7 @@ export function SearchBar({
     }, 300) // 1 second delay
 
     return () => clearTimeout(timer)
-  }, [value])
+  }, [value, onSearch])
 
   return (
     <Input

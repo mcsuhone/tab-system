@@ -1,14 +1,11 @@
 'use client'
 
-import React from 'react'
-import { Button } from '../ui/button'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ShoppingCart } from 'lucide-react'
-import { useCart } from './cart-provider'
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Button } from '../ui/button'
 import { CartDialog } from './cart-dialog'
-import { motion, AnimatePresence } from 'framer-motion'
-import { LoadingContainer } from '@/components/containers/loading-container'
-import { Skeleton } from '../ui/skeleton'
+import { useCart } from './cart-provider'
 
 export function CartButton() {
   const [cartOpen, setCartOpen] = useState(false)

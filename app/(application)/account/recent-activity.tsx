@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Table,
@@ -10,15 +9,9 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Transaction } from '@/db/schema'
-import {
-  Coins,
-  HandCoins,
-  MinusCircle,
-  PlusCircle,
-  TicketMinus
-} from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { HandCoins, TicketMinus } from 'lucide-react'
 
 interface RecentActivityProps {
   transactions: Transaction[]

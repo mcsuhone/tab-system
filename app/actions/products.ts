@@ -212,7 +212,6 @@ export async function getAdminProducts() {
         .where(eq(products.isAdminProduct, true))
         .execute()
 
-      console.log('adminProducts', adminProducts)
       return {
         products: adminProducts,
         success: {

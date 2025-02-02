@@ -296,7 +296,7 @@ function AdminMoneyDialog({
         <DialogHeader>
           <DialogTitle>Modify Balance</DialogTitle>
           <DialogDescription>
-            Add or subtract money from {user.name}'s balance.
+            Add or subtract money from {user.name}&apos;s balance.
           </DialogDescription>
         </DialogHeader>
 
@@ -353,7 +353,6 @@ export default function UsersPage() {
         result.data &&
         Array.isArray(result.data.products)
       ) {
-        console.log('result', result.data.products)
         setAdminProducts(result.data.products)
       }
     }
@@ -430,7 +429,7 @@ export default function UsersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user, index) => (
+                {users.map((user) => (
                   <motion.tr
                     key={user.id}
                     initial={{ opacity: 0, y: -10 }}
@@ -540,8 +539,9 @@ export default function UsersPage() {
           user={editingUser}
           open={!!editingUser}
           onOpenChange={(open) => !open && setEditingUser(null)}
-          onSuccess={(updatedUser) => {
+          onSuccess={() => {
             loadData()
+            setEditingUser(null)
           }}
         />
       )}
