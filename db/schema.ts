@@ -127,3 +127,11 @@ export type NewTransaction = InferInsertModel<typeof transactions>
 
 export type Measurement = InferSelectModel<typeof measurements>
 export type NewMeasurement = InferInsertModel<typeof measurements>
+
+export interface AdminUser {
+  id: number
+  member_no: string
+  name: string
+  permission: UserPermission
+  balance: number
+}
