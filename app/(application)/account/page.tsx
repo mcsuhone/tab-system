@@ -44,10 +44,10 @@ export default async function ProfilePage() {
     ? Math.round((favoriteCategory[1] / regularTransactions.length) * 100)
     : 0
 
-  // Get recent transactions (15) - include admin transactions here
+  // Get last 50 transactions - include admin transactions here
   const recentTransactions = [...user.transactions]
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .slice(0, 15)
+    .slice(0, 50)
 
   // Get last order date - from regular transactions only
   const lastRegularTransaction = regularTransactions.sort(
@@ -134,11 +134,11 @@ export default async function ProfilePage() {
         <Separator />
 
         {/* Stats Grid */}
-        <div className="space-y-8 overflow-y-auto md:overflow-y-hidden">
+        <div className="flex flex-col flex-1 gap-8 min-h-0">
           <StatsGrid stats={stats} />
 
           {/* Recent Activity */}
-          <div className="h-full overflow-x-hidden md:overflow-y-auto">
+          <div className="flex-1 min-h-0 overflow-x-hidden md:overflow-y-auto">
             <RecentActivity transactions={recentTransactions} />
           </div>
         </div>

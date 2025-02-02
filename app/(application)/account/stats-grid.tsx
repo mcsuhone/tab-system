@@ -32,10 +32,14 @@ function StatsCard({ title, value, subtitle, index }: StatsCardProps) {
     >
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">{title}</CardTitle>
+          <CardTitle className="text-xs md:text-sm font-medium">
+            {title}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          <div className="text-2xl font-bold">{value}</div>
+          <div className="text-xl sm:text-2xl md:text-3xl font-bold">
+            {value}
+          </div>
           {subtitle && (
             <p className="text-xs text-muted-foreground">{subtitle}</p>
           )}
@@ -55,7 +59,7 @@ interface StatsGridProps {
 
 export function StatsGrid({ stats }: StatsGridProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 grid-cols-3">
       <StatsCard
         index={0}
         title="Last Order"
