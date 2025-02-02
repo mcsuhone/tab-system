@@ -1,12 +1,14 @@
 'use client'
 
-import {
-  getActivityLogs,
-  exportActivityLogs,
-  getExportData
-} from '@/app/actions/activity-logs'
+import { getActivityLogs, getExportData } from '@/app/actions/activity-logs'
 import { LoadingContainer } from '@/components/containers/loading-container'
+import { TableRowMotion } from '@/components/containers/table-row-motion'
 import { Button } from '@/components/ui/button'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger
+} from '@/components/ui/collapsible'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Input } from '@/components/ui/input'
 import {
@@ -18,19 +20,12 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { useToast } from '@/hooks/use-toast'
+import { exportToExcel } from '@/lib/export-utils'
+import { scrollbarStyles } from '@/lib/scrollbar-styles'
 import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ChevronDown, Download } from 'lucide-react'
 import React, { useCallback, useEffect, useState } from 'react'
-import { scrollbarStyles } from '@/lib/scrollbar-styles'
-import { TableRowMotion } from '@/components/containers/table-row-motion'
-import { exportToExcel } from '@/lib/export-utils'
-import { Download } from 'lucide-react'
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent
-} from '@/components/ui/collapsible'
-import { ChevronDown } from 'lucide-react'
 
 interface ActivityLog {
   id: number
@@ -128,8 +123,8 @@ export default function ActivityLogsPage() {
       const startOfDay = new Date(now)
       startOfDay.setHours(0, 0, 0, 0)
 
-      let newStart = startOfDay
-      let newEnd = now
+      const newStart = startOfDay
+      const newEnd = now
 
       switch (filter) {
         case 'today':
@@ -156,7 +151,7 @@ export default function ActivityLogsPage() {
 
   useEffect(() => {
     handleQuickFilter('today')
-  }, [])
+  }, [handleQuickFilter])
 
   const handleExportExcel = useCallback(async () => {
     setIsExporting(true)

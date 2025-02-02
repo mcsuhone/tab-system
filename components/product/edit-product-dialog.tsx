@@ -92,8 +92,8 @@ export function EditProductDialog({
         price: parseFloat(values.price),
         measureId: values.measureId
       })
-      if (result.success && result.data) {
-        onSuccess(result.data.data as Product)
+      if (result.success && result.data && result.data.product) {
+        onSuccess(result.data.product)
         onOpenChange(false)
       }
     } catch (error) {

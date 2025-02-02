@@ -5,6 +5,8 @@ import {
   deleteMeasurement,
   getMeasurements
 } from '@/app/actions/measurements'
+import { LoadingContainer } from '@/components/containers/loading-container'
+import { TableRowMotion } from '@/components/containers/table-row-motion'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -24,16 +26,12 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useToast } from '@/hooks/use-toast'
 import { Measurement } from '@/db/schema'
-import { motion } from 'framer-motion'
+import { useToast } from '@/hooks/use-toast'
+import { scrollbarStyles } from '@/lib/scrollbar-styles'
+import { cn } from '@/lib/utils'
 import { Plus, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { LoadingContainer } from '@/components/containers/loading-container'
-import { cn } from '@/lib/utils'
-import { scrollbarStyles } from '@/lib/scrollbar-styles'
-import { DatePicker } from '@/components/ui/date-picker'
-import { TableRowMotion } from '@/components/containers/table-row-motion'
 
 function AddMeasurementDialog({ onSuccess }: { onSuccess: () => void }) {
   const { toast } = useToast()

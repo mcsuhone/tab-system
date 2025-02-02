@@ -6,7 +6,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
-import { DialogTitle, DialogDescription } from '@/components/ui/dialog'
 
 import {
   Sidebar,
