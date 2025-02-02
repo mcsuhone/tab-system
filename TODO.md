@@ -1,11 +1,5 @@
 TODO:
 
-2. Improvement to activity logs
-
-- .csv export from admin activity logs
-- Better filters etc.
-- Different section for transactions and users (different raports or sth?)
-
 3. Add "annoskoko" to drinks page
 
 4. Create backup script through dockers that runs daily at 12:00 and keeps backups for 30 days

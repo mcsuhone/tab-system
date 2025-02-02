@@ -80,7 +80,7 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
               )}
               onClick={() => handleProductClick(product)}
             >
-              <div className="flex-[50%]">
+              <div className="flex-[40%]">
                 <p className="font-medium text-sm">{product.name}</p>
               </div>
               <div className="flex-[15%]">
@@ -90,7 +90,7 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
               </div>
               <div className="flex-[30%] flex justify-center">
                 {existingItem && existingItem.quantity > 0 && (
-                  <div className="group">
+                  <div className="group flex flex-row items-center gap-1">
                     <QuantitySelector
                       quantity={String(existingItem.quantity)}
                       allowEmpty={true}
@@ -104,6 +104,10 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
                       }}
                       className="group-hover:bg-accent"
                     />
+                    <p className="text-sm text-muted-foreground min-w-8">
+                      {'* '}
+                      {product.measurement?.amount} {product.measurement?.unit}
+                    </p>
                   </div>
                 )}
               </div>

@@ -111,7 +111,9 @@ export type User = InferSelectModel<typeof users> & {
 }
 export type NewUser = InferInsertModel<typeof users>
 
-export type Product = InferSelectModel<typeof products>
+export type Product = InferSelectModel<typeof products> & {
+  measurement: Measurement | null
+}
 export type NewProduct = InferInsertModel<typeof products>
 
 export type ActivityLog = InferSelectModel<typeof activityLogs>

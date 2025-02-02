@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/db/db'
-import { ProductCategory, products } from '@/db/schema'
+import { ProductCategory, products, measurements } from '@/db/schema'
 import { and, eq, ilike, sql } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { withAuth } from '@/lib/auth-guard'
@@ -38,11 +38,21 @@ export async function getProducts({
 
     const [allProducts, totalCount] = await Promise.all([
       db
-        .select()
+        .select({
+          product: products,
+          measurement: measurements
+        })
         .from(products)
+        .leftJoin(measurements, eq(products.measureId, measurements.id))
         .where(and(...conditions))
         .limit(limit)
-        .offset(offset),
+        .offset(offset)
+        .then((results) =>
+          results.map(({ product, measurement }) => ({
+            ...product,
+            measurement
+          }))
+        ),
       db
         .select({ count: sql<number>`count(*)` })
         .from(products)
@@ -95,11 +105,23 @@ export async function addProduct(formData: FormData) {
         })
         .returning()
 
+      const [productWithMeasurement] = await db
+        .select({
+          product: products,
+          measurement: measurements
+        })
+        .from(products)
+        .leftJoin(measurements, eq(products.measureId, measurements.id))
+        .where(eq(products.id, newProduct.id))
+
       revalidatePath('/tab')
       revalidatePath('/admin/products')
 
       return {
-        product: newProduct,
+        product: {
+          ...productWithMeasurement.product,
+          measurement: productWithMeasurement.measurement
+        },
         success: {
           title: 'Success',
           description: 'Product added successfully'
@@ -153,20 +175,27 @@ export async function updateProduct(
         .where(eq(products.id, productId))
         .returning()
 
-      if (!updatedProduct) {
-        return {
-          error: {
-            title: 'Error',
-            description: 'Product not found'
-          }
-        }
+      const [productWithMeasurement] = await db
+        .select({
+          product: products,
+          measurement: measurements
+        })
+        .from(products)
+        .leftJoin(measurements, eq(products.measureId, measurements.id))
+        .where(eq(products.id, updatedProduct.id))
+
+      if (!productWithMeasurement?.product) {
+        return { error: 'Product not found' }
       }
 
       revalidatePath('/admin/products')
       revalidatePath('/tab')
 
       return {
-        product: updatedProduct,
+        product: {
+          ...productWithMeasurement.product,
+          measurement: productWithMeasurement.measurement
+        },
         success: {
           title: 'Success',
           description: 'Product updated successfully'
@@ -179,20 +208,26 @@ export async function updateProduct(
 
 export async function getProductByName(name: string) {
   try {
-    const product = await db.query.products.findFirst({
-      where: eq(products.name, name)
-    })
+    const result = await db
+      .select({
+        product: products,
+        measurement: measurements
+      })
+      .from(products)
+      .leftJoin(measurements, eq(products.measureId, measurements.id))
+      .where(eq(products.name, name))
+      .execute()
 
-    if (!product) {
-      return {
-        error: {
-          title: 'Error',
-          description: 'Product not found'
-        }
-      }
+    if (!result[0]?.product) {
+      return { error: 'Product not found' }
     }
 
-    return { data: product }
+    return {
+      data: {
+        ...result[0].product,
+        measurement: result[0].measurement
+      }
+    }
   } catch (error) {
     return {
       error: {
@@ -207,10 +242,20 @@ export async function getAdminProducts() {
   return withAuth(
     async () => {
       const adminProducts = await db
-        .select()
+        .select({
+          product: products,
+          measurement: measurements
+        })
         .from(products)
+        .leftJoin(measurements, eq(products.measureId, measurements.id))
         .where(eq(products.isAdminProduct, true))
         .execute()
+        .then((results) =>
+          results.map(({ product, measurement }) => ({
+            ...product,
+            measurement
+          }))
+        )
 
       return {
         products: adminProducts,

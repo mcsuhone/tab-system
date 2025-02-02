@@ -44,7 +44,6 @@ import type { Product, UserPermission } from '@/db/schema'
 import { useToast } from '@/hooks/use-toast'
 import { scrollbarStyles } from '@/lib/scrollbar-styles'
 import { cn } from '@/lib/utils'
-import { motion } from 'framer-motion'
 import { HandCoins, KeyRound, MoreHorizontal, Pencil, Plus } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 

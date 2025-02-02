@@ -113,17 +113,23 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-              <div className="grid grid-cols-3 text-sm text-gray-500 items-center">
-                <div className="col-span-1">
-                  {item.product.price.toFixed(2)}€ each
+              <div className="grid grid-cols-5 items-center">
+                <div className="col-span-1 text-sm text-gray-400">
+                  {item.product.price.toFixed(2)}€{' '}
+                  {item.product.isSpecialProduct ? '' : 'each'}
                 </div>
-                <div className="col-span-1 w-[120px] flex justify-center">
+                <div className="col-span-2 flex justify-center">
                   <QuantitySelector
                     quantity={item.quantity.toString()}
                     onQuantityChange={(qty) => handleQuantityChange(item, qty)}
                   />
                 </div>
-                <div className="col-span-1 text-right font-medium text-gray-400">
+                <div className="col-span-1 text-sm text-gray-400 ml-2">
+                  {item.product.isSpecialProduct ? '' : '* '}
+                  {item.product.measurement?.amount}{' '}
+                  {item.product.measurement?.unit}
+                </div>
+                <div className="col-span-1 text-right font-medium text-gray-300">
                   {(item.product.price * item.quantity).toFixed(2)}€
                 </div>
               </div>
