@@ -12,6 +12,8 @@ import { RecentActivity } from './recent-activity'
 import { StatsGrid } from './stats-grid'
 import { PageContainer } from '@/components/containers/page-container'
 import { BalanceText } from '@/components/balance-text'
+import { scrollbarStyles } from '@/lib/scrollbar-styles'
+import { cn } from '@/lib/utils'
 
 export default async function ProfilePage() {
   const { user } = await auth()
@@ -133,12 +135,28 @@ export default async function ProfilePage() {
 
         <Separator />
 
-        {/* Stats Grid */}
-        <div className="flex flex-col flex-1 gap-8 min-h-0">
-          <StatsGrid stats={stats} />
+        {/* Mobile Layout */}
+        <div
+          className={cn(
+            'md:hidden flex flex-col flex-1 min-h-0 overflow-y-auto overflow-x-hidden',
+            scrollbarStyles
+          )}
+        >
+          <div className="w-full py-4">
+            <StatsGrid stats={stats} />
+          </div>
+          <RecentActivity transactions={recentTransactions} />
+        </div>
 
-          {/* Recent Activity */}
-          <div className="flex-1 min-h-0 overflow-x-hidden md:overflow-y-auto">
+        {/* Desktop Layout */}
+        <div className="hidden md:flex md:flex-col md:flex-1 md:gap-8 md:min-h-0">
+          <StatsGrid stats={stats} />
+          <div
+            className={cn(
+              'flex-1 min-h-0 overflow-x-hidden overflow-y-auto',
+              scrollbarStyles
+            )}
+          >
             <RecentActivity transactions={recentTransactions} />
           </div>
         </div>
