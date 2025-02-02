@@ -1,7 +1,5 @@
 TODO:
 
-1. Fix activity logs and measurements pages to scroll properly...
-
 2. Improvement to activity logs
 
 - .csv export from admin activity logs
@@ -23,8 +21,6 @@ TODO:
 
 7. Fix searching in users admin page ,,,,
 
-8. Fix disabling / enabling products
+8. Add "auto logout" button to login page
 
-9. Add "auto logout" button to login page
-
-10. Maybe add some cool animation for logging in?
+9. Maybe add some cool animation for logging in?

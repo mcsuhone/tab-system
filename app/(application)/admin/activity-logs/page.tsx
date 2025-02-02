@@ -1,6 +1,10 @@
 'use client'
 
-import { getActivityLogs } from '@/app/actions/activity-logs'
+import {
+  getActivityLogs,
+  exportActivityLogs,
+  getExportData
+} from '@/app/actions/activity-logs'
 import { LoadingContainer } from '@/components/containers/loading-container'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
@@ -19,6 +23,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import React, { useCallback, useEffect, useState } from 'react'
 import { scrollbarStyles } from '@/lib/scrollbar-styles'
 import { TableRowMotion } from '@/components/containers/table-row-motion'
+import { exportToExcel } from '@/lib/export-utils'
+import { Download } from 'lucide-react'
 
 interface ActivityLog {
   id: number
@@ -95,6 +101,7 @@ export default function ActivityLogsPage() {
   const [endDate, setEndDate] = useState<Date>()
   const [memberNo, setMemberNo] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
   const [activeFilter, setActiveFilter] = useState<
     'all' | 'today' | 'week' | 'month'
   >('today')
@@ -157,6 +164,36 @@ export default function ActivityLogsPage() {
     },
     [startDate, endDate, memberNo, toast]
   )
+
+  const handleExportExcel = useCallback(async () => {
+    setIsExporting(true)
+    try {
+      const data = await getExportData({
+        startDate,
+        endDate,
+        memberNo: memberNo || undefined
+      })
+
+      if (data) {
+        exportToExcel(
+          data.map((item) => ({
+            ...item,
+            timestamp: new Date(item.timestamp).toLocaleString('fi-FI', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            })
+          })),
+          `activity-logs-${new Date().toISOString()}`
+        )
+      }
+    } finally {
+      setIsExporting(false)
+    }
+  }, [startDate, endDate, memberNo])
 
   useEffect(() => {
     loadLogs('today')
@@ -228,6 +265,18 @@ export default function ActivityLogsPage() {
                 />
                 <Button onClick={() => loadLogs()} disabled={isLoading}>
                   {isLoading ? 'Loading...' : 'Filter'}
+                </Button>
+                <Button
+                  onClick={handleExportExcel}
+                  disabled={isLoading || isExporting}
+                  variant="outline"
+                >
+                  {isExporting ? (
+                    <div className="animate-spin h-4 w-4 mr-2 border-2 border-current rounded-full border-t-transparent" />
+                  ) : (
+                    <Download className="h-4 w-4 mr-2" />
+                  )}
+                  {isExporting ? 'Exporting...' : 'Export Excel'}
                 </Button>
               </div>
             </div>

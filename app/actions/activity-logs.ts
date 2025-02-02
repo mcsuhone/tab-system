@@ -63,3 +63,50 @@ export async function getActivityLogs({
     }
   }
 }
+
+export async function exportActivityLogs(filters: ActivityLogFilters = {}) {
+  const result = await getActivityLogs(filters)
+  if (!result.data) return null
+  return result.data
+}
+
+function flattenDetails(details: unknown): Record<string, unknown> {
+  if (typeof details === 'string') {
+    try {
+      // Attempt to parse stringified JSON
+      details = JSON.parse(details)
+    } catch {
+      return { details } // Return as-is if not parseable
+    }
+  }
+
+  if (details && typeof details === 'object' && !Array.isArray(details)) {
+    const flattened: Record<string, unknown> = {}
+    for (const [key, value] of Object.entries(details)) {
+      // Handle nested objects recursively if needed
+      if (typeof value === 'object' && value !== null) {
+        Object.entries(value).forEach(([subKey, subValue]) => {
+          flattened[`details_${key}_${subKey}`] = subValue
+        })
+      } else {
+        flattened[`details_${key}`] = value
+      }
+    }
+    return flattened
+  }
+
+  return { details } // Fallback for arrays/primitives
+}
+
+export async function getExportData(filters: ActivityLogFilters = {}) {
+  const result = await getActivityLogs(filters)
+  if (!result.data) return null
+
+  return result.data.map((log) => ({
+    timestamp: log.createdAt,
+    action: log.action,
+    member_number: log.memberNo,
+    user_name: log.userName,
+    ...flattenDetails(log.details)
+  }))
+}
