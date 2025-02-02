@@ -2,6 +2,8 @@ TODO CRITICAL:
 
 1. Fix shopping cart dialog to have scroll and max-height (overflows if too many items)
 
+2. Fix activity logs mobile view (filters overflow)
+
 TODO EXTRA:
 
 1. Add a "top drinks" section to the products page include fire emoji
