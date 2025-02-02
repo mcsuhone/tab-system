@@ -60,7 +60,6 @@ const PriceInput = ({
   return (
     <div className="relative w-full max-w-[160px]">
       <motion.div
-        key={price}
         initial={{ scale: 0.95 }}
         animate={{ scale: 1 }}
         transition={{ type: 'spring', stiffness: 500, damping: 40 }}
