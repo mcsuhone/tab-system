@@ -168,7 +168,9 @@ export default function MeasurementsPage() {
       {/* Sticky header section */}
       <div className="sticky top-0 bg-background z-10 pb-4">
         <div className="shrink-0 mb-8 flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Measurement Management</h1>
+          <h1 className="ml-12 md:ml-0 text-2xl md:text-3xl font-bold">
+            Measurement Management
+          </h1>
           <AddMeasurementDialog onSuccess={loadMeasurements} />
         </div>
       </div>

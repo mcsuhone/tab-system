@@ -48,7 +48,9 @@ export default function AdminProductsClient() {
   return (
     <>
       <div className="shrink-0 mb-8 flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Product Management</h1>
+        <h1 className="ml-12 md:ml-0 text-2xl md:text-3xl font-bold">
+          Product Management
+        </h1>
         <AddProductDialog />
       </div>
 

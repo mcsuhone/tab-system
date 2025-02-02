@@ -196,7 +196,9 @@ export default function ActivityLogsPage() {
   return (
     <div className="flex flex-col h-full w-full">
       <div className="shrink-0 mb-8">
-        <h1 className="text-3xl font-bold">Activity Logs</h1>
+        <h1 className="ml-12 md:ml-0 text-2xl md:text-3xl font-bold">
+          Activity Logs
+        </h1>
       </div>
 
       <div className="min-h-0 flex-1 overflow-hidden">
