@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { useCallback, useEffect, useState } from 'react'
 import { scrollbarStyles } from '@/lib/scrollbar-styles'
+import { TableRowMotion } from '@/components/containers/table-row-motion'
 
 interface ActivityLog {
   id: number
@@ -96,7 +97,7 @@ export default function ActivityLogsPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [activeFilter, setActiveFilter] = useState<
     'all' | 'today' | 'week' | 'month'
-  >('all')
+  >('today')
 
   const loadLogs = useCallback(
     async (filter?: 'today' | 'week' | 'month') => {
@@ -158,7 +159,7 @@ export default function ActivityLogsPage() {
   )
 
   useEffect(() => {
-    loadLogs()
+    loadLogs('today')
   }, [loadLogs])
 
   return (
@@ -172,16 +173,6 @@ export default function ActivityLogsPage() {
           <div className={cn('h-full overflow-y-auto', scrollbarStyles)}>
             <div className="sticky top-0 bg-background z-10 pb-4 space-y-4">
               <div className="flex gap-2">
-                <FilterButton
-                  active={activeFilter === 'all'}
-                  onClick={() => {
-                    setStartDate(undefined)
-                    setEndDate(undefined)
-                    loadLogs()
-                  }}
-                >
-                  All Time
-                </FilterButton>
                 <FilterButton
                   active={activeFilter === 'today'}
                   onClick={() => loadLogs('today')}
@@ -199,6 +190,16 @@ export default function ActivityLogsPage() {
                   onClick={() => loadLogs('month')}
                 >
                   Last 30 Days
+                </FilterButton>
+                <FilterButton
+                  active={activeFilter === 'all'}
+                  onClick={() => {
+                    setStartDate(undefined)
+                    setEndDate(undefined)
+                    loadLogs()
+                  }}
+                >
+                  All Time
                 </FilterButton>
               </div>
 
@@ -251,12 +252,8 @@ export default function ActivityLogsPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {logs.map((log) => (
-                      <motion.tr
-                        key={log.id}
-                        variants={item}
-                        className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                      >
+                    {logs.map((log, index) => (
+                      <TableRowMotion key={log.id} index={index}>
                         <TableCell>
                           {new Date(log.createdAt).toLocaleString('fi-FI', {
                             year: 'numeric',
@@ -275,7 +272,7 @@ export default function ActivityLogsPage() {
                             ? log.details
                             : JSON.stringify(log.details, null, 2)}
                         </TableCell>
-                      </motion.tr>
+                      </TableRowMotion>
                     ))}
                   </TableBody>
                 </Table>

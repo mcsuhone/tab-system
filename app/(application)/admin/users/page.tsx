@@ -5,6 +5,7 @@ import { createAdminTransaction } from '@/app/actions/transactions'
 import { createUser, resetUserPassword, updateUser } from '@/app/actions/users'
 import { useUsers } from '@/app/hooks/use-users'
 import { LoadingContainer } from '@/components/containers/loading-container'
+import { TableRowMotion } from '@/components/containers/table-row-motion'
 import PriceInput from '@/components/input/price-input'
 import { SearchBar } from '@/components/product/search-bar'
 import { Button } from '@/components/ui/button'
@@ -429,17 +430,8 @@ export default function UsersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user) => (
-                  <motion.tr
-                    key={user.id}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.15,
-                      ease: 'easeOut'
-                    }}
-                    className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                  >
+                {users.map((user, index) => (
+                  <TableRowMotion key={user.id} index={index}>
                     <TableCell>{user.member_no}</TableCell>
                     <TableCell>{user.name}</TableCell>
                     <TableCell className="capitalize">
@@ -522,7 +514,7 @@ export default function UsersPage() {
                         </DialogContent>
                       </Dialog>
                     </TableCell>
-                  </motion.tr>
+                  </TableRowMotion>
                 ))}
               </TableBody>
             </Table>

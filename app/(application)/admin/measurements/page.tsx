@@ -33,6 +33,7 @@ import { LoadingContainer } from '@/components/containers/loading-container'
 import { cn } from '@/lib/utils'
 import { scrollbarStyles } from '@/lib/scrollbar-styles'
 import { DatePicker } from '@/components/ui/date-picker'
+import { TableRowMotion } from '@/components/containers/table-row-motion'
 
 function AddMeasurementDialog({ onSuccess }: { onSuccess: () => void }) {
   const { toast } = useToast()
@@ -189,17 +190,7 @@ export default function MeasurementsPage() {
               </TableHeader>
               <TableBody>
                 {measurements.map((measurement, index) => (
-                  <motion.tr
-                    key={measurement.id}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.3,
-                      delay: index * 0.1,
-                      ease: 'easeOut'
-                    }}
-                    className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                  >
+                  <TableRowMotion key={measurement.id} index={index}>
                     <TableCell>{measurement.amount}</TableCell>
                     <TableCell>{measurement.unit}</TableCell>
                     <TableCell>
@@ -214,7 +205,7 @@ export default function MeasurementsPage() {
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </TableCell>
-                  </motion.tr>
+                  </TableRowMotion>
                 ))}
               </TableBody>
             </Table>

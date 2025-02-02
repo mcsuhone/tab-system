@@ -1,5 +1,6 @@
 'use client'
 
+import { TableRowMotion } from '@/components/containers/table-row-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Table,
@@ -68,13 +69,7 @@ export function RecentActivity({ transactions }: RecentActivityProps) {
                             )}.${transactionDate.getFullYear()}, ${timeString}`
 
                       return (
-                        <motion.tr
-                          key={transaction.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.05, duration: 0.3 }}
-                          className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                        >
+                        <TableRowMotion key={transaction.id} index={index}>
                           <TableCell>
                             <div className="flex items-center gap-2">
                               {transaction.product.isAdminProduct ? (
@@ -106,7 +101,7 @@ export function RecentActivity({ transactions }: RecentActivityProps) {
                             {transaction.amount > 0 ? '+' : ''}
                             {transaction.amount.toFixed(2)} €
                           </TableCell>
-                        </motion.tr>
+                        </TableRowMotion>
                       )
                     })}
 
