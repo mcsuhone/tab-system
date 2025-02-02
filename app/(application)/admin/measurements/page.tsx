@@ -30,6 +30,9 @@ import { motion } from 'framer-motion'
 import { Plus, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { LoadingContainer } from '@/components/containers/loading-container'
+import { cn } from '@/lib/utils'
+import { scrollbarStyles } from '@/lib/scrollbar-styles'
+import { DatePicker } from '@/components/ui/date-picker'
 
 function AddMeasurementDialog({ onSuccess }: { onSuccess: () => void }) {
   const { toast } = useToast()
@@ -162,59 +165,62 @@ export default function MeasurementsPage() {
   }
 
   return (
-    <div className="w-full max-w-7xl">
-      <div className="mb-8 flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Measurement Management</h1>
-        <AddMeasurementDialog onSuccess={loadMeasurements} />
+    <div className="flex flex-col h-full w-full">
+      {/* Sticky header section */}
+      <div className="sticky top-0 bg-background z-10 pb-4">
+        <div className="shrink-0 mb-8 flex justify-between items-center">
+          <h1 className="text-3xl font-bold">Measurement Management</h1>
+          <AddMeasurementDialog onSuccess={loadMeasurements} />
+        </div>
       </div>
-      <LoadingContainer isLoading={isLoading}>
-        {measurements.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Amount</TableHead>
-                <TableHead>Unit</TableHead>
-                <TableHead>Display</TableHead>
-                <TableHead className="w-[100px]">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {measurements.map((measurement, index) => (
-                <motion.tr
-                  key={measurement.id}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    delay: index * 0.1,
-                    ease: 'easeOut'
-                  }}
-                  className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                >
-                  <TableCell>{measurement.amount}</TableCell>
-                  <TableCell>{measurement.unit}</TableCell>
-                  <TableCell>
-                    {measurement.amount} {measurement.unit}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setMeasurementToDelete(measurement)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
-                </motion.tr>
-              ))}
-            </TableBody>
-          </Table>
-        ) : (
-          <div className="text-center py-8 text-muted-foreground">
-            No measurements found
+
+      {/* Scrollable content area */}
+      <div className="min-h-0 flex-1 overflow-hidden">
+        <LoadingContainer isLoading={isLoading} className="h-full">
+          <div className={cn('w-full h-full overflow-y-auto', scrollbarStyles)}>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Unit</TableHead>
+                  <TableHead>Display</TableHead>
+                  <TableHead className="w-[100px]">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {measurements.map((measurement, index) => (
+                  <motion.tr
+                    key={measurement.id}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: index * 0.1,
+                      ease: 'easeOut'
+                    }}
+                    className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                  >
+                    <TableCell>{measurement.amount}</TableCell>
+                    <TableCell>{measurement.unit}</TableCell>
+                    <TableCell>
+                      {measurement.amount} {measurement.unit}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setMeasurementToDelete(measurement)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </motion.tr>
+                ))}
+              </TableBody>
+            </Table>
           </div>
-        )}
-      </LoadingContainer>
+        </LoadingContainer>
+      </div>
 
       <Dialog
         open={!!measurementToDelete}
