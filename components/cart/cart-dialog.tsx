@@ -1,5 +1,6 @@
 'use client'
 
+import { createTransaction } from '@/app/actions/transactions'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -9,22 +10,17 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { useCart } from './cart-provider'
-import { createTransaction } from '@/app/actions/transactions'
-import { useState, useEffect, useCallback } from 'react'
+import { CartItem } from '@/db/schema'
 import { useToast } from '@/hooks/use-toast'
-import { QuantitySelector } from '../input/quantity-selector'
+import { getQuantityString } from '@/lib/get-quantity-string'
 import { Trash2 } from 'lucide-react'
-import { Product } from '@/db/schema'
+import { useCallback, useEffect, useState } from 'react'
+import { QuantitySelector } from '../input/quantity-selector'
+import { useCart } from './cart-provider'
 
 interface CartDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-}
-
-interface CartItem {
-  product: Product
-  quantity: number
 }
 
 export function CartDialog({ open, onOpenChange }: CartDialogProps) {
@@ -100,7 +96,7 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
           <DialogTitle>Shopping Cart</DialogTitle>
           <DialogDescription>Total: {total.toFixed(2)}€</DialogDescription>
         </DialogHeader>
-        <div className="gap-6 py-4">
+        <div className="space-y-4 py-8">
           {items.map((item) => (
             <div key={item.product.id} className="space-y-2">
               <div className="flex items-center justify-between">
@@ -113,23 +109,23 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-              <div className="grid grid-cols-5 items-center">
-                <div className="col-span-1 text-sm text-gray-400">
+              <div className="grid grid-cols-[1.4fr_2fr_1fr_1fr] items-center gap-2">
+                <div className="text-sm text-gray-400">
                   {item.product.price.toFixed(2)}€{' '}
                   {item.product.isSpecialProduct ? '' : 'each'}
                 </div>
-                <div className="col-span-2 flex justify-center">
+                <div className="flex justify-center">
                   <QuantitySelector
                     quantity={item.quantity.toString()}
                     onQuantityChange={(qty) => handleQuantityChange(item, qty)}
                   />
                 </div>
-                <div className="col-span-1 text-sm text-gray-400 ml-2">
-                  {item.product.isSpecialProduct ? '' : '* '}
-                  {item.product.measurement?.amount}{' '}
-                  {item.product.measurement?.unit}
+                <div className="text-sm text-gray-400">
+                  <div className="flex flex-col items-center gap-1">
+                    {getQuantityString(item)}
+                  </div>
                 </div>
-                <div className="col-span-1 text-right font-medium text-gray-300">
+                <div className="text-right font-medium text-gray-300">
                   {(item.product.price * item.quantity).toFixed(2)}€
                 </div>
               </div>

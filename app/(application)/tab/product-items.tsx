@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '@/components/cart/cart-provider'
 import { QuantitySelector } from '@/components/input/quantity-selector'
 import { ProductSkeleton } from '@/components/product/product-skeleton'
+import { getQuantityString } from '@/lib/get-quantity-string'
 
 const container = {
   hidden: { opacity: 0 },
@@ -66,6 +67,13 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
         exit="hidden"
         className="space-y-0"
       >
+        {products.length === 0 && (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-sm text-muted-foreground">
+              No products found with provided filters
+            </p>
+          </div>
+        )}
         {products.map((product) => {
           const existingItem = items.find(
             (item) => item.product.id === product.id
@@ -75,20 +83,22 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
               key={product.id}
               variants={item}
               className={cn(
-                'flex items-center gap-4 px-4 py-3 h-16 rounded-lg border transition-colors',
+                'grid grid-cols-[2fr_1fr_3fr_1fr] items-center gap-4 px-4 py-3 h-16 rounded-lg border transition-colors',
                 !existingItem && 'hover:bg-accent cursor-pointer'
               )}
               onClick={() => handleProductClick(product)}
             >
-              <div className="flex-[40%]">
-                <p className="font-medium text-sm">{product.name}</p>
+              <div className="overflow-hidden">
+                <p className="font-medium text-sm line-clamp-2">
+                  {product.name}
+                </p>
               </div>
-              <div className="flex-[15%]">
+              <div>
                 <p className="text-sm text-muted-foreground">
                   {categoryDisplayNames[product.category]}
                 </p>
               </div>
-              <div className="flex-[30%] flex justify-center">
+              <div className="flex justify-center">
                 {existingItem && existingItem.quantity > 0 && (
                   <div className="group flex flex-row items-center gap-1">
                     <QuantitySelector
@@ -104,14 +114,13 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
                       }}
                       className="group-hover:bg-accent"
                     />
-                    <p className="text-sm text-muted-foreground min-w-8">
-                      {'* '}
-                      {product.measurement?.amount} {product.measurement?.unit}
-                    </p>
+                    <span className="text-sm text-muted-foreground text-center min-w-8">
+                      {getQuantityString(existingItem)}
+                    </span>
                   </div>
                 )}
               </div>
-              <div className="flex-[10%] text-right">
+              <div className="text-right">
                 <p className="text-sm">{product.price.toFixed(2)}€</p>
               </div>
             </motion.div>

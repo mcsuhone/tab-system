@@ -135,3 +135,8 @@ export interface AdminUser {
   permission: UserPermission
   balance: number
 }
+
+export interface CartItem {
+  product: Product
+  quantity: number
+}
