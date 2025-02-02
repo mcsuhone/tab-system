@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
+import { DialogTitle, DialogDescription } from '@/components/ui/dialog'
 
 import {
   Sidebar,
@@ -85,6 +86,11 @@ export function AppSidebar({ isAdmin }: AppSidebarProps) {
         openMobile ? 'translate-x-0' : '-translate-x-full'
       } transition-transform md:translate-x-0`}
     >
+      <DialogTitle className="sr-only">Application Navigation</DialogTitle>
+      <DialogDescription className="sr-only">
+        Main menu for OJS Tab system
+      </DialogDescription>
+
       <button
         onClick={() => setOpenMobile(!openMobile)}
         className="fixed left-4 top-4 z-50 md:hidden"
