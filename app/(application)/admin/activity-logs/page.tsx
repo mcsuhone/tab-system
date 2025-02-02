@@ -25,6 +25,12 @@ import { scrollbarStyles } from '@/lib/scrollbar-styles'
 import { TableRowMotion } from '@/components/containers/table-row-motion'
 import { exportToExcel } from '@/lib/export-utils'
 import { Download } from 'lucide-react'
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent
+} from '@/components/ui/collapsible'
+import { ChevronDown } from 'lucide-react'
 
 interface ActivityLog {
   id: number
@@ -75,25 +81,6 @@ const container = {
   }
 }
 
-const item = {
-  hidden: {
-    opacity: 0,
-    y: -10,
-    marginTop: 0
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    marginTop: 16,
-    transition: {
-      type: 'spring',
-      stiffness: 700,
-      damping: 35,
-      mass: 0.35
-    }
-  }
-}
-
 export default function ActivityLogsPage() {
   const { toast } = useToast()
   const [logs, setLogs] = useState<ActivityLog[]>([])
@@ -105,48 +92,17 @@ export default function ActivityLogsPage() {
   const [activeFilter, setActiveFilter] = useState<
     'all' | 'today' | 'week' | 'month'
   >('today')
+  const [filtersModified, setFiltersModified] = useState(false)
+  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false)
 
   const loadLogs = useCallback(
-    async (filter?: 'today' | 'week' | 'month') => {
+    async (start?: Date, end?: Date, member?: string) => {
       setIsLoading(true)
       try {
-        let start = startDate
-        let end = endDate
-
-        if (filter) {
-          const now = new Date()
-          now.setHours(23, 59, 59, 999) // Set to end of day
-          end = now
-
-          const startOfToday = new Date(now)
-          startOfToday.setHours(0, 0, 0, 0)
-
-          switch (filter) {
-            case 'today':
-              start = startOfToday
-              break
-            case 'week': {
-              start = new Date(startOfToday)
-              start.setDate(start.getDate() - 6) // -6 to include today
-              break
-            }
-            case 'month': {
-              start = new Date(startOfToday)
-              start.setDate(start.getDate() - 29) // -29 to include today
-              break
-            }
-          }
-          setStartDate(undefined)
-          setEndDate(undefined)
-          setActiveFilter(filter)
-        } else {
-          setActiveFilter('all')
-        }
-
         const { data, error } = await getActivityLogs({
           startDate: start,
           endDate: end,
-          memberNo: memberNo || undefined
+          memberNo: member || undefined
         })
 
         if (error) {
@@ -158,12 +114,49 @@ export default function ActivityLogsPage() {
         } else if (data) {
           setLogs(data as ActivityLog[])
         }
+        setFiltersModified(false)
       } finally {
         setIsLoading(false)
       }
     },
-    [startDate, endDate, memberNo, toast]
+    [toast]
   )
+
+  const handleQuickFilter = useCallback(
+    (filter: 'today' | 'week' | 'month') => {
+      const now = new Date()
+      const startOfDay = new Date(now)
+      startOfDay.setHours(0, 0, 0, 0)
+
+      let newStart = startOfDay
+      let newEnd = now
+
+      switch (filter) {
+        case 'today':
+          newEnd.setHours(23, 59, 59, 999)
+          break
+        case 'week':
+          newStart.setDate(newStart.getDate() - 6)
+          newEnd.setHours(23, 59, 59, 999)
+          break
+        case 'month':
+          newStart.setDate(newStart.getDate() - 29)
+          newEnd.setHours(23, 59, 59, 999)
+          break
+      }
+
+      setStartDate(newStart)
+      setEndDate(newEnd)
+      setActiveFilter(filter)
+      setFiltersModified(false)
+      loadLogs(newStart, newEnd, memberNo)
+    },
+    [loadLogs, memberNo]
+  )
+
+  useEffect(() => {
+    handleQuickFilter('today')
+  }, [])
 
   const handleExportExcel = useCallback(async () => {
     setIsExporting(true)
@@ -195,9 +188,9 @@ export default function ActivityLogsPage() {
     }
   }, [startDate, endDate, memberNo])
 
-  useEffect(() => {
-    loadLogs('today')
-  }, [loadLogs])
+  const handleApplyFilters = useCallback(() => {
+    loadLogs(startDate, endDate, memberNo)
+  }, [loadLogs, startDate, endDate, memberNo])
 
   return (
     <div className="flex flex-col h-full w-full">
@@ -207,78 +200,104 @@ export default function ActivityLogsPage() {
 
       <div className="min-h-0 flex-1 overflow-hidden">
         <LoadingContainer isLoading={isLoading} className="h-full">
-          <div className={cn('h-full overflow-y-auto', scrollbarStyles)}>
-            <div className="sticky top-0 bg-background z-10 pb-4 space-y-4">
-              <div className="flex gap-2">
-                <FilterButton
-                  active={activeFilter === 'today'}
-                  onClick={() => loadLogs('today')}
-                >
-                  Today
-                </FilterButton>
-                <FilterButton
-                  active={activeFilter === 'week'}
-                  onClick={() => loadLogs('week')}
-                >
-                  Last 7 Days
-                </FilterButton>
-                <FilterButton
-                  active={activeFilter === 'month'}
-                  onClick={() => loadLogs('month')}
-                >
-                  Last 30 Days
-                </FilterButton>
-                <FilterButton
-                  active={activeFilter === 'all'}
-                  onClick={() => {
-                    setStartDate(undefined)
-                    setEndDate(undefined)
-                    loadLogs()
-                  }}
-                >
-                  All Time
-                </FilterButton>
+          <div className={cn('h-full w-full overflow-y-auto', scrollbarStyles)}>
+            <div className="sticky top-0 bg-background z-10 pb-4 space-y-4 px-1">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex gap-2">
+                  <FilterButton
+                    active={activeFilter === 'today'}
+                    onClick={() => handleQuickFilter('today')}
+                  >
+                    Today
+                  </FilterButton>
+                  <FilterButton
+                    active={activeFilter === 'week'}
+                    onClick={() => handleQuickFilter('week')}
+                  >
+                    Last 7 Days
+                  </FilterButton>
+                  <FilterButton
+                    active={activeFilter === 'month'}
+                    onClick={() => handleQuickFilter('month')}
+                  >
+                    Last 30 Days
+                  </FilterButton>
+                </div>
+
+                <div className="flex gap-2">
+                  <Collapsible
+                    open={isAdvancedOpen}
+                    onOpenChange={setIsAdvancedOpen}
+                  >
+                    <CollapsibleTrigger asChild>
+                      <Button variant="ghost" className="text-muted-foreground">
+                        Advanced Filters
+                        <ChevronDown
+                          className={cn(
+                            'h-4 w-4 ml-2 transition-transform',
+                            isAdvancedOpen ? 'rotate-180' : ''
+                          )}
+                        />
+                      </Button>
+                    </CollapsibleTrigger>
+                  </Collapsible>
+                  <Button
+                    onClick={handleExportExcel}
+                    disabled={isLoading || isExporting}
+                    variant="outline"
+                  >
+                    {isExporting ? (
+                      <div className="animate-spin h-4 w-4 mr-2 border-2 border-current rounded-full border-t-transparent" />
+                    ) : (
+                      <Download className="h-4 w-4 mr-2" />
+                    )}
+                    {isExporting ? 'Exporting...' : 'Export Excel'}
+                  </Button>
+                </div>
               </div>
 
-              <div className="flex flex-wrap gap-4 bg-background">
-                <DatePicker
-                  date={startDate}
-                  onSelect={(date) => {
-                    setStartDate(date)
-                    setActiveFilter('all')
-                  }}
-                  placeholder="Start date"
-                />
-                <DatePicker
-                  date={endDate}
-                  onSelect={(date) => {
-                    setEndDate(date)
-                    setActiveFilter('all')
-                  }}
-                  placeholder="End date"
-                />
-                <Input
-                  placeholder="Member number"
-                  value={memberNo}
-                  onChange={(e) => setMemberNo(e.target.value)}
-                  className="max-w-[200px]"
-                />
-                <Button onClick={() => loadLogs()} disabled={isLoading}>
-                  {isLoading ? 'Loading...' : 'Filter'}
-                </Button>
-                <Button
-                  onClick={handleExportExcel}
-                  disabled={isLoading || isExporting}
-                  variant="outline"
-                >
-                  {isExporting ? (
-                    <div className="animate-spin h-4 w-4 mr-2 border-2 border-current rounded-full border-t-transparent" />
-                  ) : (
-                    <Download className="h-4 w-4 mr-2" />
-                  )}
-                  {isExporting ? 'Exporting...' : 'Export Excel'}
-                </Button>
-              </div>
+              <Collapsible
+                open={isAdvancedOpen}
+                onOpenChange={setIsAdvancedOpen}
+              >
+                <CollapsibleContent className="space-y-4">
+                  <div className="flex flex-wrap gap-4">
+                    <DatePicker
+                      date={startDate}
+                      onSelect={(date) => {
+                        setStartDate(date)
+                        setFiltersModified(true)
+                        setActiveFilter('all')
+                      }}
+                      placeholder="Start date"
+                    />
+                    <DatePicker
+                      date={endDate}
+                      onSelect={(date) => {
+                        setEndDate(date)
+                        setFiltersModified(true)
+                        setActiveFilter('all')
+                      }}
+                      placeholder="End date"
+                    />
+                    <Input
+                      placeholder="Member number"
+                      value={memberNo}
+                      onChange={(e) => {
+                        setMemberNo(e.target.value)
+                        setFiltersModified(true)
+                      }}
+                      className="max-w-[200px]"
+                    />
+                    <Button
+                      onClick={handleApplyFilters}
+                      disabled={!filtersModified || isLoading}
+                    >
+                      {isLoading ? 'Applying...' : 'Apply Filters'}
+                    </Button>
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
             </div>
 
             <AnimatePresence mode="wait">
