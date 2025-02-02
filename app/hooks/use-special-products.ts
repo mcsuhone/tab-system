@@ -9,7 +9,7 @@ export function useSpecialProducts() {
     queryFn: async () => {
       const result = await getProducts({})
       return {
-        data: result.data?.filter((p) => p.isSpecialProduct) || []
+        products: result.products?.filter((p) => p.isSpecialProduct) || []
       }
     }
   })

@@ -21,7 +21,7 @@ export function TabPageClient({ user }: { user: User | null }) {
     return (
       <>
         <AnimatePresence mode="wait">
-          {!isSpecialProductsLoading && specialProductsData?.data && (
+          {!isSpecialProductsLoading && specialProductsData?.products && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -29,7 +29,7 @@ export function TabPageClient({ user }: { user: User | null }) {
               className="mb-8"
             >
               <SpecialProducts
-                products={specialProductsData.data}
+                products={specialProductsData.products}
                 isLoading={false}
               />
             </motion.div>

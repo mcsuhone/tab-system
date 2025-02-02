@@ -22,7 +22,7 @@ export function useProducts(filters: ProductFilters = {}) {
     initialPageParam: 1
   })
 
-  const allProducts = data?.pages.flatMap((page) => page.data ?? []) ?? []
+  const allProducts = data?.pages.flatMap((page) => page.products ?? []) ?? []
   const isLoadingMore = isFetchingNextPage
 
   return {

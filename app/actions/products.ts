@@ -51,7 +51,7 @@ export async function getProducts({
     ])
 
     return {
-      data: allProducts,
+      products: allProducts,
       pagination: {
         total: totalCount,
         totalPages: Math.ceil(totalCount / limit),
@@ -99,7 +99,7 @@ export async function addProduct(formData: FormData) {
       revalidatePath('/admin/products')
 
       return {
-        data: newProduct,
+        product: newProduct,
         success: {
           title: 'Success',
           description: 'Product added successfully'
@@ -166,7 +166,7 @@ export async function updateProduct(
       revalidatePath('/tab')
 
       return {
-        data: updatedProduct,
+        product: updatedProduct,
         success: {
           title: 'Success',
           description: 'Product updated successfully'

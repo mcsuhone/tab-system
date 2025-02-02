@@ -65,8 +65,9 @@ export function AdminProductItem({
       const result = await updateProduct(product.id, {
         disabled: !product.disabled
       })
-      if (result.success && result.data) {
-        setProduct(result.data as unknown as Product)
+      console.log(result)
+      if (result.success && result.data && result.data.product) {
+        setProduct(result.data.product as unknown as Product)
       }
     } catch (error) {
       console.error('Failed to update product:', error)
