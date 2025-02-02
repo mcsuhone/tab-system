@@ -122,7 +122,11 @@ export default function UsersPage() {
             ref={contentRef}
           >
             <div className="sticky top-1 ml-1 bg-background z-10 pb-4">
-              <SearchBar onSearch={setSearch} placeholder="Search users..." />
+              <SearchBar
+                value={search}
+                onSearch={setSearch}
+                placeholder="Search users..."
+              />
             </div>
             <Table>
               <TableHeader className="sticky top-0 bg-background">

@@ -156,7 +156,7 @@ export const ProductWrapper = ({
                   activeCategory={category}
                   onCategorySelect={setCategory}
                 />
-                <SearchBar onSearch={setQuery} />
+                <SearchBar value={query} onSearch={setQuery} />
               </div>
             </div>
           </div>
@@ -197,7 +197,7 @@ export const ProductWrapper = ({
             onScroll={handleScroll}
           >
             <div className="flex justify-between sticky top-0 z-10 bg-background py-3 px-1">
-              <SearchBar onSearch={setQuery} />
+              <SearchBar value={query} onSearch={setQuery} />
               {showCart && <CartButton />}
             </div>
             {content}

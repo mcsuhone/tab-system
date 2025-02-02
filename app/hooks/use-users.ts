@@ -1,6 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { getUsers } from '@/app/actions/users'
-import { useEffect } from 'react'
 
 export interface UsersFilters {
   query?: string
@@ -29,20 +28,6 @@ export function useUsers(filters: UsersFilters = {}) {
     },
     initialPageParam: 1
   })
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrolledToBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 100
-      if (scrolledToBottom && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage()
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   const allUsers = data?.pages.flatMap((page) => page.data ?? []) ?? []
 

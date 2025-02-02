@@ -5,32 +5,37 @@ import { cn } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 
 interface SearchBarProps {
+  value: string
   onSearch: (value: string) => void
   placeholder?: string
   className?: string
 }
 
 export function SearchBar({
+  value,
   onSearch,
   placeholder = 'Search drinks...',
   className
 }: SearchBarProps) {
-  const [value, setValue] = useState('')
+  const [internalValue, setInternalValue] = useState(value)
 
-  // Add debounce effect
+  useEffect(() => {
+    setInternalValue(value)
+  }, [value])
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      onSearch(value)
-    }, 300) // 1 second delay
+      onSearch(internalValue)
+    }, 300)
 
     return () => clearTimeout(timer)
-  }, [value, onSearch])
+  }, [internalValue, onSearch])
 
   return (
     <Input
       placeholder={placeholder}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
+      value={internalValue}
+      onChange={(e) => setInternalValue(e.target.value)}
       className={cn('max-w-xs ring-offset-0', className)}
     />
   )
