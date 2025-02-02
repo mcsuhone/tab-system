@@ -192,6 +192,12 @@ export default function ActivityLogsPage() {
     loadLogs(startDate, endDate, memberNo)
   }, [loadLogs, startDate, endDate, memberNo])
 
+  const handleClearFilters = useCallback(() => {
+    setStartDate(undefined)
+    setEndDate(undefined)
+    setMemberNo('')
+  }, [])
+
   return (
     <div className="flex flex-col h-full w-full">
       <div className="shrink-0 mb-8">
@@ -294,6 +300,13 @@ export default function ActivityLogsPage() {
                       disabled={!filtersModified || isLoading}
                     >
                       {isLoading ? 'Applying...' : 'Apply Filters'}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={handleClearFilters}
+                      disabled={!filtersModified || isLoading}
+                    >
+                      Clear Filters
                     </Button>
                   </div>
                 </CollapsibleContent>
