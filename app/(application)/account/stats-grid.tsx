@@ -59,7 +59,7 @@ interface StatsGridProps {
 
 export function StatsGrid({ stats }: StatsGridProps) {
   return (
-    <div className="grid gap-4 grid-cols-3">
+    <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
       <StatsCard
         index={0}
         title="Last Order"
