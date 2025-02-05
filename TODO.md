@@ -1,14 +1,10 @@
 TODO CRITICAL:
 
-1. Add "auto logout" button to login page
+1. Move categories into DB from hard coded enum. => Make a page on admin panel to manage categories.
 
-2. Fix shopping cart dialog to have scroll and max-height (overflows if too many items)
+2. Fix activity logs mobile view (filters overflow)
 
-3. Move categories into DB from hard coded enum. => Make a page on admin panel to manage categories.
-
-4. Fix activity logs mobile view (filters overflow)
-
-5. Fix member nro filter in activity logs
+3. Fix member nro filter in activity logs
 
 TODO EXTRA:
 
