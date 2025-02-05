@@ -29,10 +29,15 @@ const categoryMapping: Record<string, ProductCategory> = {
 export async function importProducts() {
   // Read CSV file
   const filePath = path.join(__dirname, 'old_data', 'exported_prices.json')
-  const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' })
+  let records: any[] = []
+  try {
+    const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' })
+    records = JSON.parse(fileContent)
+  } catch (error) {
+    console.error(`Failed to open file:`, error)
+    return
+  }
 
-  // Parse CSV
-  const records = JSON.parse(fileContent)
 
   for (const record of records) {
     try {
@@ -85,8 +90,14 @@ export async function importProducts() {
 
 export async function importUsers() {
   const filePath = path.join(__dirname, 'old_data', 'exported_users.json')
-  const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' })
-  const records = JSON.parse(fileContent)
+  let records: any[] = []
+  try {
+    const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' })
+    records = JSON.parse(fileContent)
+  } catch (error) {
+    console.error(`Failed to open file:`, error)
+    return
+  }
 
   for (const record of records) {
     try {

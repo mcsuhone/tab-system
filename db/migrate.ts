@@ -110,8 +110,8 @@ async function main() {
 
     console.log('Existing products:', existingProducts.length)
 
-    if (existingProducts.length === 0) {
-      console.log('\nNo products found in database. Running seed script...')
+    if (existingProducts.length < 10) {
+      console.log('\nLess than 10 products. Running seed script...')
       const { importProducts } = await import('./seed.js')
       await importProducts()
       console.log('Products seeded successfully!')
@@ -121,8 +121,8 @@ async function main() {
     // Check if there are any users in the database
     const existingUsers = await db.select().from(users).execute()
     console.log('Existing users:', existingUsers.length)
-    if (existingUsers.length < 3) {
-      console.log('\nNo users found in database. Running seed script...')
+    if (existingUsers.length < 10) {
+      console.log('\nLess than 10 users. Running seed script...')
       const { importUsers } = await import('./seed.js')
       await importUsers()
       console.log('Users seeded successfully!')
