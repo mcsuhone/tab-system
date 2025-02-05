@@ -74,7 +74,7 @@ export async function importProducts() {
       const productData: NewProduct = {
         name: record.name,
         category: category,
-        price: parseFloat(record.price.replace(',', '.')),
+        price: record.price,
         disabled: record.active.toLowerCase() !== 'active',
         isSpecialProduct: false,
         measureId: measurement.id
