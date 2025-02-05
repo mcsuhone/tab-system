@@ -5,8 +5,8 @@ from pathlib import Path
 def connect_to_db():
     """Connect to the SQLite database"""
     try:
-        db_path = Path('../piikkilaite/db')
-        conn = sqlite3.connect(db_path / 'database.sqlite')
+        db_path = '../piikkilaite/db/sqlite-prod.db'
+        conn = sqlite3.connect(db_path)
         return conn
     except sqlite3.Error as e:
         print(f"Error connecting to database: {e}")
