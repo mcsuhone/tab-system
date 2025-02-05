@@ -1,11 +1,10 @@
-import { parse } from 'csv-parse/sync'
+import { db } from '@/db/db'
+import bcrypt from 'bcryptjs'
+import { eq } from 'drizzle-orm'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { ProductCategory, type NewProduct, type NewMeasurement } from './schema'
-import { db } from '@/db/db'
-import { measurements, products } from './schema'
-import { eq } from 'drizzle-orm'
+import { measurements, NewUser, ProductCategory, products, users, type NewMeasurement, type NewProduct } from './schema'
 
 // Get current directory path
 const __filename = fileURLToPath(import.meta.url)
@@ -23,20 +22,17 @@ const categoryMapping: Record<string, ProductCategory> = {
   Konjakki: 'OTHER_LIQUOR',
   Absintti: 'OTHER_LIQUOR',
   Alkoholittomat: 'NON_ALCOHOLIC',
-  Ruoat: 'OTHER'
+  Ruoat: 'FOOD',
+  Grappa: 'GRAPPA'
 }
 
-async function importProducts() {
+export async function importProducts() {
   // Read CSV file
-  const csvFilePath = path.join(__dirname, 'old_data', 'products.csv')
-  const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' })
+  const filePath = path.join(__dirname, 'old_data', 'exported_prices.json')
+  const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' })
 
   // Parse CSV
-  const records = parse(fileContent, {
-    delimiter: ';',
-    columns: true,
-    skip_empty_lines: true
-  })
+  const records = JSON.parse(fileContent)
 
   for (const record of records) {
     try {
@@ -62,12 +58,11 @@ async function importProducts() {
       }
 
       // Map category
-      const category = categoryMapping[record.CATEGORY]
-      if (!category) {
-        console.warn(
-          `Unknown category: ${record.CATEGORY} for product ${record.NAME}`
-        )
-        continue
+      let category: ProductCategory
+      if (!(record.CATEGORY in categoryMapping)) {
+        category = 'OTHER'
+      } else {
+        category = categoryMapping[record.CATEGORY]
       }
 
       // Create product
@@ -88,7 +83,25 @@ async function importProducts() {
   }
 }
 
-// Run the import
-importProducts()
-  .then(() => console.log('Import completed'))
-  .catch(console.error)
+export async function importUsers() {
+  const filePath = path.join(__dirname, 'old_data', 'exported_users.json')
+  const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' })
+  const records = JSON.parse(fileContent)
+
+  for (const record of records) {
+    try {
+      const userData: NewUser = {
+        name: record.name,
+        member_no: record.memberID.toString(),
+        balance: record.balance || 0,
+        password: '',
+        permission: 'default'
+      }
+
+      await db.insert(users).values(userData)
+      console.log(`Imported user: ${record.name} (Member #${record.memberID})`)
+    } catch (error) {
+      console.error(`Failed to import user ${record.name}:`, error)
+    }
+  }
+}

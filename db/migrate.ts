@@ -99,6 +99,20 @@ async function main() {
     } else {
       console.log('All required admin products exist')
     }
+
+    // Check if there are any products in the database
+    const existingProducts = await db
+      .select()
+      .from(products)
+      .execute()
+
+    if (existingProducts.length === 0) {
+      console.log('\nNo products found in database. Running seed script...')
+      const { importProducts } = await import('./seed.js')
+      await importProducts()
+      console.log('Products seeded successfully!')
+    }
+
   } catch (error) {
     console.error('Error during migration:', error)
     throw error
