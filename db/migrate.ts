@@ -3,6 +3,7 @@ import { eq, and, inArray } from 'drizzle-orm'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import { db } from './db'
 import { users, products } from './schema'
+import { importProducts, importUsers } from './seed'
 
 const DEFAULT_ADMIN_USERNAME = 'admin'
 
@@ -110,23 +111,18 @@ async function main() {
 
     console.log('Existing products:', existingProducts.length)
 
-    if (existingProducts.length < 10) {
-      console.log('\nLess than 10 products. Running seed script...')
-      const { importProducts } = await import('./seed.js')
-      await importProducts()
-      console.log('Products seeded successfully!')
-    }
+    await importProducts()
+    console.log('Products seeded successfully!')
+
 
     console.log('Checking for users...')
     // Check if there are any users in the database
     const existingUsers = await db.select().from(users).execute()
     console.log('Existing users:', existingUsers.length)
-    if (existingUsers.length < 10) {
-      console.log('\nLess than 10 users. Running seed script...')
-      const { importUsers } = await import('./seed.js')
-      await importUsers()
-      console.log('Users seeded successfully!')
-    }
+
+    await importUsers()
+    console.log('Users seeded successfully!')
+
 
   } catch (error) {
     console.error('Error during migration:', error)

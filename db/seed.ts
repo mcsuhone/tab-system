@@ -70,6 +70,18 @@ export async function importProducts() {
         category = categoryMapping[record.category]
       }
 
+      // Check if product already exists
+      const existingProduct = await db
+        .select()
+        .from(products)
+        .where(eq(products.name, record.name))
+        .execute()
+
+      if (existingProduct.length > 0) {
+        console.log(`Skipping existing product: ${record.name}`)
+        continue
+      }
+
       // Create product
       const productData: NewProduct = {
         name: record.name,
@@ -101,6 +113,18 @@ export async function importUsers() {
 
   for (const record of records) {
     try {
+      // Check if user already exists
+      const existingUser = await db
+        .select()
+        .from(users)
+        .where(eq(users.member_no, record.memberID.toString()))
+        .execute()
+
+      if (existingUser.length > 0) {
+        console.log(`Skipping existing user: ${record.memberID}`)
+        continue
+      }
+
       const userData: NewUser = {
         name: record.name,
         member_no: record.memberID.toString(),
