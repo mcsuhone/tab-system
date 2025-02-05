@@ -10,6 +10,11 @@ import { useToast } from '@/hooks/use-toast'
 import { login } from '@/app/actions/auth-action'
 import Image from 'next/image'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { NumberPadHoverCard } from '@/components/number-pad-hover-card'
+import { useDebounce } from '@/hooks/use-debounce'
+import { HoverCard, HoverCardTrigger } from '@/components/ui/hover-card'
+import { Keyboard, LogIn } from 'lucide-react'
 
 export function LoginPageClient() {
   const [memberNo, setMemberNo] = useState('')
@@ -17,8 +22,12 @@ export function LoginPageClient() {
   const [rememberMe, setRememberMe] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isExiting, setIsExiting] = useState(false)
+  const [isNumberPadOpen, setIsNumberPadOpen] = useState(false)
+  const isMobile = useIsMobile()
   const router = useRouter()
   const { toast } = useToast()
+  const [lastKey, setLastKey] = useState('')
+  const debouncedKey = useDebounce(lastKey, 100)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -72,6 +81,18 @@ export function LoginPageClient() {
     }
   }
 
+  const handleNumberInput = (num: string) => {
+    setMemberNo((prev) => prev + num)
+    setLastKey(num)
+    setTimeout(() => setLastKey(''), 0)
+  }
+
+  const handleBackspace = () => {
+    setMemberNo((prev) => prev.slice(0, -1))
+    setLastKey('Backspace')
+    setTimeout(() => setLastKey(''), 0)
+  }
+
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-background">
       <AnimatePresence mode="wait">
@@ -104,7 +125,6 @@ export function LoginPageClient() {
                 alt="OJS Logo"
                 priority
                 fill
-                quality={100}
                 className="object-contain"
               />
             </div>
@@ -120,13 +140,55 @@ export function LoginPageClient() {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="memberNo">Member Number</Label>
-                  <Input
-                    id="memberNo"
-                    type="number"
-                    value={memberNo}
-                    onChange={(e) => setMemberNo(e.target.value)}
-                    disabled={isLoading}
-                  />
+                  {!isMobile && (
+                    <HoverCard open={isNumberPadOpen} openDelay={0.2}>
+                      <HoverCardTrigger asChild>
+                        <div className="relative">
+                          <Input
+                            id="memberNo"
+                            type="number"
+                            value={memberNo}
+                            autoComplete="off"
+                            onFocus={() => setIsNumberPadOpen(true)}
+                            onBlur={(e) => {
+                              if (!e.currentTarget.contains(e.relatedTarget)) {
+                                setIsNumberPadOpen(false)
+                              }
+                            }}
+                            onChange={(e) => setMemberNo(e.target.value)}
+                            disabled={isLoading}
+                          />
+                        </div>
+                      </HoverCardTrigger>
+                      <NumberPadHoverCard
+                        onInput={handleNumberInput}
+                        onBackspace={handleBackspace}
+                        value={memberNo}
+                      />
+                    </HoverCard>
+                  )}
+                  {isMobile && (
+                    <Input
+                      id="memberNo"
+                      type="number"
+                      value={memberNo}
+                      autoComplete="off"
+                      onFocus={() => setIsNumberPadOpen(true)}
+                      onBlur={(e) => {
+                        if (!e.currentTarget.contains(e.relatedTarget)) {
+                          setIsNumberPadOpen(false)
+                        }
+                      }}
+                      onChange={(e) => setMemberNo(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (/[0-9]|Backspace/.test(e.key)) {
+                          setLastKey(e.key)
+                          setTimeout(() => setLastKey(''), 0)
+                        }
+                      }}
+                      disabled={isLoading}
+                    />
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -152,6 +214,7 @@ export function LoginPageClient() {
 
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? 'Signing in...' : 'Sign in'}
+                <LogIn />
               </Button>
             </form>
           </motion.div>
