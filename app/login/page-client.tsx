@@ -96,13 +96,15 @@ export function LoginPageClient() {
                 ease: 'easeInOut'
               }
             }}
-            className="w-full max-w-sm"
+            className="w-full max-w-sm px-8 md:px-0"
           >
             <div className="relative h-32 w-full mb-8">
               <Image
                 src="/jalostajat_logo_w.png"
-                alt="Logo"
+                alt="OJS Logo"
+                priority
                 fill
+                quality={100}
                 className="object-contain"
               />
             </div>
@@ -120,7 +122,7 @@ export function LoginPageClient() {
                   <Label htmlFor="memberNo">Member Number</Label>
                   <Input
                     id="memberNo"
-                    type="text"
+                    type="number"
                     value={memberNo}
                     onChange={(e) => setMemberNo(e.target.value)}
                     disabled={isLoading}
