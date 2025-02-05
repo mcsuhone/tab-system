@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { QuantitySelector } from '../input/quantity-selector'
 import { useCart } from './cart-provider'
+import { scrollbarStyles } from '@/lib/scrollbar-styles'
 
 interface CartDialogProps {
   open: boolean
@@ -109,12 +110,14 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Shopping Cart</DialogTitle>
           <DialogDescription>Total: {total.toFixed(2)}€</DialogDescription>
         </DialogHeader>
-        <div className="space-y-4 py-8">
+        <div
+          className={`space-y-4 py-8 flex-1 overflow-y-auto ${scrollbarStyles}`}
+        >
           {items.map((item) => (
             <div key={item.product.id} className="space-y-2">
               <div className="flex items-center justify-between">
