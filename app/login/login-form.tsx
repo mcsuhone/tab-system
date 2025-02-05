@@ -43,8 +43,16 @@ export function LoginForm() {
         return
       }
 
-      router.refresh()
+      console.log('Login successful')
+
+      toast({
+        title: 'Success',
+        description: 'Login successful',
+        variant: 'default'
+      })
+
       router.push('/tab')
+
     } catch (error) {
       console.error('Login error:', error)
       toast({
