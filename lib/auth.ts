@@ -6,6 +6,10 @@ import { jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 import type { User } from '@/db/schema'
 
+const passwordIsEmpty = (password: string) => {
+  return !password || password === ''
+}
+
 export async function verifyCredentials(memberNo: string, password: string) {
   try {
     // Find user by member_no instead of name
@@ -20,12 +24,12 @@ export async function verifyCredentials(memberNo: string, password: string) {
     }
 
     // If password is empty in DB and provided password is empty
-    if (!user[0].password && !password) {
+    if (passwordIsEmpty(user[0].password) && passwordIsEmpty(password)) {
       return true
     }
 
     // If password is empty in DB but password was provided, or vice versa
-    if (!user[0].password || !password) {
+    if (passwordIsEmpty(user[0].password) || passwordIsEmpty(password)) {
       return false
     }
 
