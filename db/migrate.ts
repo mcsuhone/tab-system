@@ -100,6 +100,8 @@ async function main() {
       console.log('All required admin products exist')
     }
 
+
+    console.log('Checking for products...')
     // Check if there are any products in the database
     const existingProducts = await db
       .select()
@@ -111,6 +113,16 @@ async function main() {
       const { importProducts } = await import('./seed.js')
       await importProducts()
       console.log('Products seeded successfully!')
+    }
+
+    console.log('Checking for users...')
+    // Check if there are any users in the database
+    const existingUsers = await db.select().from(users).execute()
+    if (existingUsers.length === 0) {
+      console.log('\nNo users found in database. Running seed script...')
+      const { importUsers } = await import('./seed.js')
+      await importUsers()
+      console.log('Users seeded successfully!')
     }
 
   } catch (error) {
