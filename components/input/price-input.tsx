@@ -58,7 +58,7 @@ const PriceInput = ({
   }
 
   return (
-    <div className="relative w-full max-w-[160px]">
+    <div className="relative w-full max-w-[140px] h-10">
       <motion.div
         initial={{ scale: 0.95 }}
         animate={{ scale: 1 }}

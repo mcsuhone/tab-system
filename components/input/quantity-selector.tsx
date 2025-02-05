@@ -42,7 +42,7 @@ export function QuantitySelector({
   }
 
   return (
-    <div className="relative w-full min-w-[80px] max-w-[160px]">
+    <div className="relative w-full min-w-[80px] max-w-[140px] h-10">
       <motion.div
         key={quantity}
         initial={{ scale: 0.95 }}
