@@ -45,7 +45,7 @@ export async function login(memberNo: string, password: string) {
     // Set cookie with domain and path
     cookies().set('token', token, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: 'lax',
       path: '/',
       maxAge: 86400 * 165 // 1 day
