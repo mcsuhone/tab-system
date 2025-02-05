@@ -1,5 +1,7 @@
 'use client'
 
+import { logout } from '@/app/actions/auth-action'
+import { rememberUserAction } from '@/app/actions/remember-user-action'
 import { createTransaction } from '@/app/actions/transactions'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,7 +15,8 @@ import {
 import { CartItem } from '@/db/schema'
 import { useToast } from '@/hooks/use-toast'
 import { getQuantityString } from '@/lib/get-quantity-string'
-import { Trash2 } from 'lucide-react'
+import { LogOut, Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { QuantitySelector } from '../input/quantity-selector'
 import { useCart } from './cart-provider'
@@ -26,7 +29,17 @@ interface CartDialogProps {
 export function CartDialog({ open, onOpenChange }: CartDialogProps) {
   const { items, removeItem, total, clearCart, updateQuantity } = useCart()
   const [isCheckingOut, setIsCheckingOut] = useState(false)
+  const [rememberUser, setRememberUser] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkRememberUser = async () => {
+      const result = await rememberUserAction()
+      setRememberUser(result)
+    }
+    checkRememberUser()
+  }, [])
 
   const handleCheckout = useCallback(async () => {
     if (isCheckingOut || items.length === 0) return
@@ -46,6 +59,11 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
         title: 'Success',
         description: 'Order placed successfully!'
       })
+
+      if (!rememberUser) {
+        await logout()
+        router.push('/login')
+      }
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -138,6 +156,7 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
             disabled={items.length === 0 || isCheckingOut}
           >
             {isCheckingOut ? 'Processing...' : `Checkout ${total.toFixed(2)}€`}
+            {!rememberUser && <LogOut className="w-4 h-4" />}
           </Button>
         </DialogFooter>
       </DialogContent>

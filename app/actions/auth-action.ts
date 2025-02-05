@@ -8,7 +8,11 @@ import { users } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { auth } from '@/lib/auth'
 
-export async function login(memberNo: string, password: string) {
+export async function login(
+  memberNo: string,
+  password: string,
+  rememberMe: boolean
+) {
   try {
     if (!memberNo) {
       return false
@@ -36,7 +40,8 @@ export async function login(memberNo: string, password: string) {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET)
     const token = await new SignJWT({
       memberNo: user[0].memberNo,
-      permission: user[0].permission
+      permission: user[0].permission,
+      rememberMe: rememberMe
     })
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('1d')
