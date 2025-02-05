@@ -83,9 +83,10 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
               key={product.id}
               variants={item}
               className={cn(
-                'grid grid-cols-[2fr_1fr_3fr_1fr] hover:bg-accent items-center gap-4 px-4 py-3 h-16 rounded-lg border transition-colors',
-                !existingItem && ' cursor-pointer',
-                existingItem && 'ring-1 ring-inset ring-selected'
+                'grid grid-cols-[3fr_1fr_1fr] md:grid-cols-[2fr_1fr_3fr_1fr] hover:bg-accent items-center gap-4 px-4 py-3 h-16 rounded-lg border transition-colors',
+                !existingItem && 'cursor-pointer',
+                existingItem &&
+                  'ring-1 ring-inset ring-selected grid-cols-[3fr_3fr_1fr] md:grid-cols-[2fr_1fr_3fr_1fr]'
               )}
               onClick={() => handleProductClick(product)}
             >
@@ -94,13 +95,13 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
                   {product.name}
                 </p>
               </div>
-              <div>
+              <div className={cn(existingItem && 'hidden md:block')}>
                 <p className="text-sm text-muted-foreground">
                   {categoryDisplayNames[product.category]}
                 </p>
               </div>
-              <div className="flex justify-center">
-                {existingItem && existingItem.quantity > 0 && (
+              {existingItem && existingItem.quantity > 0 && (
+                <div className="flex justify-center">
                   <div className="group flex flex-row items-center gap-1">
                     <QuantitySelector
                       quantity={String(existingItem.quantity)}
@@ -119,12 +120,14 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
                       {getQuantityString(existingItem)}
                     </span>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
               <div className="text-right">
-                {existingItem && (
-                  <p className="text-sm">{getPriceString(existingItem)}</p>
-                )}
+                <p className="text-sm">
+                  {getPriceString(
+                    existingItem || { product: product, quantity: 1 }
+                  )}
+                </p>
               </div>
             </motion.div>
           )
