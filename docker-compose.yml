@@ -28,7 +28,7 @@ services:
     build:
       context: .
       dockerfile: dockerfile
-    command: pnpm migrate
+    command: pnpm db:migrate
     depends_on:
       db:
         condition: service_healthy
