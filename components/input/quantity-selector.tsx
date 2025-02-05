@@ -48,7 +48,7 @@ export function QuantitySelector({
         initial={{ scale: 0.95 }}
         animate={{ scale: 1 }}
         transition={{ type: 'spring', stiffness: 500, damping: 40 }}
-        className="h-full"
+        className="h-full bg-accent"
       >
         <Input
           type="number"
@@ -67,7 +67,7 @@ export function QuantitySelector({
         variant="ghost"
         size="icon"
         tabIndex={-1}
-        className="absolute left-0 top-0 h-full w-10 hover:bg-transparent focus:bg-transparent active:bg-transparent px-0"
+        className="absolute left-0 top-0 h-full w-10 hover:bg-transparent text-muted-foreground hover:text-white focus:bg-transparent active:bg-transparent px-0"
         onClick={handleDecrement}
         disabled={parseFloat(quantity) <= parseFloat(effectiveMin)}
       >
@@ -77,7 +77,7 @@ export function QuantitySelector({
         variant="ghost"
         size="icon"
         tabIndex={-1}
-        className="absolute right-0 top-0 h-full w-10 hover:bg-transparent focus:bg-transparent active:bg-transparent px-0"
+        className="absolute right-0 top-0 h-full w-10 hover:bg-transparent text-muted-foreground hover:text-white focus:bg-transparent active:bg-transparent px-0"
         onClick={handleIncrement}
         disabled={max ? parseFloat(quantity) >= parseFloat(max) : false}
       >

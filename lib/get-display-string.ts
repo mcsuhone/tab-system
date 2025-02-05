@@ -7,3 +7,7 @@ export const getQuantityString = (item: CartItem) => {
     : item.quantity.toString()
   return quantityString + ' ' + item.product.measurement?.unit
 }
+
+export const getPriceString = (item: CartItem) => {
+  return (item.product.price * item.quantity).toFixed(2) + '€'
+}

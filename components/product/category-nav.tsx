@@ -80,7 +80,7 @@ export function CategoryNav({
       </div>
 
       {/* Desktop View */}
-      <nav className={`hidden md:block transition-all duration-200`}>
+      <nav className={`hidden md:block transition-all duration-200 mr-1`}>
         <CategoryList
           activeCategory={activeCategory}
           onCategorySelect={onCategorySelect}

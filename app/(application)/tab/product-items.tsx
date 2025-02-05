@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '@/components/cart/cart-provider'
 import { QuantitySelector } from '@/components/input/quantity-selector'
 import { ProductSkeleton } from '@/components/product/product-skeleton'
-import { getQuantityString } from '@/lib/get-quantity-string'
+import { getPriceString, getQuantityString } from '@/lib/get-display-string'
 
 const container = {
   hidden: { opacity: 0 },
@@ -83,8 +83,9 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
               key={product.id}
               variants={item}
               className={cn(
-                'grid grid-cols-[2fr_1fr_3fr_1fr] items-center gap-4 px-4 py-3 h-16 rounded-lg border transition-colors',
-                !existingItem && 'hover:bg-accent cursor-pointer'
+                'grid grid-cols-[2fr_1fr_3fr_1fr] hover:bg-accent items-center gap-4 px-4 py-3 h-16 rounded-lg border transition-colors',
+                !existingItem && ' cursor-pointer',
+                existingItem && 'ring-1 ring-inset ring-selected'
               )}
               onClick={() => handleProductClick(product)}
             >
@@ -121,7 +122,9 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
                 )}
               </div>
               <div className="text-right">
-                <p className="text-sm">{product.price.toFixed(2)}€</p>
+                {existingItem && (
+                  <p className="text-sm">{getPriceString(existingItem)}</p>
+                )}
               </div>
             </motion.div>
           )

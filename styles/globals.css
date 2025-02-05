@@ -73,7 +73,7 @@
     --muted: #212322;
     --muted-foreground: #9baea7;
 
-    --accent: #262e2b;
+    --accent: #19211e;
     --accent-foreground: #f2fcfb;
 
     --destructive: #932121;
@@ -82,6 +82,7 @@
     --border: #3f4241;
     --input: #535655;
     --ring: #c6ded6;
+    --selected: #4d5954;
 
     --chart-1: #4d90ff;
     --chart-2: #2ed3b7;

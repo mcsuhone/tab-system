@@ -22,6 +22,7 @@ const config = {
         border: 'var(--border)',
         input: 'var(--input)',
         ring: 'var(--ring)',
+        selected: 'var(--selected)',
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         primary: {

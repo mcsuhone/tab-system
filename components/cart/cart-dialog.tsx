@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dialog'
 import { CartItem } from '@/db/schema'
 import { useToast } from '@/hooks/use-toast'
-import { getQuantityString } from '@/lib/get-quantity-string'
+import { getQuantityString } from '@/lib/get-display-string'
 import { LogOut, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
