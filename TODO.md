@@ -2,7 +2,10 @@ TODO CRITICAL:
 
 1. Fix shopping cart dialog to have scroll and max-height (overflows if too many items)
 
-2. Fix activity logs mobile view (filters overflow)
+2. Move categories into DB from hard coded enum. => Make a page on admin panel to manage categories.
+
+3. Fix activity logs mobile view (filters overflow)
+
 
 TODO EXTRA:
 

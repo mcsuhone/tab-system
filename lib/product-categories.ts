@@ -16,5 +16,7 @@ export const categoryDisplayNames: Record<ProductCategory, string> = {
   NON_ALCOHOLIC: 'Non-Alcoholic',
   COCKTAIL: 'Cocktail',
   OTHER_LIQUOR: 'Other Liquor',
-  OTHER: 'Other'
+  OTHER: 'Other',
+  FOOD: 'Food',
+  GRAPPA: 'Grappa'
 }

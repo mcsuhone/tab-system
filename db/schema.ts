@@ -29,6 +29,8 @@ export const productCategoryEnum = pgEnum('product_category', [
   'ENERGY_DRINK',
   'NON_ALCOHOLIC',
   'COCKTAIL',
+  'FOOD',
+  'GRAPPA',
   'OTHER_LIQUOR',
   'OTHER'
 ])
