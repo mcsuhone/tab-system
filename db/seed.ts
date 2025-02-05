@@ -43,8 +43,8 @@ export async function importProducts() {
     try {
       // Create or find measurement
       const measurementData: NewMeasurement = {
-        amount: parseFloat(record.SIZE),
-        unit: record.UNIT.toLowerCase()
+        amount: parseFloat(record.size),
+        unit: record.unit?.toLowerCase()
       }
 
       // Check if measurement already exists
@@ -64,26 +64,26 @@ export async function importProducts() {
 
       // Map category
       let category: ProductCategory
-      if (!(record.CATEGORY in categoryMapping)) {
+      if (!(record.category in categoryMapping)) {
         category = 'OTHER'
       } else {
-        category = categoryMapping[record.CATEGORY]
+        category = categoryMapping[record.category]
       }
 
       // Create product
       const productData: NewProduct = {
-        name: record.NAME,
+        name: record.name,
         category: category,
-        price: parseFloat(record.PRICE.replace(',', '.')),
-        disabled: record.ACTIVE.toLowerCase() !== 'active',
+        price: parseFloat(record.price.replace(',', '.')),
+        disabled: record.active.toLowerCase() !== 'active',
         isSpecialProduct: false,
         measureId: measurement.id
       }
 
       await db.insert(products).values(productData)
-      console.log(`Imported: ${record.NAME}`)
+      console.log(`Imported: ${record.name}`)
     } catch (error) {
-      console.error(`Failed to import ${record.NAME}:`, error)
+      console.error(`Failed to import ${record.name}:`, error)
     }
   }
 }
