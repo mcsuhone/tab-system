@@ -124,11 +124,10 @@ export async function importUsers() {
         console.log(`Skipping existing user: ${record.memberID}`)
         continue
       }
-
       const userData: NewUser = {
         name: record.name,
         member_no: record.memberID.toString(),
-        balance: record.balance || 0,
+        balance: record.balance ? -record.balance : 0,
         password: '',
         permission: 'default'
       }
