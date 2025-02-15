@@ -1,20 +1,19 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence, MotionValue } from 'framer-motion'
+import { login } from '@/app/actions/auth-action'
+import { NumberPadHoverCard } from '@/components/number-pad-hover-card'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { HoverCard, HoverCardTrigger } from '@/components/ui/hover-card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useToast } from '@/hooks/use-toast'
-import { login } from '@/app/actions/auth-action'
-import Image from 'next/image'
-import { Checkbox } from '@/components/ui/checkbox'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { NumberPadHoverCard } from '@/components/number-pad-hover-card'
-import { useDebounce } from '@/hooks/use-debounce'
-import { HoverCard, HoverCardTrigger } from '@/components/ui/hover-card'
-import { Keyboard, LogIn } from 'lucide-react'
+import { useToast } from '@/hooks/use-toast'
+import { AnimatePresence, motion } from 'framer-motion'
+import { LogIn } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export function LoginPageClient() {
   const [memberNo, setMemberNo] = useState('')
@@ -26,8 +25,6 @@ export function LoginPageClient() {
   const isMobile = useIsMobile()
   const router = useRouter()
   const { toast } = useToast()
-  const [lastKey, setLastKey] = useState('')
-  const debouncedKey = useDebounce(lastKey, 100)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,7 +46,7 @@ export function LoginPageClient() {
       if (success) {
         setIsExiting(true)
         // Time the navigation to match when logo reaches center
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        await new Promise((resolve) => setTimeout(resolve, 200))
         router.push('/tab')
       }
 
@@ -83,22 +80,29 @@ export function LoginPageClient() {
 
   const handleNumberInput = (num: string) => {
     setMemberNo((prev) => prev + num)
-    setLastKey(num)
-    setTimeout(() => setLastKey(''), 0)
   }
 
   const handleBackspace = () => {
     setMemberNo((prev) => prev.slice(0, -1))
-    setLastKey('Backspace')
-    setTimeout(() => setLastKey(''), 0)
   }
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-background">
+      {/* Static logo outside AnimatePresence */}
+      <div className="relative h-32 w-full mb-8">
+        <Image
+          src="/jalostajat_logo_w.png"
+          alt="OJS Logo"
+          priority
+          fill
+          className="object-contain"
+        />
+      </div>
+
       <AnimatePresence mode="wait">
         {!isExiting && (
           <motion.div
-            key="login-container"
+            key="login-form"
             initial={{ opacity: 0, y: 20 }}
             animate={{
               opacity: 1,
@@ -113,22 +117,12 @@ export function LoginPageClient() {
               opacity: 0,
               y: -40,
               transition: {
-                duration: 0.5,
+                duration: 0.35,
                 ease: 'easeInOut'
               }
             }}
             className="w-full max-w-sm px-8 md:px-0"
           >
-            <div className="relative h-32 w-full mb-8">
-              <Image
-                src="/jalostajat_logo_w.png"
-                alt="OJS Logo"
-                priority
-                fill
-                className="object-contain"
-              />
-            </div>
-
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold mb-2">Login</h1>
               <p className="text-muted-foreground">
@@ -157,6 +151,19 @@ export function LoginPageClient() {
                             }}
                             onChange={(e) => setMemberNo(e.target.value)}
                             disabled={isLoading}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault()
+                                const inputs = Array.from(
+                                  document.querySelectorAll('input')
+                                )
+                                const index = inputs.indexOf(e.currentTarget)
+                                if (index > -1 && inputs[index + 1]) {
+                                  inputs[index + 1].focus()
+                                }
+                                setIsNumberPadOpen(false)
+                              }
+                            }}
                           />
                         </div>
                       </HoverCardTrigger>
@@ -181,9 +188,16 @@ export function LoginPageClient() {
                       }}
                       onChange={(e) => setMemberNo(e.target.value)}
                       onKeyDown={(e) => {
-                        if (/[0-9]|Backspace/.test(e.key)) {
-                          setLastKey(e.key)
-                          setTimeout(() => setLastKey(''), 0)
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          const inputs = Array.from(
+                            document.querySelectorAll('input')
+                          )
+                          const index = inputs.indexOf(e.currentTarget)
+                          if (index > -1 && inputs[index + 1]) {
+                            inputs[index + 1].focus()
+                          }
+                          setIsNumberPadOpen(false)
                         }
                       }}
                       disabled={isLoading}

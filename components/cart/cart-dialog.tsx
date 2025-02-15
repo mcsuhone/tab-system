@@ -15,12 +15,12 @@ import {
 import { CartItem } from '@/db/schema'
 import { useToast } from '@/hooks/use-toast'
 import { getQuantityString } from '@/lib/get-display-string'
+import { scrollbarStyles } from '@/lib/scrollbar-styles'
 import { LogOut, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { QuantitySelector } from '../input/quantity-selector'
 import { useCart } from './cart-provider'
-import { scrollbarStyles } from '@/lib/scrollbar-styles'
 
 interface CartDialogProps {
   open: boolean
@@ -74,7 +74,15 @@ export function CartDialog({ open, onOpenChange }: CartDialogProps) {
     } finally {
       setIsCheckingOut(false)
     }
-  }, [isCheckingOut, items, clearCart, onOpenChange, toast])
+  }, [
+    isCheckingOut,
+    items,
+    clearCart,
+    onOpenChange,
+    toast,
+    rememberUser,
+    router
+  ])
 
   useEffect(() => {
     const handleKeyDown = async (e: KeyboardEvent) => {

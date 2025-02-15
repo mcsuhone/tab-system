@@ -30,7 +30,7 @@ export function NumberPadHoverCard({
     setLastValue(value)
     const timer = setTimeout(() => setHighlightedKey(''), 100)
     return () => clearTimeout(timer)
-  }, [value, setHighlightedKey, setLastValue])
+  }, [value, setHighlightedKey, lastValue, setLastValue])
 
   return (
     <HoverCardContent

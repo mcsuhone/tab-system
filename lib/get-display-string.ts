@@ -1,4 +1,4 @@
-import { CartItem, Product } from '@/db/schema'
+import { CartItem } from '@/db/schema'
 
 export const getQuantityString = (item: CartItem) => {
   if (item.product.isSpecialProduct) return item.quantity.toString() + ' pcs'
