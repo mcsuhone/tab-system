@@ -83,7 +83,7 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
               key={product.id}
               variants={item}
               className={cn(
-                'grid grid-cols-[3fr_1fr_1fr] md:grid-cols-[2fr_1fr_3fr_1fr] hover:bg-accent items-center gap-4 px-4 py-3 h-16 rounded-lg border transition-colors',
+                'grid grid-cols-[3fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr] hover:bg-accent items-center gap-4 px-4 py-3 h-16 rounded-lg border transition-colors',
                 !existingItem && 'cursor-pointer',
                 existingItem &&
                   'ring-1 ring-inset ring-selected grid-cols-[3fr_3fr_1fr] md:grid-cols-[2fr_1fr_3fr_1fr]'
@@ -96,7 +96,7 @@ export function ProductItems({ products, isLoading }: ProductItemsProps) {
                 </p>
               </div>
               <div className={cn(existingItem && 'hidden md:block')}>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground select-none">
                   {categoryDisplayNames[product.category]}
                 </p>
               </div>
