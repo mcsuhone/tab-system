@@ -39,7 +39,7 @@ export function NumberPadHoverCard({
       className="w-[384px] h-[240px] p-4 mx-auto"
       avoidCollisions={false}
     >
-      <div className="grid grid-cols-3 gap-2 h-full">
+      <div className="grid grid-cols-3 gap-1 h-full">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num) => (
           <Button
             variant="outline"
