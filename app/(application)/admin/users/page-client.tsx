@@ -40,12 +40,15 @@ import {
   HandCoins,
   KeyRound,
   MoreHorizontal,
-  Pencil
+  Pencil,
+  Download
 } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { AdminMoneyDialog } from './admin-money-dialog'
 import { AddUserDialog, EditUserDialog } from './user-dialogs'
 import { BalanceText } from '@/components/balance-text'
+import { exportToExcel } from '@/lib/export-utils'
+import { UsersExportButton } from './users-export-button'
 
 type SortDirection = 'asc' | 'desc' | null
 
@@ -86,6 +89,7 @@ export default function UsersPage() {
   const [search, setSearch] = useState('')
   const [sortDirection, setSortDirection] = useState<SortDirection>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const [isExporting, setIsExporting] = useState(false)
 
   useEffect(() => {
     async function fetchAdminProducts() {
@@ -140,13 +144,34 @@ export default function UsersPage() {
     setResetUserId(null)
   }
 
+  async function handleExportExcel() {
+    setIsExporting(true)
+    try {
+      if (users.length === 0) return
+      exportToExcel(
+        users.map((u) => ({
+          member_no: u.member_no,
+          name: u.name,
+          permission: u.permission,
+          balance: u.balance
+        })),
+        `users-${new Date().toISOString()}`
+      )
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
   return (
     <div className="flex flex-col h-full w-full">
       <div className="shrink-0 mb-8 flex justify-between items-center">
         <h1 className="ml-12 md:ml-0 text-2xl md:text-3xl font-bold">
           User Management
         </h1>
-        <AddUserDialog onSuccess={loadData} />
+        <div className="flex gap-2 items-center">
+          <AddUserDialog onSuccess={loadData} />
+          <UsersExportButton users={users} isLoading={isLoading} />
+        </div>
       </div>
       <div className="min-h-0 flex-1 overflow-hidden">
         <div className="sticky top-1 ml-1 bg-background z-10 pb-4 flex gap-2">
