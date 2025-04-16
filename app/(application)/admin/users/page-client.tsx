@@ -45,6 +45,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react'
 import { AdminMoneyDialog } from './admin-money-dialog'
 import { AddUserDialog, EditUserDialog } from './user-dialogs'
+import { BalanceText } from '@/components/balance-text'
 
 type SortDirection = 'asc' | 'desc' | null
 
@@ -189,9 +190,13 @@ export default function UsersPage() {
                       {user.permission}
                     </TableCell>
                     <TableCell
-                      className={`$${
-                        user.balance < -50 ? 'text-red-500 font-medium' : ''
-                      }`}
+                      className={
+                        user.balance < -50
+                          ? 'text-red-500 font-semibold'
+                          : user.balance < 0
+                            ? 'text-amber-500 font-semibold'
+                            : ''
+                      }
                     >
                       {user.balance.toFixed(2)} €
                     </TableCell>
