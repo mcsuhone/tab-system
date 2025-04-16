@@ -89,17 +89,15 @@ export function LoginPageClient() {
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-background">
       {/* Static logo outside AnimatePresence */}
-      {!isMobile && (
-        <div className="relative h-32 w-full mb-8">
-          <Image
-            src="/jalostajat_logo_w.png"
-            alt="OJS Logo"
-            priority
-            fill
-            className="object-contain"
-          />
-        </div>
-      )}
+      <div className="relative h-32 w-full mb-8">
+        <Image
+          src="/jalostajat_logo_w.png"
+          alt="OJS Logo"
+          priority
+          fill
+          className="object-contain"
+        />
+      </div>
 
       <AnimatePresence mode="wait">
         {!isExiting && (

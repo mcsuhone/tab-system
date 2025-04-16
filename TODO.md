@@ -8,9 +8,10 @@ TODO CRITICAL:
 
 TODO EXTRA:
 
-1. Add a "top drinks" section to the products page include fire emoji
+1. Add a "home page" that contains top drinks, analytics etc. fun stuff
 
-- This includes "most popular" drinks based on sales
+- Allow adding products to shopping cart from home page
+- Use materialized views to store top drinks, top products, etc.
 
 2. Add advanced search logic
 

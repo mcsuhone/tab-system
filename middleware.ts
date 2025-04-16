@@ -49,7 +49,7 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!api|_next/static|_next/image|favicon\.ico|.*\.(?:png|jpe?g|gif|svg|css|js|ico|webmanifest|xml|txt)$).*)',
     '/tab/:path*' // Explicitly include the tab route
   ]
 }
