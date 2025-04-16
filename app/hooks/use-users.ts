@@ -1,9 +1,12 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { getUsers } from '@/app/actions/users'
 
+type SortDirection = 'asc' | 'desc' | null
+
 export interface UsersFilters {
   query?: string
   limit?: number
+  sortDirection?: SortDirection
 }
 
 export function useUsers(filters: UsersFilters = {}) {
@@ -16,7 +19,7 @@ export function useUsers(filters: UsersFilters = {}) {
     error,
     refetch
   } = useInfiniteQuery({
-    queryKey: ['users', filters],
+    queryKey: ['users', filters.query, filters.limit, filters.sortDirection],
     queryFn: async ({ pageParam = 1 }) => {
       const response = await getUsers({ ...filters, page: pageParam })
       if (!response.success) throw new Error(response.error.description)

@@ -4,18 +4,22 @@ import { db } from '@/db/db'
 import { UserPermission, users } from '@/db/schema'
 import { withAuth } from '@/lib/auth-guard'
 import { hash } from 'bcryptjs'
-import { and, eq, ilike, or, sql } from 'drizzle-orm'
+import { and, eq, ilike, or, sql, asc, desc } from 'drizzle-orm'
+
+type SortDirection = 'asc' | 'desc' | null
 
 interface GetUsersOptions {
   query?: string
   page?: number
   limit?: number
+  sortDirection?: SortDirection
 }
 
 export async function getUsers({
   query,
   page = 1,
-  limit = 10
+  limit = 10,
+  sortDirection = null
 }: GetUsersOptions = {}) {
   return withAuth(
     async () => {
@@ -37,7 +41,13 @@ export async function getUsers({
           .select()
           .from(users)
           .where(conditions.length > 0 ? and(...conditions) : undefined)
-          .orderBy(sql`CAST(${users.member_no} AS INTEGER)`)
+          .orderBy(
+            sortDirection === 'asc'
+              ? asc(users.balance)
+              : sortDirection === 'desc'
+                ? desc(users.balance)
+                : sql`CAST(${users.member_no} AS INTEGER)`
+          )
           .limit(limit)
           .offset(offset),
         db

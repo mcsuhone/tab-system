@@ -34,10 +34,46 @@ import { AdminUser } from '@/db/schema'
 import { useToast } from '@/hooks/use-toast'
 import { scrollbarStyles } from '@/lib/scrollbar-styles'
 import { cn } from '@/lib/utils'
-import { HandCoins, KeyRound, MoreHorizontal, Pencil } from 'lucide-react'
+import {
+  ArrowDown,
+  ArrowUp,
+  HandCoins,
+  KeyRound,
+  MoreHorizontal,
+  Pencil
+} from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { AdminMoneyDialog } from './admin-money-dialog'
 import { AddUserDialog, EditUserDialog } from './user-dialogs'
+
+type SortDirection = 'asc' | 'desc' | null
+
+interface BalanceSortButtonProps {
+  currentSort: SortDirection
+  onChange: (sort: SortDirection) => void
+}
+
+function BalanceSortButton({ currentSort, onChange }: BalanceSortButtonProps) {
+  const handleClick = () => {
+    let nextSort: SortDirection
+    if (currentSort === null) {
+      nextSort = 'asc' // None -> Asc (Negative first)
+    } else if (currentSort === 'asc') {
+      nextSort = 'desc' // Asc -> Desc (Positive first)
+    } else {
+      nextSort = null // Desc -> None (Default)
+    }
+    onChange(nextSort)
+  }
+
+  return (
+    <Button variant="outline" onClick={handleClick} className="shrink-0">
+      Sort by Balance
+      {currentSort === 'asc' && <ArrowUp className="ml-2 h-4 w-4" />}
+      {currentSort === 'desc' && <ArrowDown className="ml-2 h-4 w-4" />}
+    </Button>
+  )
+}
 
 export default function UsersPage() {
   const { toast } = useToast()
@@ -47,6 +83,7 @@ export default function UsersPage() {
   const [adminProducts, setAdminProducts] = useState<Product[]>([])
   const [moneyDialogUser, setMoneyDialogUser] = useState<AdminUser | null>(null)
   const [search, setSearch] = useState('')
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -70,7 +107,7 @@ export default function UsersPage() {
     hasMore,
     refetch: loadData,
     fetchNextPage
-  } = useUsers({ query: search, limit: 30 })
+  } = useUsers({ query: search, limit: 30, sortDirection })
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement
@@ -121,11 +158,16 @@ export default function UsersPage() {
             onScroll={handleScroll}
             ref={contentRef}
           >
-            <div className="sticky top-1 ml-1 bg-background z-10 pb-4">
+            <div className="sticky top-1 ml-1 bg-background z-10 pb-4 flex gap-2">
               <SearchBar
                 value={search}
                 onSearch={setSearch}
                 placeholder="Search users..."
+                className="flex-grow"
+              />
+              <BalanceSortButton
+                currentSort={sortDirection}
+                onChange={setSortDirection}
               />
             </div>
             <Table>
