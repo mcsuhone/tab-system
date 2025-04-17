@@ -40,14 +40,11 @@ import {
   HandCoins,
   KeyRound,
   MoreHorizontal,
-  Pencil,
-  Download
+  Pencil
 } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { AdminMoneyDialog } from './admin-money-dialog'
 import { AddUserDialog, EditUserDialog } from './user-dialogs'
-import { BalanceText } from '@/components/balance-text'
-import { exportToExcel } from '@/lib/export-utils'
 import { UsersExportButton } from './users-export-button'
 
 type SortDirection = 'asc' | 'desc' | null
@@ -89,7 +86,6 @@ export default function UsersPage() {
   const [search, setSearch] = useState('')
   const [sortDirection, setSortDirection] = useState<SortDirection>(null)
   const contentRef = useRef<HTMLDivElement>(null)
-  const [isExporting, setIsExporting] = useState(false)
 
   useEffect(() => {
     async function fetchAdminProducts() {
@@ -142,24 +138,6 @@ export default function UsersPage() {
     }
     setIsResetDialogOpen(false)
     setResetUserId(null)
-  }
-
-  async function handleExportExcel() {
-    setIsExporting(true)
-    try {
-      if (users.length === 0) return
-      exportToExcel(
-        users.map((u) => ({
-          member_no: u.member_no,
-          name: u.name,
-          permission: u.permission,
-          balance: u.balance
-        })),
-        `users-${new Date().toISOString()}`
-      )
-    } finally {
-      setIsExporting(false)
-    }
   }
 
   return (
