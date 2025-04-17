@@ -16,7 +16,9 @@ export function TabPageClient({ user }: { user: User | null }) {
 
   const renderProducts = (products: Product[]) => {
     // Filter out special products from regular list
-    const regularProducts = products.filter((p) => !p.isSpecialProduct)
+    const regularProducts = products.filter(
+      (p) => !p.isSpecialProduct && !p.disabled
+    )
 
     return (
       <>
