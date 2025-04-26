@@ -8,7 +8,8 @@ import {
   real,
   pgEnum,
   boolean,
-  jsonb
+  jsonb,
+  check
 } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 import { relations } from 'drizzle-orm'
@@ -42,14 +43,18 @@ export const userPermissionEnum = pgEnum('user_permission', [
 ])
 export type UserPermission = (typeof userPermissionEnum.enumValues)[number]
 
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  balance: real('balance').notNull().default(0),
-  name: text('name').notNull(),
-  member_no: text('member_no').notNull().unique(),
-  password: text('password').notNull(),
-  permission: userPermissionEnum('permission').notNull().default('default')
-})
+export const users = pgTable(
+  'users',
+  {
+    id: serial('id').primaryKey(),
+    balance: real('balance').notNull().default(0),
+    name: text('name').notNull(),
+    member_no: text('member_no').notNull().unique(),
+    password: text('password').notNull(),
+    permission: userPermissionEnum('permission').notNull().default('default')
+  },
+  (table) => [check('balance_not_nan', sql`${table.balance} <> 'NaN'::real`)]
+)
 
 export const measurements = pgTable('measurements', {
   id: serial('id').primaryKey(),
@@ -78,19 +83,23 @@ export const activityLogs = pgTable('activity_logs', {
     .default(sql`CURRENT_TIMESTAMP`)
 })
 
-export const transactions = pgTable('transactions', {
-  id: serial('id').primaryKey(),
-  amount: real('amount').notNull(),
-  userId: integer('user_id')
-    .notNull()
-    .references(() => users.id),
-  productId: integer('product_id')
-    .notNull()
-    .references(() => products.id),
-  createdAt: timestamp('created_at')
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`)
-})
+export const transactions = pgTable(
+  'transactions',
+  {
+    id: serial('id').primaryKey(),
+    amount: real('amount').notNull(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id),
+    productId: integer('product_id')
+      .notNull()
+      .references(() => products.id),
+    createdAt: timestamp('created_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`)
+  },
+  (table) => [check('amount_not_nan', sql`${table.amount} <> 'NaN'::real`)]
+)
 
 export const transactionsRelations = relations(transactions, ({ one }) => ({
   user: one(users, {

@@ -1,0 +1,2 @@
+ALTER TABLE "transactions" ADD CONSTRAINT "amount_not_nan" CHECK ("transactions"."amount" <> 'NaN'::real);--> statement-breakpoint
+ALTER TABLE "users" ADD CONSTRAINT "balance_not_nan" CHECK ("users"."balance" <> 'NaN'::real);
