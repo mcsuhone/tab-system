@@ -65,15 +65,17 @@ export function CategoryNav({
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-64">
-            <div className="mt-8 gap-4 flex flex-col">
+            <div className="mt-8 gap-4 flex flex-col h-full">
               <SheetTitle>Categories</SheetTitle>
               <SheetDescription className="hidden">
                 Select a category to filter products
               </SheetDescription>
-              <CategoryList
-                activeCategory={activeCategory}
-                onCategorySelect={onCategorySelect}
-              />
+              <div className="flex-1 overflow-y-auto pb-8">
+                <CategoryList
+                  activeCategory={activeCategory}
+                  onCategorySelect={onCategorySelect}
+                />
+              </div>
             </div>
           </SheetContent>
         </Sheet>
