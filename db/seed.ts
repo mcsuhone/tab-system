@@ -4,7 +4,15 @@ import { eq } from 'drizzle-orm'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { measurements, NewUser, ProductCategory, products, users, type NewMeasurement, type NewProduct } from './schema'
+import {
+  measurements,
+  NewUser,
+  ProductCategory,
+  products,
+  users,
+  type NewMeasurement,
+  type NewProduct
+} from './schema'
 
 // Get current directory path
 const __filename = fileURLToPath(import.meta.url)
@@ -27,17 +35,22 @@ const categoryMapping: Record<string, ProductCategory> = {
 }
 
 export async function importProducts() {
-  // Read CSV file
+  // Read JSON file
   const filePath = path.join(__dirname, 'old_data', 'exported_prices.json')
   let records: any[] = []
   try {
     const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' })
     records = JSON.parse(fileContent)
-  } catch (error) {
-    console.error(`Failed to open file:`, error)
-    return
+  } catch (error: any) {
+    if (error.code === 'ENOENT') {
+      console.log(
+        `Product seed file not found at ${filePath}, skipping product import.`
+      )
+    } else {
+      console.error(`Failed to read or parse product seed file:`, error)
+    }
+    return // Exit function if file reading fails or file not found
   }
-
 
   for (const record of records) {
     try {
@@ -106,9 +119,15 @@ export async function importUsers() {
   try {
     const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' })
     records = JSON.parse(fileContent)
-  } catch (error) {
-    console.error(`Failed to open file:`, error)
-    return
+  } catch (error: any) {
+    if (error.code === 'ENOENT') {
+      console.log(
+        `User seed file not found at ${filePath}, skipping user import.`
+      )
+    } else {
+      console.error(`Failed to read or parse user seed file:`, error)
+    }
+    return // Exit function if file reading fails or file not found
   }
 
   for (const record of records) {
