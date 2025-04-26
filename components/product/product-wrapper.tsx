@@ -32,11 +32,13 @@ const ProductListSkeleton = () => {
 export const ProductWrapper = ({
   children,
   showCart = true,
-  showDisabled = true
+  showDisabled = true,
+  onSearchStatusChange
 }: {
   children: (products: Product[]) => React.ReactNode
   showCart?: boolean
   showDisabled?: boolean
+  onSearchStatusChange?: (isSearching: boolean) => void
 }) => {
   const [showSkeleton, setShowSkeleton] = useState(false)
   const { query, category, setQuery, setCategory } = useSearch()
@@ -57,6 +59,10 @@ export const ProductWrapper = ({
       }
     }
   }, [isLoading])
+
+  useEffect(() => {
+    onSearchStatusChange?.(!!query)
+  }, [query, onSearchStatusChange])
 
   const observerRef = useRef<IntersectionObserver>()
   const bottomRef = useRef<HTMLDivElement>(null)
