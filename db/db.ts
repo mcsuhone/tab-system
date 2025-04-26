@@ -1,18 +1,24 @@
-import dotenv from 'dotenv'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import pg from 'pg'
 import * as schema from './schema'
+import {
+  dbCredentials,
+  validateAndLoadDbCredentials
+} from '../config/db-config'
 
-dotenv.config()
+// Validate credentials specifically for db connection context
+validateAndLoadDbCredentials('db connection')
+
+// We can assert non-null here because validateAndLoadDbCredentials throws if they are missing
+const { host, user, password, database, port, ssl } = dbCredentials
 
 const pool = new pg.Pool({
-  host: process.env.POSTGRES_HOST || 'localhost',
-  user: process.env.POSTGRES_USER || 'postgres',
-  password: process.env.POSTGRES_PASSWORD || 'postgres',
-  database: process.env.POSTGRES_DB || 'tab-system',
-  port: parseInt(process.env.POSTGRES_PORT || '5432'),
-  ssl:
-    process.env.POSTGRES_SSL === 'true' ? { rejectUnauthorized: false } : false
+  host: host!,
+  user: user!,
+  password: password!,
+  database: database!,
+  port: parseInt(port || '5432'), // Default port if not set
+  ssl: ssl === 'true' ? { rejectUnauthorized: false } : false
 })
 
 export const db = drizzle(pool, { schema })

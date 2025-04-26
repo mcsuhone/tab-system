@@ -12,7 +12,8 @@
     "db:migrate": "tsx db/migrate.ts",
     "db:seed": "tsx db/seed.ts",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:migrate:remote": "DB_TARGET=remote tsx db/migrate.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
